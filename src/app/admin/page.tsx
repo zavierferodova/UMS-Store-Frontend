@@ -1,5 +1,16 @@
+import { AdminHeader } from "@/components/admin/AdminHeader";
+
 export default function AdminPage() {
-    return (
-        <></>
-    )
+  return (
+    <>
+      <AdminHeader
+        menu={[
+          {
+            name: "Beranda",
+            href: "/",
+          },
+        ]}
+      />
+    </>
+  );
 }

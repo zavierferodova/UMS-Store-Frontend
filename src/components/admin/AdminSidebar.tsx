@@ -1,5 +1,5 @@
 "use client"
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator } from "@/components/ui/sidebar";
 import { ArrowDownRightIcon, ClipboardTextIcon, MoneyIcon, ShoppingBagIcon, ShoppingCartIcon } from "@phosphor-icons/react/dist/ssr";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { BadgeCheckIcon, BellIcon, ChevronsUpDownIcon, HomeIcon, LogOutIcon, MoonIcon, SunIcon, TagIcon, UserIcon } from "lucide-react";
@@ -16,41 +16,71 @@ export interface MenuItem {
     disabled?: boolean;
 }
 
-const menu: MenuItem[] = [
+export interface MenuGroup {
+    label: string;
+    items: MenuItem[];
+}
+
+const menu: MenuGroup[] = [
     {
-        title: "Beranda",
-        href: "#",
-        icon: <HomeIcon/>,
+        label: "Menu",
+        items: [
+            {
+                title: "Beranda",
+                href: "#",
+                icon: <HomeIcon />,
+            },
+        ]
     },
     {
-        title: "Transaksi",
-        href: "#",
-        icon: <MoneyIcon/>,
+        label: "Master Data",
+        items: [
+            {
+                title: "Produk",
+                href: "#",
+                icon: <ShoppingBagIcon />,
+            },
+            {
+                title: "Supplier",
+                href: "#",
+                icon: <ArrowDownRightIcon />,
+            },
+            {
+                title: "Kupon",
+                href: "#",
+                icon: <TagIcon />,
+            },
+            {
+                title: "Pengguna",
+                href: "#",
+                icon: <UserIcon />,
+            },
+        ]
     },
     {
-        title: "Produk",
-        href: "#",
-        icon: <ShoppingBagIcon/>,
+        label: "Transaksi",
+        items: [
+            {
+                title: "Transaksi",
+                href: "#",
+                icon: <MoneyIcon />,
+            },
+            {
+                title: "Purchase Order",
+                href: "#",
+                icon: <ShoppingCartIcon />,
+            },
+        ]
     },
     {
-        title: "Purchase Order",
-        href: "#",
-        icon: <ShoppingCartIcon/>,
-    },
-    {
-        title: "Supplier",
-        href: "#",
-        icon: <ArrowDownRightIcon/>,
-    },
-    {
-        title: "Kupon",
-        href: "#",
-        icon: <TagIcon/>,
-    },
-    {
-        title: "Laporan",
-        href: "#",
-        icon: <ClipboardTextIcon/>,
+        label: "Laporan",
+        items: [
+            {
+                title: "Laporan",
+                href: "#",
+                icon: <ClipboardTextIcon />,
+            },
+        ]
     }
 ]
 
@@ -61,29 +91,32 @@ export function AdminSidebar() {
         <Sidebar>
             <SidebarHeader>
                 <div className="text-primary font-bold py-4 flex justify-center items-center">
-                    <Image src="/images/logo.png" alt="Logo" width={50} height={50}/>
+                    <Image src="/images/logo.png" alt="Logo" width={50} height={50} />
                 </div>
                 <SidebarSeparator />
             </SidebarHeader>
             <SidebarContent>
-                <SidebarGroup>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            {menu.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton asChild>
-                                        <a href={item.href}>
-                                            {item.icon}
-                                            <div className="ml-1">
-                                                {item.title}
-                                            </div>
-                                        </a>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
+                {menu.map((group) => (
+                    <SidebarGroup key={group.label}>
+                        <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+                        <SidebarGroupContent>
+                            <SidebarMenu>
+                                {group.items.map((item) => (
+                                    <SidebarMenuItem key={item.title}>
+                                        <SidebarMenuButton asChild>
+                                            <a href={item.href}>
+                                                {item.icon}
+                                                <div className="ml-1">
+                                                    {item.title}
+                                                </div>
+                                            </a>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ))}
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                ))}
             </SidebarContent>
             <SidebarFooter>
                 <SidebarSeparator />
