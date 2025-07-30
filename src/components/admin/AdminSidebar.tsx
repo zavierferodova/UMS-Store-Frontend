@@ -1,0 +1,158 @@
+"use client"
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator } from "@/components/ui/sidebar";
+import { ArrowDownRightIcon, ClipboardTextIcon, MoneyIcon, ShoppingBagIcon, ShoppingCartIcon } from "@phosphor-icons/react/dist/ssr";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { BadgeCheckIcon, BellIcon, ChevronsUpDownIcon, HomeIcon, LogOutIcon, MoonIcon, SunIcon, TagIcon, UserIcon } from "lucide-react";
+import Image from "next/image";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useTheme } from "next-themes";
+import { Switch } from "@/components/ui/switch";
+import Link from "next/link";
+
+export interface MenuItem {
+    title: string;
+    href: string;
+    icon: React.ReactNode;
+    disabled?: boolean;
+}
+
+const menu: MenuItem[] = [
+    {
+        title: "Beranda",
+        href: "#",
+        icon: <HomeIcon/>,
+    },
+    {
+        title: "Transaksi",
+        href: "#",
+        icon: <MoneyIcon/>,
+    },
+    {
+        title: "Produk",
+        href: "#",
+        icon: <ShoppingBagIcon/>,
+    },
+    {
+        title: "Purchase Order",
+        href: "#",
+        icon: <ShoppingCartIcon/>,
+    },
+    {
+        title: "Supplier",
+        href: "#",
+        icon: <ArrowDownRightIcon/>,
+    },
+    {
+        title: "Kupon",
+        href: "#",
+        icon: <TagIcon/>,
+    },
+    {
+        title: "Laporan",
+        href: "#",
+        icon: <ClipboardTextIcon/>,
+    }
+]
+
+export function AdminSidebar() {
+    const { setTheme, theme } = useTheme()
+
+    return (
+        <Sidebar>
+            <SidebarHeader>
+                <div className="text-primary font-bold py-4 flex justify-center items-center">
+                    <Image src="/images/logo.png" alt="Logo" width={50} height={50}/>
+                </div>
+                <SidebarSeparator />
+            </SidebarHeader>
+            <SidebarContent>
+                <SidebarGroup>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            {menu.map((item) => (
+                                <SidebarMenuItem key={item.title}>
+                                    <SidebarMenuButton asChild>
+                                        <a href={item.href}>
+                                            {item.icon}
+                                            <div className="ml-1">
+                                                {item.title}
+                                            </div>
+                                        </a>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            ))}
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
+            </SidebarContent>
+            <SidebarFooter>
+                <SidebarSeparator />
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <SidebarMenuButton className="h-auto cursor-pointer">
+                            <Avatar className="size-10 rounded-lg overflow-hidden">
+                                <AvatarImage src="https://github.com/shadcn.png" />
+                                <AvatarFallback className="w-full h-full flex justify-center items-center bg-accent">
+                                    <UserIcon className="text-accent-foreground/60" />
+                                </AvatarFallback>
+                            </Avatar>
+                            <div className="grid flex-1 text-left text-sm leading-tight">
+                                <span className="truncate font-medium">Alex John Sanjaya</span>
+                                <span className="truncate text-xs text-gray-500">Administrator</span>
+                            </div>
+                            <ChevronsUpDownIcon className="ml-auto size-4" />
+                        </SidebarMenuButton>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                        <DropdownMenuLabel>
+                                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                                <Avatar className="size-10 rounded-lg overflow-hidden">
+                                    <AvatarImage src="https://github.com/shadcn.png" />
+                                    <AvatarFallback className="w-full h-full flex justify-center items-center bg-accent">
+                                        <UserIcon className="text-accent-foreground/60" />
+                                    </AvatarFallback>
+                                </Avatar>
+                                <div className="grid flex-1 text-left text-sm leading-tight">
+                                    <span className="truncate font-medium">Alex John Sanjaya</span>
+                                    <span className="truncate text-xs text-gray-500">Administrator</span>
+                                </div>
+                            </div>
+                        </DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuGroup>
+                            <DropdownMenuItem>
+                                <BadgeCheckIcon className="size-4" />
+                                <span>Profile</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                <BellIcon className="size-4" />
+                                <span>Notifications</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                <div className="flex items-center">
+                                    <SunIcon className="w-4 h-4 mr-2 dark:hidden" />
+                                    <MoonIcon className="w-4 h-4 mr-2 hidden dark:block" />
+                                    <span>Theme</span>
+                                </div>
+                                <Switch
+                                    className="ml-auto"
+                                    checked={theme === "dark"}
+                                    onCheckedChange={() => {
+                                        setTheme(theme === "light" ? "dark" : "light");
+                                    }}
+                                />
+                            </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                            <Link href="/login">
+                                <LogOutIcon className="size-4" />
+                                <span>Log out</span>
+                            </Link>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </SidebarFooter>
+        </Sidebar>
+    )
+}
