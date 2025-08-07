@@ -5,30 +5,14 @@ import { Separator } from "@/components/ui/separator"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { ThemeToggle } from "@/components/ThemeToggle"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { UserIcon } from "@phosphor-icons/react/dist/ssr"
 import { ShieldIcon } from "lucide-react"
 import Image from "next/image"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-
-const formSchema = z.object({
-    username: z.string().min(1, { message: "Username tidak boleh kosong" }),
-    password: z.string().min(1, { message: "Password tidak boleh kosong" }),
-})
+import { useController } from "./controller"
+import { signIn } from "next-auth/react"
 
 export default function LoginPage() {
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            username: "",
-            password: "",
-        }
-    })
-
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
-    }
+    const { form, onSubmit } = useController()
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 min-h-dvh">
@@ -43,6 +27,7 @@ export default function LoginPage() {
 
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full max-w-sm">
+
                         <FormField
                             control={form.control}
                             name="username"
@@ -92,7 +77,7 @@ export default function LoginPage() {
                     <Separator className="data-[orientation=horizontal]:w-12 bg-gray-500/30 ml-4" />
                 </div>
                 <div>
-                    <Button variant="outline" className="w-13 h-13 rounded-full cursor-pointer">
+                    <Button variant="outline" className="w-13 h-13 rounded-full cursor-pointer" onClick={() => signIn("google")}>
                         <Image loading="eager" src="/images/google.svg" alt="Google" width={40} height={40} />
                     </Button>
                 </div>

@@ -1,13 +1,13 @@
 "use client"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator } from "@/components/ui/sidebar";
-import { ArrowDownRightIcon, ClipboardTextIcon, MoneyIcon, ShoppingBagIcon, ShoppingCartIcon } from "@phosphor-icons/react/dist/ssr";
+import { ArrowDownRightIcon, ClipboardTextIcon, MoneyIcon, ShoppingBagIcon, ShoppingCartIcon, StudentIcon } from "@phosphor-icons/react/dist/ssr";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { BadgeCheckIcon, BellIcon, ChevronsUpDownIcon, HomeIcon, LogOutIcon, MoonIcon, SunIcon, TagIcon, UserIcon } from "lucide-react";
 import Image from "next/image";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useTheme } from "next-themes";
 import { Switch } from "@/components/ui/switch";
-import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
 
 export interface MenuItem {
     title: string;
@@ -33,7 +33,22 @@ const menu: MenuGroup[] = [
         ]
     },
     {
-        label: "Master Data",
+        label: "Transaksi",
+        items: [
+            {
+                title: "Transaksi",
+                href: "#",
+                icon: <MoneyIcon />,
+            },
+            {
+                title: "Purchase Order",
+                href: "#",
+                icon: <ShoppingCartIcon />,
+            },
+        ]
+    },
+    {
+        label: "Manajemen",
         items: [
             {
                 title: "Produk",
@@ -51,24 +66,14 @@ const menu: MenuGroup[] = [
                 icon: <TagIcon />,
             },
             {
+                title: "Mahasiswa",
+                href: "#",
+                icon: <StudentIcon />,
+            },
+            {
                 title: "Pengguna",
                 href: "#",
                 icon: <UserIcon />,
-            },
-        ]
-    },
-    {
-        label: "Transaksi",
-        items: [
-            {
-                title: "Transaksi",
-                href: "#",
-                icon: <MoneyIcon />,
-            },
-            {
-                title: "Purchase Order",
-                href: "#",
-                icon: <ShoppingCartIcon />,
             },
         ]
     },
@@ -86,6 +91,7 @@ const menu: MenuGroup[] = [
 
 export function AdminSidebar() {
     const { setTheme, theme } = useTheme()
+    const session = useSession()
 
     return (
         <Sidebar>
@@ -130,8 +136,8 @@ export function AdminSidebar() {
                                 </AvatarFallback>
                             </Avatar>
                             <div className="grid flex-1 text-left text-sm leading-tight">
-                                <span className="truncate font-medium">Alex John Sanjaya</span>
-                                <span className="truncate text-xs text-gray-500">Administrator</span>
+                                <span className="truncate font-medium">{session.data?.user?.name}</span>
+                                <span className="truncate text-xs text-gray-500">{session.data?.user?.role}</span>
                             </div>
                             <ChevronsUpDownIcon className="ml-auto size-4" />
                         </SidebarMenuButton>
@@ -146,8 +152,8 @@ export function AdminSidebar() {
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className="grid flex-1 text-left text-sm leading-tight">
-                                    <span className="truncate font-medium">Alex John Sanjaya</span>
-                                    <span className="truncate text-xs text-gray-500">Administrator</span>
+                                    <span className="truncate font-medium">{session.data?.user?.name}</span>
+                                    <span className="truncate text-xs text-gray-500">{session.data?.user?.role}</span>
                                 </div>
                             </div>
                         </DropdownMenuLabel>
@@ -177,11 +183,9 @@ export function AdminSidebar() {
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem asChild>
-                            <Link href="/login">
-                                <LogOutIcon className="size-4" />
-                                <span>Log out</span>
-                            </Link>
+                        <DropdownMenuItem className="cursor-pointer" onClick={() => signOut()}>
+                            <LogOutIcon className="size-4" />
+                            <span>Log out</span>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
