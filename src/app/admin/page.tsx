@@ -7,7 +7,7 @@ export default function AdminPage() {
         menu={[
           {
             name: "Beranda",
-            href: "/",
+            href: "/admin",
           },
         ]}
       />

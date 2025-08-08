@@ -4,7 +4,7 @@ import { IAuthData, LoginResponse, RotateTokenResponse } from "@/domain/data/aut
 
 async function login(username: string, password: string): Promise<LoginResponse | null> {
   try {
-    const data = await fetchJSON(`${apiBaseURL}/apis/auth/login`, {
+    const response = await fetchJSON(`${apiBaseURL}/apis/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -15,7 +15,9 @@ async function login(username: string, password: string): Promise<LoginResponse 
       }),
     });
   
-    if (data) {
+    if (response) {
+      const { data } = response;
+  
       return {
         access_token: data.access,
         refresh_token: data.refresh,
@@ -33,7 +35,7 @@ async function login(username: string, password: string): Promise<LoginResponse 
 
 async function rotateToken(refreshToken: string): Promise<RotateTokenResponse | null> {
   try {
-    const data = await fetchJSON(`${apiBaseURL}/apis/auth/token/refresh`, {
+    const response = await fetchJSON(`${apiBaseURL}/apis/auth/token/refresh`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -43,7 +45,9 @@ async function rotateToken(refreshToken: string): Promise<RotateTokenResponse | 
       }),
     });
   
-    if (data) {
+    if (response) {
+      const { data } = response;
+  
       return {
         access_token: data.access,
         access_expiration: data.access_expiration,
@@ -58,7 +62,7 @@ async function rotateToken(refreshToken: string): Promise<RotateTokenResponse | 
 
 async function loginWithGoogle(accessToken: string): Promise<LoginResponse | null> {
   try {
-    const data = await fetchJSON(`${apiBaseURL}/apis/auth/google`, {
+    const response = await fetchJSON(`${apiBaseURL}/apis/auth/google`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -68,7 +72,10 @@ async function loginWithGoogle(accessToken: string): Promise<LoginResponse | nul
       }),
     });
 
-    if (data) {
+
+    if (response) {
+      const { data } = response;
+
       return {
         access_token: data.access,
         refresh_token: data.refresh,

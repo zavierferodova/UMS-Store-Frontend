@@ -8,6 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { useTheme } from "next-themes";
 import { Switch } from "@/components/ui/switch";
 import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 
 export interface MenuItem {
     title: string;
@@ -159,9 +160,11 @@ export function AdminSidebar() {
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuItem>
-                                <BadgeCheckIcon className="size-4" />
-                                <span>Profile</span>
+                            <DropdownMenuItem asChild className="cursor-pointer">
+                                <Link href="/admin/profile">
+                                    <BadgeCheckIcon className="size-4" />
+                                    <span>Profile</span>
+                                </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>
                                 <BellIcon className="size-4" />
@@ -174,7 +177,7 @@ export function AdminSidebar() {
                                     <span>Theme</span>
                                 </div>
                                 <Switch
-                                    className="ml-auto"
+                                    className="ml-auto cursor-pointer"
                                     checked={theme === "dark"}
                                     onCheckedChange={() => {
                                         setTheme(theme === "light" ? "dark" : "light");
