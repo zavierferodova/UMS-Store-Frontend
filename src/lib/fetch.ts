@@ -4,8 +4,12 @@ export async function fetchJSON(url: string, options?: RequestInit) {
             ...options
         });
 
-        const result = await response.json();
-        return result;
+        if (response.ok) {
+            const result = await response.json();
+            return result;
+        }
+
+        return null;
     } catch (e) {
         return null
     }

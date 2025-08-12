@@ -5,6 +5,7 @@ import { signIn, useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { useEffect } from "react"
+import { panelRoutes } from "@/routes/route"
 
 const formSchema = z.object({
     username: z.string().min(1, { message: "Username tidak boleh kosong" }),
@@ -31,7 +32,7 @@ export function useController() {
         })
 
         if (result?.ok) {
-            router.push("/admin")
+            router.push(panelRoutes.home)
         } else {
             toast.error("Username atau password salah!", {
                 position: "top-center"
@@ -41,7 +42,7 @@ export function useController() {
 
     useEffect(() => {
         if (status === "authenticated") {
-            router.push("/admin")
+            router.push(panelRoutes.home)
         }
     }, [status])
 

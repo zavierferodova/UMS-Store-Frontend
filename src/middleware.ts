@@ -1,5 +1,6 @@
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
+import { panelRoutes } from "./routes/route";
 
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
@@ -11,16 +12,16 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (token.user.role) {
-    if (pathname.startsWith("/admin")) {
+    if (pathname.startsWith(panelRoutes.home)) {
       return NextResponse.next();
     }
-    return NextResponse.redirect(new URL("/admin", req.url));
+    return NextResponse.redirect(new URL(panelRoutes.home, req.url));
   } else {
-    if (pathname.startsWith("/no-role")) {
+    if (pathname.startsWith(panelRoutes.noRole)) {
       return NextResponse.next();
     }
-    return NextResponse.redirect(new URL("/no-role", req.url));
+    return NextResponse.redirect(new URL(panelRoutes.noRole, req.url));
   }
 }
 
-export const config = { matcher: ["/admin/:path*", "/no-role"] };
+export const config = { matcher: ["/panel/:path*", "/no-role"] };

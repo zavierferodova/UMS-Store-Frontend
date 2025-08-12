@@ -1,6 +1,5 @@
 import type { NextConfig } from "next";
-
-const API_URL = process.env.API_URL;
+import { API_URL } from "@/config/env";
 
 const nextConfig: NextConfig = {
   async rewrites() {

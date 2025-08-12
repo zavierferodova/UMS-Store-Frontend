@@ -3,24 +3,48 @@
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "../ui/breadcrumb";
-import React from "react";
+import React, { useState } from "react";
+import { createContext, useContext } from "react";
 
-export interface BreadcrumbMenuItem {
+type PanelHeaderContextType = {
+    menu: PanelMenuItem[],
+    setMenu: (menu: PanelMenuItem[]) => void,
+}
+
+const PanelHeaderContext = createContext<PanelHeaderContextType>({
+    menu: [],
+    setMenu: (menu: PanelMenuItem[]) => {},
+})
+
+export const usePanelHeader = () => { 
+    return useContext(PanelHeaderContext)
+}
+
+export interface PanelMenuItem {
     name: string;
     href: string;
 }
 
-export interface AdminHeaderProps {
-    menu: BreadcrumbMenuItem[];
+export const PanelHeaderProvider = ({ children }: { children: React.ReactNode }) => {
+    const [menu, setMenu] = useState([] as PanelMenuItem[])
+    const value = { menu, setMenu }
+
+    return (
+        <PanelHeaderContext.Provider value={value}>
+            {children}
+        </PanelHeaderContext.Provider>
+    )
 }
 
-export function AdminHeader({ menu }: AdminHeaderProps) {
+export function PanelHeader() {
+    const { menu } = usePanelHeader()
+    
     return (
         <>
             <div className="flex items-center justify-between">
                 <div className="flex items-center">
                     <div className="flex items-center mr-4">
-                        <SidebarTrigger className="mr-2" />
+                        <SidebarTrigger className="mr-2 cursor-pointer" />
                         <Separator orientation="vertical" className="data-[orientation=vertical]:h-6" />
                     </div>
                     <Breadcrumb>

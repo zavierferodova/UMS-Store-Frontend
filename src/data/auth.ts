@@ -1,10 +1,12 @@
 import { fetchJSON } from "@/lib/fetch";
-import { apiBaseURL } from "@/config/api";
-import { IAuthData, LoginResponse, RotateTokenResponse } from "@/domain/data/auth";
+import { IAuthData, LoginResponse, RotateTokenResponse, UpdateUserParam } from "@/domain/data/auth";
+import { APP_URL } from "@/config/env";
+import { User } from "@/domain/model/user";
+import { getSession } from "next-auth/react"
 
 async function login(username: string, password: string): Promise<LoginResponse | null> {
   try {
-    const response = await fetchJSON(`${apiBaseURL}/apis/auth/login`, {
+    const response = await fetchJSON(`${APP_URL}/apis/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -14,7 +16,7 @@ async function login(username: string, password: string): Promise<LoginResponse 
         password,
       }),
     });
-  
+
     if (response) {
       const { data } = response;
   
@@ -35,7 +37,7 @@ async function login(username: string, password: string): Promise<LoginResponse 
 
 async function rotateToken(refreshToken: string): Promise<RotateTokenResponse | null> {
   try {
-    const response = await fetchJSON(`${apiBaseURL}/apis/auth/token/refresh`, {
+    const response = await fetchJSON(`${APP_URL}/apis/auth/token/refresh`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -62,7 +64,7 @@ async function rotateToken(refreshToken: string): Promise<RotateTokenResponse | 
 
 async function loginWithGoogle(accessToken: string): Promise<LoginResponse | null> {
   try {
-    const response = await fetchJSON(`${apiBaseURL}/apis/auth/google`, {
+    const response = await fetchJSON(`${APP_URL}/apis/auth/google`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -91,10 +93,112 @@ async function loginWithGoogle(accessToken: string): Promise<LoginResponse | nul
   }
 }
 
+async function getUser(accessToken: string): Promise<User | null> {
+  try {
+    const response = await fetchJSON(`${APP_URL}/apis/auth/user`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (response) {
+      const { data } = response;
+      return data;
+    }
+
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
+
+async function updateUser(
+  user: UpdateUserParam,
+): Promise<User | null> {
+  try {
+    const session = await getSession();
+    const response = await fetchJSON(`${APP_URL}/apis/auth/user`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session?.access_token}`,
+      },
+      body: JSON.stringify(user),
+    });
+
+    if (response) {
+      const { data } = response;
+      return data;
+    }
+
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
+
+async function updatePassword(
+  newPassword: string,
+  passwordConfirm: string
+): Promise<boolean> {
+  try {
+    const session = await getSession();
+    const response = await fetchJSON(`${APP_URL}/apis/auth/password/change`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session?.access_token}`,
+      },
+      body: JSON.stringify({
+        new_password: newPassword,
+        new_password2: passwordConfirm
+      }),
+    });
+
+    if (response) {
+      return true;
+    }
+
+    return false;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function uploadProfileImage(image: File): Promise<User | null> {
+  try {
+    const formData = new FormData();
+    formData.append("profile_image", image);
+    const session = await getSession();
+    const response = await fetchJSON(`${APP_URL}/apis/auth/user/profile-image`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${session?.access_token}`,
+      },
+      body: formData,
+    });
+
+    if (response) {
+      const { data } = response;
+      return data;
+    }
+
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
+
 const authData: IAuthData = {
   login,
   loginWithGoogle,
-  rotateToken
+  rotateToken,
+  getUser,
+  updateUser,
+  updatePassword,
+  uploadProfileImage,
 }
 
 export default authData;

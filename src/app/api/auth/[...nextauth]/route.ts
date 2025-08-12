@@ -2,6 +2,8 @@ import authData from "@/data/auth";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET } from "@/config/env";
+import { publicRoutes } from "@/routes/route";
 
 const handler = NextAuth({
   providers: [
@@ -19,6 +21,7 @@ const handler = NextAuth({
 
         return {
           id: response.user.id,
+          profile_image: response.user.profile_image,
           name: response.user.name,
           email: response.user.email,
           username: response.user.username,
@@ -34,8 +37,8 @@ const handler = NextAuth({
       }
     }),
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+      clientId: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
       authorization: {
         params: {
           prompt: "consent",
@@ -45,24 +48,25 @@ const handler = NextAuth({
       }
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
   },
   pages: {
-    signIn: "/login",
+    signIn: publicRoutes.login,
   },
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, session, trigger }) {
       if (account?.provider === "google") {
         const data = await authData.loginWithGoogle(account.access_token!)
 
         if (data) {
           token.user = {
             id: data.user.id,
+            profile_image: data.user.profile_image,
+            name: data.user.name,
             username: data.user.username,
             email: data.user.email,
-            name: data.user.name,
             role: data.user.role,
             gender: data.user.gender,
             phone: data.user.phone,
@@ -77,6 +81,7 @@ const handler = NextAuth({
         const { access_token, refresh_token, access_expiration, refresh_expiration, ...userData } = user;
         token.user = {
           id: Number(userData.id),
+          profile_image: userData.profile_image,
           name: userData.name!,
           email: userData.email!,
           username: userData.username,
@@ -90,17 +95,38 @@ const handler = NextAuth({
         token.refresh_token = refresh_token;
         token.access_expiration = access_expiration;
         token.refresh_expiration = refresh_expiration;
-  
+        
+        return token;
+      } else if (token) {
+        const { refresh_token, access_expiration } = token;
+
         if (Date.now() > new Date(access_expiration).getTime()) {
-          const newToken = await authData.rotateToken(token.refresh_token);
+          const newToken = await authData.rotateToken(refresh_token);
   
           if (newToken) {
             token.access_token = newToken.access_token;
             token.access_expiration = newToken.access_expiration;
           }
         }
-        
-        return token;
+
+        const user = await authData.getUser(token.access_token);
+        if (user) {
+          token.user = {
+            id: Number(user.id),
+            profile_image: user.profile_image,
+            name: user.name,
+            email: user.email,
+            username: user.username,
+            role: user.role,
+            gender: user.gender,
+            phone: user.phone,
+            address: user.address,
+          }
+        }
+      }
+
+      if (trigger === "update") {
+        token.user = session.user
       }
 
       return token;

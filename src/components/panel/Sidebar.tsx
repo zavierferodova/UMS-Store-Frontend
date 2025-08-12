@@ -2,13 +2,16 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator } from "@/components/ui/sidebar";
 import { ArrowDownRightIcon, ClipboardTextIcon, MoneyIcon, ShoppingBagIcon, ShoppingCartIcon, StudentIcon } from "@phosphor-icons/react/dist/ssr";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { BadgeCheckIcon, BellIcon, ChevronsUpDownIcon, HomeIcon, LogOutIcon, MoonIcon, SunIcon, TagIcon, UserIcon } from "lucide-react";
-import Image from "next/image";
+import { BadgeCheckIcon, BellIcon, ChevronsUpDownIcon, HomeIcon, LogOutIcon, MoonIcon, SunIcon, TagIcon } from "lucide-react";
+import { UserIcon } from "@phosphor-icons/react/dist/ssr";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useTheme } from "next-themes";
 import { Switch } from "@/components/ui/switch";
 import { signOut, useSession } from "next-auth/react";
+import { roleLabel } from "@/lib/role";
+import Image from "next/image";
 import Link from "next/link";
+import { panelRoutes } from "@/routes/route";
 
 export interface MenuItem {
     title: string;
@@ -28,7 +31,7 @@ const menu: MenuGroup[] = [
         items: [
             {
                 title: "Beranda",
-                href: "#",
+                href: panelRoutes.home,
                 icon: <HomeIcon />,
             },
         ]
@@ -90,9 +93,10 @@ const menu: MenuGroup[] = [
     }
 ]
 
-export function AdminSidebar() {
+export function PanelSidebar() {
     const { setTheme, theme } = useTheme()
     const session = useSession()
+    const { user } = session.data || {}
 
     return (
         <Sidebar>
@@ -131,14 +135,14 @@ export function AdminSidebar() {
                     <DropdownMenuTrigger asChild>
                         <SidebarMenuButton className="h-auto cursor-pointer">
                             <Avatar className="size-10 rounded-lg overflow-hidden">
-                                <AvatarImage src="https://github.com/shadcn.png" />
+                                <AvatarImage src={user?.profile_image} alt="User profile image" className="w-full h-full object-cover" />
                                 <AvatarFallback className="w-full h-full flex justify-center items-center bg-accent">
                                     <UserIcon className="text-accent-foreground/60" />
                                 </AvatarFallback>
                             </Avatar>
                             <div className="grid flex-1 text-left text-sm leading-tight">
-                                <span className="truncate font-medium">{session.data?.user?.name}</span>
-                                <span className="truncate text-xs text-gray-500">{session.data?.user?.role}</span>
+                                <span className="truncate font-medium">{user?.name}</span>
+                                <span className="truncate text-xs text-gray-500">{roleLabel(user?.role || "")}</span>
                             </div>
                             <ChevronsUpDownIcon className="ml-auto size-4" />
                         </SidebarMenuButton>
@@ -147,21 +151,21 @@ export function AdminSidebar() {
                         <DropdownMenuLabel>
                                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <Avatar className="size-10 rounded-lg overflow-hidden">
-                                    <AvatarImage src="https://github.com/shadcn.png" />
+                                    <AvatarImage src={user?.profile_image} alt="User profile image" className="w-full h-full object-cover"/>
                                     <AvatarFallback className="w-full h-full flex justify-center items-center bg-accent">
                                         <UserIcon className="text-accent-foreground/60" />
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className="grid flex-1 text-left text-sm leading-tight">
-                                    <span className="truncate font-medium">{session.data?.user?.name}</span>
-                                    <span className="truncate text-xs text-gray-500">{session.data?.user?.role}</span>
+                                    <span className="truncate font-medium">{user?.name}</span>
+                                    <span className="truncate text-xs text-gray-500">{roleLabel(user?.role || "")}</span>
                                 </div>
                             </div>
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
                             <DropdownMenuItem asChild className="cursor-pointer">
-                                <Link href="/admin/profile">
+                                <Link href={panelRoutes.profile}>
                                     <BadgeCheckIcon className="size-4" />
                                     <span>Profile</span>
                                 </Link>
