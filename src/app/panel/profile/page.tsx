@@ -20,11 +20,11 @@ export default function ProfilePage() {
         href: panelRoutes.profile,
       },
     ])
-  }, [])
+  }, [setMenu])
 
   return (
     <>
-      <div className="mt-6 flex w-full flex-col gap-4 lg:flex-row">
+      <div className="flex w-full flex-col gap-4 lg:flex-row">
         <div className="flex w-full flex-col gap-4 lg:w-[40%]">
           <MyAccountForm />
           <UpdatePasswordForm />

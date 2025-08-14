@@ -15,7 +15,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useController } from "./controller";
 import {
   Select,
   SelectContent,
@@ -24,16 +23,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useController } from "./controller";
+import { User } from "@/domain/model/user";
+import { isAdmin } from "@/lib/role";
 
-export const MyProfileForm = () => {
-  const { form, onSubmit } = useController();
+export type ProfileFormProps = {
+  user: User | null
+}
+
+export const ProfileForm = ({ user }: ProfileFormProps) => {
+  const { session, form, onSubmit } = useController(user);
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
         <Card>
           <CardHeader>
-            <CardTitle>Profil Saya</CardTitle>
+            <CardTitle>Profil</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -61,6 +67,7 @@ export const MyProfileForm = () => {
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                         value={field.value}
+                        disabled={!isAdmin(session?.user)}
                       >
                         <SelectTrigger className="w-full cursor-pointer">
                           <SelectValue placeholder="Pilih jenis kelamin" />
@@ -97,7 +104,7 @@ export const MyProfileForm = () => {
                     <FormControl>
                       <Textarea
                         placeholder="Jl Raya Kebangsaan, Mendungan. Sukoharjo"
-                        className="min-h-35 max-h-40"
+                        className="min-h-53 max-h-53"
                         {...field}
                       />
                     </FormControl>
@@ -108,9 +115,11 @@ export const MyProfileForm = () => {
             </div>
           </CardContent>
           <CardFooter className="justify-end space-x-2">
-            <Button type="submit" className="cursor-pointer">
-              Simpan
-            </Button>
+            {isAdmin(session?.user) && (
+              <Button type="submit" className="cursor-pointer">
+                Simpan
+              </Button>
+            )}
           </CardFooter>
         </Card>
       </form>

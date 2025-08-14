@@ -13,7 +13,7 @@ export default function AdminPage() {
         href: panelRoutes.home,
       },
     ])
-  }, [])
+  }, [setMenu])
 
   return (
     <></>

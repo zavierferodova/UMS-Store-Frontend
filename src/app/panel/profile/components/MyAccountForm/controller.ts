@@ -13,10 +13,11 @@ const formSchema = z.object({
   username: z
     .string()
     .regex(
-      /^[a-zA-Z0-9_]+$/,
-      "Username hanya boleh berisi huruf, angka, dan undescore"
+      /^$|^[a-zA-Z0-9_]+$/,
+      "Username hanya boleh berisi huruf, angka, dan underscore"
     )
-    .optional(),
+    .optional()
+    .or(z.literal('')),
 });
 
 const avatarSchema = z.object({
@@ -93,39 +94,6 @@ export const useController = () => {
         return "Foto profil berhasil diperbarui!";
       },
       error: "Gagal memperbarui foto profil!",
-    });
-  };
-
-  const handleRemoveAvatar = () => {
-    setImagePreview(null);
-    avatarForm.setValue("profileImage", undefined);
-
-    const promise = new Promise((resolve, reject) => {
-      authData
-        .updateUser({
-          profile_image: null,
-        })
-        .then((result) => {
-          if (result) {
-            resolve(result);
-          } else {
-            reject(new Error("Gagal memperbarui akun"));
-          }
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-
-    toast.promise(promise, {
-      loading: "Sedang memperbaharui akun",
-      success: (data) => {
-        updateSession({
-          user: data,
-        });
-        return "Akun berhasil diperbarui!";
-      },
-      error: "Gagal memperbarui akun!",
     });
   };
 

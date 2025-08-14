@@ -2,7 +2,7 @@
 
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
-import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "../ui/breadcrumb";
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumb";
 import React, { useState } from "react";
 import { createContext, useContext } from "react";
 
@@ -13,7 +13,7 @@ type PanelHeaderContextType = {
 
 const PanelHeaderContext = createContext<PanelHeaderContextType>({
     menu: [],
-    setMenu: (menu: PanelMenuItem[]) => {},
+    setMenu: () => {},
 })
 
 export const usePanelHeader = () => { 
@@ -41,11 +41,13 @@ export function PanelHeader() {
     
     return (
         <>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center">
                     <div className="flex items-center mr-4">
                         <SidebarTrigger className="mr-2 cursor-pointer" />
-                        <Separator orientation="vertical" className="data-[orientation=vertical]:h-6" />
+                        { (menu.length > 0) && (
+                            <Separator orientation="vertical" className="data-[orientation=vertical]:h-6" />
+                        )}
                     </div>
                     <Breadcrumb>
                         <BreadcrumbList>

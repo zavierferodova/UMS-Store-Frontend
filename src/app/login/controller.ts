@@ -44,7 +44,7 @@ export function useController() {
         if (status === "authenticated") {
             router.push(panelRoutes.home)
         }
-    }, [status])
+    }, [status, router])
 
     return { form, onSubmit }
 }

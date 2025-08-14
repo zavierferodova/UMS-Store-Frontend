@@ -18,7 +18,7 @@ const formSchema = z.object({
 });
 
 export const useController = () => {
-  const { update: updateSession, data: session } = useSession();
+  const { update: updateSession } = useSession();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

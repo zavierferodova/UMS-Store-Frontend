@@ -76,7 +76,7 @@ const menu: MenuGroup[] = [
             },
             {
                 title: "Pengguna",
-                href: "#",
+                href: panelRoutes.users,
                 icon: <UserIcon />,
             },
         ]

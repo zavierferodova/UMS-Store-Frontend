@@ -8,4 +8,5 @@ export interface User {
     gender: string | null;
     phone: string | null;
     address: string | null;
+    last_login: string | null;
 }

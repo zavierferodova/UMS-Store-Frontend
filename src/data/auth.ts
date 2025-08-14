@@ -1,5 +1,5 @@
 import { fetchJSON } from "@/lib/fetch";
-import { IAuthData, LoginResponse, RotateTokenResponse, UpdateUserParam } from "@/domain/data/auth";
+import { IAuthData, LoginResponse, RotateTokenResponse, UpdateUserParams } from "@/domain/data/auth";
 import { APP_URL } from "@/config/env";
 import { User } from "@/domain/model/user";
 import { getSession } from "next-auth/react"
@@ -30,7 +30,7 @@ async function login(username: string, password: string): Promise<LoginResponse 
     }
   
     return null;
-  } catch (e) {
+  } catch {
     return null;
   }
 }
@@ -57,7 +57,7 @@ async function rotateToken(refreshToken: string): Promise<RotateTokenResponse | 
     }
   
     return null; 
-  } catch (e) {
+  } catch {
     return null;
   }
 }
@@ -88,7 +88,7 @@ async function loginWithGoogle(accessToken: string): Promise<LoginResponse | nul
     }
 
     return null;
-  } catch (e) {
+  } catch {
     return null;
   }
 }
@@ -109,13 +109,13 @@ async function getUser(accessToken: string): Promise<User | null> {
     }
 
     return null;
-  } catch (e) {
+  } catch {
     return null;
   }
 }
 
 async function updateUser(
-  user: UpdateUserParam,
+  user: UpdateUserParams,
 ): Promise<User | null> {
   try {
     const session = await getSession();
@@ -134,7 +134,7 @@ async function updateUser(
     }
 
     return null;
-  } catch (e) {
+  } catch {
     return null;
   }
 }
@@ -162,7 +162,7 @@ async function updatePassword(
     }
 
     return false;
-  } catch (e) {
+  } catch {
     return false;
   }
 }
@@ -186,7 +186,7 @@ async function uploadProfileImage(image: File): Promise<User | null> {
     }
 
     return null;
-  } catch (e) {
+  } catch {
     return null;
   }
 }

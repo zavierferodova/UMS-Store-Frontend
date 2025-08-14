@@ -10,7 +10,7 @@ export async function fetchJSON(url: string, options?: RequestInit) {
         }
 
         return null;
-    } catch (e) {
+    } catch {
         return null
     }
 }
