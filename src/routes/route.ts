@@ -3,6 +3,9 @@ export const panelRoutes = {
     profile: "/panel/profile",
     users: "/panel/users",
     userEdit: (id: string) => `/panel/users/${id}`,
+    suppliers: "/panel/suppliers",
+    supplierEdit: (id: string) => `/panel/suppliers/${id}`,
+    supplierAdd: "/panel/suppliers/add",
     noRole: "/no-role",
 }
 

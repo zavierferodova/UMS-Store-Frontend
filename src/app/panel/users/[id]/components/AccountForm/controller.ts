@@ -11,16 +11,15 @@ import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 
 const formSchema = z.object({
-  email: z.string().email("Invalid email address").min(1, "Email is required"),
+  email: z.email("Email tidak valid"),
   username: z
     .string()
     .regex(
       /^$|^[a-zA-Z0-9_]+$/,
       "Username hanya boleh berisi huruf, angka, dan underscore"
     )
-    .optional()
-    .or(z.literal('')),
-  role: z.enum(["admin", "procurement", "cashier"]).optional(),
+    .or(z.string().optional()),
+  role: z.enum(["admin", "procurement", "cashier"]).or(z.string().optional()),
 });
 
 export const useController = (user: User | null) => {
@@ -65,8 +64,8 @@ export const useController = (user: User | null) => {
   useEffect(() => {
     if (user) {
       form.reset({
-        email: user.email || "",
-        username: user.username || "",
+        email: user.email || undefined,
+        username: user.username || undefined,
         role: user.role || undefined,
       });
       setUserImage(user.profile_image || "");

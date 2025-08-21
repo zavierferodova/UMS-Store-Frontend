@@ -1,11 +1,11 @@
-import authData from "@/data/auth";
-import NextAuth from "next-auth";
+import { authDataServer } from "@/data/auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET } from "@/config/env";
 import { publicRoutes } from "@/routes/route";
 
-const handler = NextAuth({
+export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -16,7 +16,7 @@ const handler = NextAuth({
       async authorize(credentials) {
         if (!credentials) return null;
         
-        const response = await authData.login(credentials.username, credentials.password);
+        const response = await authDataServer.login(credentials.username, credentials.password);
         if (!response) return null;
 
         return {
@@ -33,6 +33,7 @@ const handler = NextAuth({
           refresh_token: response.refresh_token,
           access_expiration: response.access_expiration,
           refresh_expiration: response.refresh_expiration,
+          last_login: response.user.last_login
         };
       }
     }),
@@ -58,7 +59,7 @@ const handler = NextAuth({
   callbacks: {
     async jwt({ token, user, account, session, trigger }) {
       if (account?.provider === "google") {
-        const data = await authData.loginWithGoogle(account.access_token!)
+        const data = await authDataServer.loginWithGoogle(account.access_token!)
 
         if (data) {
           token.user = {
@@ -71,6 +72,7 @@ const handler = NextAuth({
             gender: data.user.gender,
             phone: data.user.phone,
             address: data.user.address,
+            last_login: data.user.last_login
           };
           token.access_token = data.access_token;
           token.refresh_token = data.refresh_token;
@@ -89,6 +91,7 @@ const handler = NextAuth({
           gender: userData.gender,
           phone: userData.phone,
           address: userData.address,
+          last_login: userData.last_login
         };
 
         token.access_token = access_token;
@@ -101,7 +104,7 @@ const handler = NextAuth({
         const { refresh_token, access_expiration } = token;
 
         if (Date.now() > new Date(access_expiration).getTime()) {
-          const newToken = await authData.rotateToken(refresh_token);
+          const newToken = await authDataServer.rotateToken(refresh_token);
   
           if (newToken) {
             token.access_token = newToken.access_token;
@@ -109,24 +112,29 @@ const handler = NextAuth({
           }
         }
 
-        const user = await authData.getUser(token.access_token);
-        if (user) {
+        console.log(token.accessToken);
+        const newUser = await authDataServer.getUser(token.access_token);
+
+        if (newUser) {
           token.user = {
-            id: Number(user.id),
-            profile_image: user.profile_image,
-            name: user.name,
-            email: user.email,
-            username: user.username,
-            role: user.role,
-            gender: user.gender,
-            phone: user.phone,
-            address: user.address,
+            id: Number(newUser.id),
+            profile_image: newUser.profile_image,
+            name: newUser.name,
+            email: newUser.email,
+            username: newUser.username,
+            role: newUser.role,
+            gender: newUser.gender,
+            phone: newUser.phone,
+            address: newUser.address,
+            last_login: newUser.last_login
           }
         }
       }
 
       if (trigger === "update") {
-        token.user = session.user
+        if (session.user) {
+          token.user = session.user
+        }
       }
 
       return token;
@@ -137,6 +145,8 @@ const handler = NextAuth({
       return session;
     },
   }
-});
+}
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

@@ -60,8 +60,8 @@ const menu: MenuGroup[] = [
                 icon: <ShoppingBagIcon />,
             },
             {
-                title: "Supplier",
-                href: "#",
+                title: "Pemasok",
+                href: panelRoutes.suppliers,
                 icon: <ArrowDownRightIcon />,
             },
             {

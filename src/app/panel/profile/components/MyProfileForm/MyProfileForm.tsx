@@ -44,7 +44,7 @@ export const MyProfileForm = () => {
                   <FormItem>
                     <FormLabel>Nama</FormLabel>
                     <FormControl>
-                      <Input placeholder="Nama anda" {...field} />
+                      <Input placeholder="Masukkan nama lengkap anda" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -82,7 +82,7 @@ export const MyProfileForm = () => {
                   <FormItem className="content-start">
                     <FormLabel>No Telp</FormLabel>
                     <FormControl>
-                      <Input placeholder="628xxxxxxxxxx" {...field} />
+                      <Input placeholder="Masukkan no telp" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

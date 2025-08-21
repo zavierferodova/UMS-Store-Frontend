@@ -9,6 +9,7 @@ export const useController = () => {
     const [limit, setLimit] = useState(10)
     const [page, setPage] = useState(1)
     const [search, setSearch] = useState("")
+    const [role, setRole] = useState<string[]>([])
     const [users, setUsers] = useState<IPaginationResponse<User>>({
         data: [],
         meta: {
@@ -23,7 +24,7 @@ export const useController = () => {
     const fetchUserData = useCallback(async () => {
         setStatus(PageStatus.LOADING)
         try {
-            const response = await userData.getUsers({ page, limit, search })
+            const response = await userData.getUsers({ page, limit, search, role })
             setUsers({
                 data: response.data,
                 meta: response.meta
@@ -31,7 +32,7 @@ export const useController = () => {
         } finally {
             setStatus(PageStatus.SUCCESS)
         }
-    }, [page, limit, search])
+    }, [page, limit, search, role])
 
 
     const updatePage = (page: number) => {
@@ -48,6 +49,11 @@ export const useController = () => {
         setSearch(search)
     }
 
+    const updateRole = (role: string[]) => {
+        setPage(1)
+        setRole(role)
+    }
+
     useEffect(() => {
         fetchUserData()
     }, [fetchUserData])
@@ -60,6 +66,7 @@ export const useController = () => {
         users,
         updatePage,
         updateLimit,
-        updateSearch
+        updateSearch,
+        updateRole
     }
 }

@@ -1,0 +1,23 @@
+"use client"
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+
+export type NotFoundProps = {
+    message?: string
+}
+
+export function NotFound({ message }: NotFoundProps) {
+    return (
+        <div className="w-full h-full flex justify-center items-center flex-col">
+            <div className="w-4xl">
+                <DotLottieReact
+                    src="/lottie/TKoC6NThAb.lottie"
+                    loop
+                    autoplay
+                    />
+            </div>
+            <div className="text-3xl font-medium text-zinc-700 text-center">
+                {message || "Mau cari apa sih ?"}
+            </div>
+        </div>
+    )
+}

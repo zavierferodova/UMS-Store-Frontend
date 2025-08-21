@@ -8,9 +8,9 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  gender: z.enum(["male", "female"]).optional(),
-  phone: z.string().optional(),
+  name: z.string().min(1, "Nama tidak boleh kosong"),
+  gender: z.enum(["male", "female"]).or(z.string().optional()),
+  phone: z.string().regex(/^[0-9]+$/, "Nomor telepon hanya boleh berisi angka").or(z.string().optional()),
   address: z.string().optional(),
 });
 
@@ -20,7 +20,7 @@ export const useController = (user: User | null) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      gender: undefined,
+      gender: "",
       phone: "",
       address: "",
     },
@@ -33,8 +33,8 @@ export const useController = (user: User | null) => {
           .updateUser(user.id.toString(), {
             name: data.name,
             gender: data.gender,
-            phone: data.phone,
-            address: data.address,
+            phone: data.phone || undefined,
+            address: data.address || undefined,
           })
           .then((user) => {
             if (user) {
@@ -61,7 +61,7 @@ export const useController = (user: User | null) => {
   useEffect(() => {
     if (user) {
       form.reset({
-        name: user.name || "",
+        name: user.name,
         gender:
           user.gender == null ? undefined : (user.gender as "male" | "female"),
         phone: user.phone || "",

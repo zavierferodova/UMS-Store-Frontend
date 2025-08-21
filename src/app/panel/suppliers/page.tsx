@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -9,33 +10,31 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
 import { Paginated } from "@/components/pagination/Paginated";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { usePanelHeader } from "@/components/panel/Header";
 import { useEffect } from "react";
 import { panelRoutes } from "@/routes/route";
-import { UserIcon } from "@phosphor-icons/react/dist/ssr";
 import { useController } from "./controller";
-import { UsersTableSkeleton } from "@/components/skeleton/users-table-skeleton";
+import { SuppliersTableSkeleton } from "@/components/skeleton/suppliers-table-skeleton";
 import { PageStatus } from "@/lib/page";
 import { localeDateFormat } from "@/lib/utils";
 import Link from "next/link";
-import { RoleFilter } from "./components/RoleFilter";
-import { roleLabel } from "@/lib/role";
+import { Search } from "lucide-react";
+import { PlusIcon } from "@phosphor-icons/react/dist/ssr";
+import { StatusFilter } from "./components/StatusFilter";
 
-export default function UsersPage() {
+export default function SuppliersPage() {
   const {
     search,
     status,
-    users,
+    suppliers,
     updatePage,
     updateLimit,
     updateSearch,
-    updateRole
+    updateIsDeleted,
   } = useController();
   const { setMenu } = usePanelHeader();
-  const { meta } = users;
+  const { meta } = suppliers;
 
   useEffect(() => {
     setMenu([
@@ -44,8 +43,8 @@ export default function UsersPage() {
         href: panelRoutes.home,
       },
       {
-        name: "Pengguna",
-        href: panelRoutes.users,
+        name: "Pemasok",
+        href: panelRoutes.suppliers,
       },
     ]);
   }, [setMenu]);
@@ -54,24 +53,29 @@ export default function UsersPage() {
     <Card>
       <CardHeader>
         <div className="flex justify-between items-center">
-          <CardTitle>Daftar Pengguna</CardTitle>
+          <CardTitle>Daftar Pemasok</CardTitle>
           <div className="flex gap-2">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 onChange={(e) => updateSearch(e.target.value)}
                 value={search}
-                placeholder="Cari pengguna"
+                placeholder="Cari pemasok"
                 className="pl-10"
               />
             </div>
-            <RoleFilter onFilterChange={updateRole} />
+            <StatusFilter onFilterChange={updateIsDeleted} />
+            <Link href={panelRoutes.supplierAdd}>
+              <Button className="cursor-pointer">
+                <PlusIcon /> Tambah
+              </Button>
+            </Link>
           </div>
         </div>
       </CardHeader>
       <CardContent>
         {status == PageStatus.LOADING ? (
-          <UsersTableSkeleton />
+          <SuppliersTableSkeleton />
         ) : (
           <Table>
             <TableHeader>
@@ -79,44 +83,38 @@ export default function UsersPage() {
                 <TableHead>
                   <div className="flex justify-center">No</div>
                 </TableHead>
-                <TableHead>
-                  <div className="flex justify-center">Image</div>
-                </TableHead>
+                <TableHead>Kode</TableHead>
                 <TableHead>Nama</TableHead>
-                <TableHead>Username</TableHead>
+                <TableHead>No Telp</TableHead>
                 <TableHead>Email</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Terakhir Login</TableHead>
+                <TableHead>Dibuat</TableHead>
+                <TableHead>Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {users.data.map((user, index) => (
-                <TableRow key={user.id}>
+              {suppliers.data.map((supplier, index) => (
+                <TableRow key={supplier.id}>
                   <TableCell>
                     <div className="flex justify-center">{index + 1}</div>
                   </TableCell>
-                  <TableCell className="w-20">
-                    <div className="flex justify-center">
-                      <Avatar>
-                        <AvatarImage src={user.profile_image} className="object-cover" />
-                        <AvatarFallback>
-                          <UserIcon />
-                        </AvatarFallback>
-                      </Avatar>
-                    </div>
-                  </TableCell>
+                  <TableCell>{supplier.code}</TableCell>
                   <TableCell>
-                    <Link href={panelRoutes.userEdit(user.id.toString())} className="font-medium hover:underline">
-                     {user.name}
+                    <Link
+                      href={panelRoutes.supplierEdit(supplier.id.toString())}
+                      className="font-medium hover:underline"
+                    >
+                      {supplier.name}
                     </Link>
                   </TableCell>
-                  <TableCell>{user.username || "-"}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.role ? roleLabel(user.role) : "-"}</TableCell>
+                  <TableCell>{supplier.phone}</TableCell>
+                  <TableCell>{supplier.email || "-"}</TableCell>
                   <TableCell>
-                    {user.last_login
-                      ? localeDateFormat(user.last_login)
+                    {supplier.created_at
+                      ? localeDateFormat(supplier.created_at)
                       : "-"}
+                  </TableCell>
+                  <TableCell>
+                    {supplier.is_deleted ? "Dihapus" : "Aktif"}
                   </TableCell>
                 </TableRow>
               ))}

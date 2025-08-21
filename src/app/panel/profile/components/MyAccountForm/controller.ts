@@ -9,15 +9,14 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
-  email: z.string().email("Invalid email address").min(1, "Email is required"),
+  email: z.email("Email tidak valid"),
   username: z
     .string()
     .regex(
       /^$|^[a-zA-Z0-9_]+$/,
       "Username hanya boleh berisi huruf, angka, dan underscore"
     )
-    .optional()
-    .or(z.literal('')),
+    .or(z.string().optional()),
 });
 
 const avatarSchema = z.object({

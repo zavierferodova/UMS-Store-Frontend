@@ -11,7 +11,7 @@ export async function middleware(req: NextRequest) {
 
   const { pathname } = req.nextUrl;
 
-  if (token.user.role) {
+  if (token.user?.role) {
     if (pathname.startsWith(panelRoutes.home)) {
       return NextResponse.next();
     }

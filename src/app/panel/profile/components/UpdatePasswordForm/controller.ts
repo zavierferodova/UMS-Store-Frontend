@@ -1,5 +1,4 @@
 "use client";
-
 import authData from "@/data/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
@@ -8,10 +7,10 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
-  newPassword: z.string().min(1, { message: "Password tidak boleh kosong" }),
+  newPassword: z.string().min(8, "Password minimal 8 karakter"),
   confirmPassword: z
     .string()
-    .min(1, { message: "Konfirmasi password tidak boleh kosong" }),
+    .min(8, "Konfirmasi password minimal 8 karakter"),
 }).refine((data) => data.newPassword === data.confirmPassword, {
   message: "Password tidak cocok",
   path: ["confirmPassword"],
@@ -46,9 +45,6 @@ export const useController = () => {
     toast.promise(promise, {
       loading: "Sedang memperbaharui password",
       success: (data) => {
-        updateSession({
-          user: data,
-        });
         return "Password berhasil diperbarui!";
       },
       error: "Gagal memperbarui password!",

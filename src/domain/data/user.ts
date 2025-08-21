@@ -5,9 +5,10 @@ export type GetUsersParams = {
     search?: string;
     limit?: number;
     page?: number;
+    role?: string[];
 }
 
-export type UpdateUserParams= {
+export type UpdateUserParams = {
     name?: string;
     email?: string;
     username?: string;

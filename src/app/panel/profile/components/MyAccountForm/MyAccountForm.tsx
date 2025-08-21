@@ -94,7 +94,7 @@ export const MyAccountForm = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="email@example.com" {...field} />
+                    <Input placeholder="Masukkan email anda" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -107,7 +107,7 @@ export const MyAccountForm = () => {
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="Username anda" {...field} />
+                    <Input placeholder="Masukkan username anda" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
