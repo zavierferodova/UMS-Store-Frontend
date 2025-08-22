@@ -6,6 +6,7 @@ import supplierData from "@/data/supplier";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const formSchema = z.object({
   name: z.string().min(1, "Nama tidak boleh kosong"),
@@ -26,6 +27,7 @@ const formSchema = z.object({
 });
 
 export const useController = (supplier: Supplier | null) => {
+  const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -39,6 +41,7 @@ export const useController = (supplier: Supplier | null) => {
       active: true,
     },
   });
+  const user = session?.user;
 
   useEffect(() => {
     if (supplier) {
@@ -103,6 +106,7 @@ export const useController = (supplier: Supplier | null) => {
   };
 
   return {
+    user,
     form,
     onSubmit,
     open,

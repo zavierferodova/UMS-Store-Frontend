@@ -10,13 +10,13 @@ export function NotFound({ message }: NotFoundProps) {
         <div className="w-full h-full flex justify-center items-center flex-col">
             <div className="w-4xl">
                 <DotLottieReact
-                    src="/lottie/TKoC6NThAb.lottie"
+                    src="/lottie/Y8za7rMi03.lottie"
                     loop
                     autoplay
                     />
             </div>
             <div className="text-3xl font-medium text-zinc-700 text-center">
-                {message || "Mau cari apa sih ?"}
+                {message || "Eitss gak nemu nih ?"}
             </div>
         </div>
     )

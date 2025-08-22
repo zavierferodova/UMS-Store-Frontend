@@ -2,6 +2,7 @@ import supplierData from "@/data/supplier";
 import { IPaginationResponse } from "@/domain/model/response";
 import { Supplier } from "@/domain/model/supplier";
 import { PageStatus } from "@/lib/page";
+import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
 
 export const useController = () => {
@@ -21,6 +22,9 @@ export const useController = () => {
         },
     });
 
+    const { data: session } = useSession();
+    const user = session?.user;
+
     const fetchSupplierData = useCallback(async () => {
         setStatus(PageStatus.LOADING);
         try {
@@ -32,7 +36,7 @@ export const useController = () => {
         } finally {
             setStatus(PageStatus.SUCCESS);
         }
-    }, [page, limit, search, dataStatus]);
+    }, [user, page, limit, search, dataStatus]);
 
     const updatePage = (page: number) => {
         setPage(page);
@@ -54,10 +58,13 @@ export const useController = () => {
     };
 
     useEffect(() => {
-        fetchSupplierData();
-    }, [fetchSupplierData]);
+        if (user) {
+            fetchSupplierData();
+        }
+    }, [user, fetchSupplierData]);
 
     return {
+        user,
         search,
         page,
         limit,

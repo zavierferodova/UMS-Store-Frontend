@@ -1,27 +1,9 @@
-import { getToken } from "next-auth/jwt";
-import { NextRequest, NextResponse } from "next/server";
-import { panelRoutes } from "./routes/route";
+import { chain } from "./middlewares"
+import { authChain } from "./middlewares/auth"
+import { roleMiddleware } from "./middlewares/role"
+import { panelUsersMiddleware } from "./middlewares/panel"
 
-export async function middleware(req: NextRequest) {
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+const authMiddlewares = [authChain([roleMiddleware, panelUsersMiddleware])]
+export const middleware = chain(authMiddlewares)
 
-  if (!token) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
-
-  const { pathname } = req.nextUrl;
-
-  if (token.user?.role) {
-    if (pathname.startsWith(panelRoutes.home)) {
-      return NextResponse.next();
-    }
-    return NextResponse.redirect(new URL(panelRoutes.home, req.url));
-  } else {
-    if (pathname.startsWith(panelRoutes.noRole)) {
-      return NextResponse.next();
-    }
-    return NextResponse.redirect(new URL(panelRoutes.noRole, req.url));
-  }
-}
-
-export const config = { matcher: ["/panel/:path*", "/no-role"] };
+export const config = { matcher: ["/panel/:path*", "/no-role"] }

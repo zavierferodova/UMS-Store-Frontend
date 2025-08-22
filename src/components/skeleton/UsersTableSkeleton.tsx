@@ -28,7 +28,7 @@ export function UsersTableSkeleton() {
                 <Skeleton className="h-4 w-4" />
               </TableCell>
               <TableCell>
-                <Skeleton className="h-10 w-10 rounded-full" />
+                <Skeleton className="h-8 w-8 rounded-full" />
               </TableCell>
               <TableCell>
                 <Skeleton className="h-4 w-24" />

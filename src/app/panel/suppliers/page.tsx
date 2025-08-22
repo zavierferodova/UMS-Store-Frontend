@@ -15,16 +15,19 @@ import { usePanelHeader } from "@/components/panel/Header";
 import { useEffect } from "react";
 import { panelRoutes } from "@/routes/route";
 import { useController } from "./controller";
-import { SuppliersTableSkeleton } from "@/components/skeleton/suppliers-table-skeleton";
+import { SuppliersTableSkeleton } from "@/components/skeleton/SuppliersTableSkeleton";
 import { PageStatus } from "@/lib/page";
 import { localeDateFormat } from "@/lib/utils";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { PlusIcon } from "@phosphor-icons/react/dist/ssr";
 import { StatusFilter } from "./components/StatusFilter";
+import { isAdmin } from "@/lib/role";
+import { EmptyDisplay } from "@/components/display/EmptyDisplay";
 
 export default function SuppliersPage() {
   const {
+    user,
     search,
     status,
     suppliers,
@@ -34,7 +37,7 @@ export default function SuppliersPage() {
     updateIsDeleted,
   } = useController();
   const { setMenu } = usePanelHeader();
-  const { meta } = suppliers;
+  const isEmpty = status == PageStatus.SUCCESS && suppliers.data.length == 0;
 
   useEffect(() => {
     setMenu([
@@ -64,7 +67,7 @@ export default function SuppliersPage() {
                 className="pl-10"
               />
             </div>
-            <StatusFilter onFilterChange={updateIsDeleted} />
+            {isAdmin(user) && <StatusFilter onFilterChange={updateIsDeleted} />}
             <Link href={panelRoutes.supplierAdd}>
               <Button className="cursor-pointer">
                 <PlusIcon /> Tambah
@@ -75,7 +78,7 @@ export default function SuppliersPage() {
       </CardHeader>
       <CardContent>
         {status == PageStatus.LOADING ? (
-          <SuppliersTableSkeleton />
+          <SuppliersTableSkeleton showStatusColumn={isAdmin(user)} />
         ) : (
           <Table>
             <TableHeader>
@@ -88,7 +91,7 @@ export default function SuppliersPage() {
                 <TableHead>No Telp</TableHead>
                 <TableHead>Email</TableHead>
                 <TableHead>Dibuat</TableHead>
-                <TableHead>Status</TableHead>
+                {isAdmin(user) && <TableHead>Status</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -113,19 +116,33 @@ export default function SuppliersPage() {
                       ? localeDateFormat(supplier.created_at)
                       : "-"}
                   </TableCell>
-                  <TableCell>
-                    {supplier.is_deleted ? "Dihapus" : "Aktif"}
-                  </TableCell>
+                  {isAdmin(user) && (
+                    <TableCell>
+                      {supplier.is_deleted ? "Dihapus" : "Aktif"}
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         )}
-        <Paginated
-          meta={meta}
-          onPageChange={(page) => updatePage(page)}
-          onLimitChange={(limit) => updateLimit(limit)}
-        />
+        {isEmpty && (
+          <div className="mt-8 mb-8">
+            <EmptyDisplay
+              title="Kosong"
+              description={
+                search ? "Tidak ada data yang ditemukan" : "Belum ada pemasok yang terdaftar"
+              }
+            />
+          </div>
+        )}
+        {!isEmpty && (
+          <Paginated
+            meta={suppliers.meta}
+            onPageChange={(page) => updatePage(page)}
+            onLimitChange={(limit) => updateLimit(limit)}
+          />
+        )}
       </CardContent>
     </Card>
   );

@@ -8,13 +8,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-export function SuppliersTableSkeleton() {
+interface SuppliersTableSkeletonProps {
+  showStatusColumn: boolean;
+}
+
+export function SuppliersTableSkeleton({ showStatusColumn }: SuppliersTableSkeletonProps) {
   return (
     <div className="space-y-2">
       <Table>
         <TableHeader>
           <TableRow>
-            {Array.from({ length: 6 }).map((_, i) => (
+            {Array.from({ length: showStatusColumn ? 6 : 5 }).map((_, i) => (
               <TableHead key={i}>
                 <Skeleton className="h-4 w-3/4" />
               </TableHead>
@@ -39,9 +43,13 @@ export function SuppliersTableSkeleton() {
               <TableCell>
                 <Skeleton className="h-4 w-20" />
               </TableCell>
-              <TableCell>
-                <Skeleton className="h-4 w-20" />
-              </TableCell>
+              {
+                showStatusColumn && (
+                  <TableCell>
+                    <Skeleton className="h-4 w-20" />
+                  </TableCell>
+                )
+              }
             </TableRow>
           ))}
         </TableBody>

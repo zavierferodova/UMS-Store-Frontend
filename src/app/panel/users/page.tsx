@@ -17,12 +17,13 @@ import { useEffect } from "react";
 import { panelRoutes } from "@/routes/route";
 import { UserIcon } from "@phosphor-icons/react/dist/ssr";
 import { useController } from "./controller";
-import { UsersTableSkeleton } from "@/components/skeleton/users-table-skeleton";
+import { UsersTableSkeleton } from "@/components/skeleton/UsersTableSkeleton";
 import { PageStatus } from "@/lib/page";
 import { localeDateFormat } from "@/lib/utils";
 import Link from "next/link";
 import { RoleFilter } from "./components/RoleFilter";
 import { roleLabel } from "@/lib/role";
+import { EmptyDisplay } from "@/components/display/EmptyDisplay";
 
 export default function UsersPage() {
   const {
@@ -35,7 +36,7 @@ export default function UsersPage() {
     updateRole
   } = useController();
   const { setMenu } = usePanelHeader();
-  const { meta } = users;
+  const isEmpty = status == PageStatus.SUCCESS && users.data.length == 0;
 
   useEffect(() => {
     setMenu([
@@ -123,11 +124,23 @@ export default function UsersPage() {
             </TableBody>
           </Table>
         )}
-        <Paginated
-          meta={meta}
-          onPageChange={(page) => updatePage(page)}
-          onLimitChange={(limit) => updateLimit(limit)}
-        />
+        {isEmpty && (
+          <div className="mt-8 mb-8">
+            <EmptyDisplay
+              title="Kosong"
+              description={
+                search ? "Tidak ada data yang ditemukan" : "Belum ada pengguna yang terdaftar"
+              }
+            />
+          </div>
+        )}
+        {!isEmpty && (
+          <Paginated
+            meta={users.meta}
+            onPageChange={(page) => updatePage(page)}
+            onLimitChange={(limit) => updateLimit(limit)}
+          />
+        )}
       </CardContent>
     </Card>
   );

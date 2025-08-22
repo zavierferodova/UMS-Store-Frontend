@@ -8,21 +8,24 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { useTheme } from "next-themes";
 import { Switch } from "@/components/ui/switch";
 import { signOut, useSession } from "next-auth/react";
-import { roleLabel } from "@/lib/role";
+import { role, roleLabel } from "@/lib/role";
 import Image from "next/image";
 import Link from "next/link";
 import { panelRoutes } from "@/routes/route";
+import { Role } from "@/domain/model/role";
 
 export interface MenuItem {
     title: string;
     href: string;
     icon: React.ReactNode;
     disabled?: boolean;
+    roles?: Role[];
 }
 
 export interface MenuGroup {
     label: string;
     items: MenuItem[];
+    roles?: Role[];
 }
 
 const menu: MenuGroup[] = [
@@ -32,9 +35,10 @@ const menu: MenuGroup[] = [
             {
                 title: "Beranda",
                 href: panelRoutes.home,
-                icon: <HomeIcon />,
+                icon: <HomeIcon />
             },
-        ]
+        ],
+        roles: [role.admin, role.procurement]
     },
     {
         label: "Transaksi",
@@ -49,7 +53,8 @@ const menu: MenuGroup[] = [
                 href: "#",
                 icon: <ShoppingCartIcon />,
             },
-        ]
+        ],
+        roles: [role.admin]
     },
     {
         label: "Manajemen",
@@ -58,26 +63,31 @@ const menu: MenuGroup[] = [
                 title: "Produk",
                 href: "#",
                 icon: <ShoppingBagIcon />,
+                roles: [role.admin, role.procurement]
             },
             {
                 title: "Pemasok",
                 href: panelRoutes.suppliers,
                 icon: <ArrowDownRightIcon />,
+                roles: [role.admin, role.procurement]
             },
             {
                 title: "Kupon",
                 href: "#",
                 icon: <TagIcon />,
+                roles: [role.admin, role.procurement]
             },
             {
                 title: "Mahasiswa",
                 href: "#",
                 icon: <StudentIcon />,
+                roles: [role.admin, role.procurement]
             },
             {
                 title: "Pengguna",
                 href: panelRoutes.users,
                 icon: <UserIcon />,
+                roles: [role.admin]
             },
         ]
     },
@@ -89,14 +99,22 @@ const menu: MenuGroup[] = [
                 href: "#",
                 icon: <ClipboardTextIcon />,
             },
-        ]
+        ],
+        roles: [role.admin]
     }
 ]
+
+function hasRoleAccess(itemRoles: Role[] | undefined, userRole: Role | undefined) {
+    if (!itemRoles || itemRoles.length === 0) return true;
+    if (!userRole) return false;
+    return itemRoles.includes(userRole);
+}
 
 export function PanelSidebar() {
     const { setTheme, theme } = useTheme()
     const session = useSession()
     const { user } = session.data || {}
+    const userRole = user?.role as Role | undefined
 
     return (
         <Sidebar>
@@ -107,27 +125,34 @@ export function PanelSidebar() {
                 <SidebarSeparator />
             </SidebarHeader>
             <SidebarContent>
-                {menu.map((group) => (
-                    <SidebarGroup key={group.label}>
-                        <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
-                        <SidebarGroupContent>
-                            <SidebarMenu>
-                                {group.items.map((item) => (
-                                    <SidebarMenuItem key={item.title}>
-                                        <SidebarMenuButton asChild>
-                                            <a href={item.href}>
-                                                {item.icon}
-                                                <div className="ml-1">
-                                                    {item.title}
-                                                </div>
-                                            </a>
-                                        </SidebarMenuButton>
-                                    </SidebarMenuItem>
-                                ))}
-                            </SidebarMenu>
-                        </SidebarGroupContent>
-                    </SidebarGroup>
-                ))}
+                {menu
+                    .filter(group => hasRoleAccess(group.roles, userRole))
+                    .map((group) => {
+                        const visibleItems = group.items.filter(item => hasRoleAccess(item.roles, userRole));
+                        if (visibleItems.length === 0) return null;
+                        
+                        return (
+                            <SidebarGroup key={group.label}>
+                                <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+                                <SidebarGroupContent>
+                                    <SidebarMenu>
+                                        {visibleItems.map((item) => (
+                                            <SidebarMenuItem key={item.title}>
+                                                <SidebarMenuButton asChild disabled={item.disabled}>
+                                                    <a href={item.href}>
+                                                        {item.icon}
+                                                        <div className="ml-1">
+                                                            {item.title}
+                                                        </div>
+                                                    </a>
+                                                </SidebarMenuButton>
+                                            </SidebarMenuItem>
+                                        ))}
+                                    </SidebarMenu>
+                                </SidebarGroupContent>
+                            </SidebarGroup>
+                        );
+                    })}
             </SidebarContent>
             <SidebarFooter>
                 <SidebarSeparator />

@@ -1,5 +1,12 @@
+import { Role } from "@/domain/model/role"
 import { User } from "@/domain/model/user"
 import { User as NextUser } from "next-auth"
+
+export const role = {
+  admin: "admin" as Role,
+  procurement: "procurement" as Role,
+  cashier: "cashier" as Role,
+}
 
 export function roleLabel(role: string) {
   switch (role) {

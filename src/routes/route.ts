@@ -10,5 +10,6 @@ export const panelRoutes = {
 }
 
 export const publicRoutes = {
-    login: "/login"
+    login: "/login",
+    notFound: "/not-found",
 }

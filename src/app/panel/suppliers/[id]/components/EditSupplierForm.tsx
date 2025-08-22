@@ -28,13 +28,15 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
+import { isAdmin, isProcurement } from "@/lib/role";
+import { useSession } from "next-auth/react";
 
 export interface EditSupplierFormProps {
   supplier: Supplier;
 }
 
 export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
-  const { form, onSubmit, open, setOpen, onDelete } = useController(supplier);
+  const { user, form, onSubmit, open, setOpen, onDelete } = useController(supplier);
 
   return (
     <Card>
@@ -142,34 +144,41 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="active"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-start gap-2 h-full mt-3">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormLabel>Aktif</FormLabel>
-                  </FormItem>
-                )}
-              />
+              {
+                isAdmin(user) && (
+                  <FormField
+                    control={form.control}
+                    name="active"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center justify-start gap-2 h-full mt-3">
+                        <FormControl>
+                          <Checkbox
+                            className="cursor-pointer"
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormLabel>Aktif</FormLabel>
+                      </FormItem>
+                    )}
+                  />
+                )
+              }
             </div>
             <div className="flex justify-end gap-2">
               <Button className="w-max cursor-pointer" type="submit">
                 Simpan
               </Button>
-              <Button
-                className="w-max cursor-pointer"
-                type="button"
-                variant="destructive"
-                onClick={() => setOpen(true)}
-              >
-                Hapus
-              </Button>
+              {isProcurement(user) && (
+                <Button
+                  className="w-max cursor-pointer"
+                  type="button"
+                  variant="destructive"
+                  onClick={() => setOpen(true)}
+                >
+                  Hapus
+                </Button>
+              )}
             </div>
           </form>
         </Form>
@@ -185,8 +194,15 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel className="cursor-pointer">Batal</AlertDialogCancel>
-              <AlertDialogAction className="bg-destructive hover:bg-destructive/90 cursor-pointer" onClick={onDelete}>Hapus</AlertDialogAction>
+              <AlertDialogCancel className="cursor-pointer">
+                Batal
+              </AlertDialogCancel>
+              <AlertDialogAction
+                className="bg-destructive hover:bg-destructive/90 cursor-pointer"
+                onClick={onDelete}
+              >
+                Hapus
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

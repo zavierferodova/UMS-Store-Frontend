@@ -112,7 +112,6 @@ export const authOptions: AuthOptions = {
           }
         }
 
-        console.log(token.accessToken);
         const newUser = await authDataServer.getUser(token.access_token);
 
         if (newUser) {
