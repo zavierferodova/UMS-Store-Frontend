@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Form,
@@ -30,6 +30,7 @@ export const AccountForm = ({ user }: AccountFormProps) => {
     <Card>
       <CardHeader>
         <CardTitle>Akun</CardTitle>
+        <CardDescription>Informasi akun pengguna</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="mb-6 flex items-center space-x-4">

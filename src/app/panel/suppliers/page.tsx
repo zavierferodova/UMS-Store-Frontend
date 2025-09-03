@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableHeader,
@@ -56,7 +56,10 @@ export default function SuppliersPage() {
     <Card>
       <CardHeader>
         <div className="flex justify-between items-center">
-          <CardTitle>Daftar Pemasok</CardTitle>
+          <div>
+            <CardTitle>Daftar Pemasok</CardTitle>
+            <CardDescription>Daftar semua pemasok yang terdaftar di sistem</CardDescription>
+          </div>
           <div className="flex gap-2">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />

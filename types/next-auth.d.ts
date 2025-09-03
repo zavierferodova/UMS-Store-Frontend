@@ -9,7 +9,7 @@ declare module "next-auth" {
   }
 
   interface User extends BaseUser {
-    id: number;
+    id: string;
     access_token: string;
     refresh_token: string;
     access_expiration: string;

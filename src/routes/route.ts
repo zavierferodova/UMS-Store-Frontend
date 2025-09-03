@@ -6,6 +6,8 @@ export const panelRoutes = {
     suppliers: "/panel/suppliers",
     supplierEdit: (id: string) => `/panel/suppliers/${id}`,
     supplierAdd: "/panel/suppliers/add",
+    products: "/panel/products",
+    addProduct: "/panel/products/add",
     noRole: "/no-role",
 }
 

@@ -40,7 +40,7 @@ class UserData implements IUserData {
             }
             
             const session = await this.getAuthSession();
-            const response = await fetchJSON(`${APP_URL}/apis/users/list${query}`, {
+            const response = await fetchJSON(`${APP_URL}/apis/users${query}`, {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${session?.access_token}`,
@@ -81,7 +81,7 @@ class UserData implements IUserData {
     
     async getUser(id: string): Promise<User | null> {
         try {
-            let session = await this.getAuthSession();
+            const session = await this.getAuthSession();
 
             const response = await fetchJSON(`${APP_URL}/apis/users/${id}`, {
                 method: "GET",

@@ -1,7 +1,7 @@
 "use client";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useController } from "./controller";
 import {
@@ -21,6 +21,7 @@ export const AddSupplierForm = () => {
     <Card>
       <CardHeader>
         <CardTitle>Pemasok</CardTitle>
+        <CardDescription>Formulir untuk menambah pemasok baru.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>

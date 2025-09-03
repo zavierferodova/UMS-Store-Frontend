@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardDescription,
   CardContent,
   CardFooter,
   CardHeader,
@@ -40,6 +41,7 @@ export const ProfileForm = ({ user }: ProfileFormProps) => {
         <Card>
           <CardHeader>
             <CardTitle>Profil</CardTitle>
+            <CardDescription>Informasi profil pengguna</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">

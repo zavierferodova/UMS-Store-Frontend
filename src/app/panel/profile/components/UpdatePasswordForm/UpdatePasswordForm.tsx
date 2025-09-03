@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -28,6 +29,7 @@ export const UpdatePasswordForm = () => {
         <Card>
           <CardHeader>
             <CardTitle>Update Password</CardTitle>
+            <CardDescription>Perbarui kata sandi akun Anda</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <FormField

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -37,6 +38,7 @@ export const MyAccountForm = () => {
     <Card>
       <CardHeader>
         <CardTitle>Akun Saya</CardTitle>
+        <CardDescription>Kelola informasi akun Anda</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>

@@ -82,7 +82,7 @@ export const authOptions: AuthOptions = {
       } else if (user) {
         const { access_token, refresh_token, access_expiration, refresh_expiration, ...userData } = user;
         token.user = {
-          id: Number(userData.id),
+          id: userData.id,
           profile_image: userData.profile_image,
           name: userData.name!,
           email: userData.email!,
@@ -101,7 +101,11 @@ export const authOptions: AuthOptions = {
         
         return token;
       } else if (token) {
-        const { refresh_token, access_expiration } = token;
+        const { refresh_token, access_expiration, refresh_expiration } = token;
+
+        if (Date.now() > new Date(refresh_expiration).getTime()) {
+          throw new Error("Refresh token expired");
+        }
 
         if (Date.now() > new Date(access_expiration).getTime()) {
           const newToken = await authDataServer.rotateToken(refresh_token);
@@ -116,7 +120,7 @@ export const authOptions: AuthOptions = {
 
         if (newUser) {
           token.user = {
-            id: Number(newUser.id),
+            id: newUser.id,
             profile_image: newUser.profile_image,
             name: newUser.name,
             email: newUser.email,

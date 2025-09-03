@@ -40,7 +40,7 @@ class SupplierData implements ISupplierData {
             }
             
             const session = await this.getAuthSession();
-            const response = await fetchJSON(`${APP_URL}/apis/suppliers/list${query}`, {
+            const response = await fetchJSON(`${APP_URL}/apis/suppliers${query}`, {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${session?.access_token}`,
@@ -126,7 +126,7 @@ class SupplierData implements ISupplierData {
     async createSupplier(data: CreateSupplierParams): Promise<Supplier | null> {
         try {
             const session = await this.getAuthSession();
-            const response = await fetchJSON(`${APP_URL}/apis/suppliers/add`,
+            const response = await fetchJSON(`${APP_URL}/apis/suppliers`,
                 {
                     method: "POST",
                     headers: {

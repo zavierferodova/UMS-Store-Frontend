@@ -2,7 +2,7 @@
 import { Textarea } from "@/components/ui/textarea";
 import { Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Supplier } from "@/domain/model/supplier";
@@ -29,7 +29,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { isAdmin, isProcurement } from "@/lib/role";
-import { useSession } from "next-auth/react";
 
 export interface EditSupplierFormProps {
   supplier: Supplier;
@@ -42,6 +41,7 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
     <Card>
       <CardHeader>
         <CardTitle>Pemasok</CardTitle>
+        <CardDescription>Formulir untuk mengubah data pemasok</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>

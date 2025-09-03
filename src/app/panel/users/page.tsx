@@ -1,5 +1,5 @@
 "use client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableHeader,
@@ -55,7 +55,10 @@ export default function UsersPage() {
     <Card>
       <CardHeader>
         <div className="flex justify-between items-center">
-          <CardTitle>Daftar Pengguna</CardTitle>
+          <div>
+            <CardTitle>Daftar Pengguna</CardTitle>
+            <CardDescription>Daftar semua pengguna yang terdaftar di sistem</CardDescription>
+          </div>
           <div className="flex gap-2">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />

@@ -61,7 +61,7 @@ const menu: MenuGroup[] = [
         items: [
             {
                 title: "Produk",
-                href: "#",
+                href: panelRoutes.products,
                 icon: <ShoppingBagIcon />,
                 roles: [role.admin, role.procurement]
             },
@@ -120,7 +120,7 @@ export function PanelSidebar() {
         <Sidebar>
             <SidebarHeader>
                 <div className="text-primary font-bold py-4 flex justify-center items-center">
-                    <Image src="/images/logo.png" alt="Logo" width={50} height={50} />
+                    <Image src="/images/logo.png" alt="Logo" width={70} height={70} />
                 </div>
                 <SidebarSeparator />
             </SidebarHeader>

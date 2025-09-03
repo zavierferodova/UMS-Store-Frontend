@@ -6,7 +6,7 @@ import { AuthMiddleware } from "./auth"
 export const roleMiddleware: AuthMiddleware = (req: NextRequest, token: JWT) => {
     const { pathname } = req.nextUrl
   
-    if (token?.user.role) {
+    if (token?.user?.role) {
       if (pathname.startsWith(panelRoutes.home)) {
         return NextResponse.next()
       }
