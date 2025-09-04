@@ -1,7 +1,9 @@
 "use client"
+import productData from "@/data/product"
 import { IPaginationResponse } from "@/domain/model/response"
 import { Product } from "@/domain/model/product"
 import { PageStatus } from "@/lib/page"
+import { useSession } from "next-auth/react"
 import { useCallback, useEffect, useState } from "react"
 
 export const useController = () => {
@@ -20,25 +22,21 @@ export const useController = () => {
         },
     })
 
+    const { data: session } = useSession()
+    const user = session?.user
+
     const fetchProductData = useCallback(async () => {
         setStatus(PageStatus.LOADING)
         try {
-            // const response = await getProducts(page, limit)
-            // setProducts({
-            //     data: response.content,
-            //     meta: {
-            //         total: response.totalElements,
-            //         page: response.number,
-            //         limit: response.size,
-            //         next: null,
-            //         previous: null,
-            //     }
-            // })
+            const response = await productData.getProducts({ page, limit, search })
+            setProducts({
+                data: response.data,
+                meta: response.meta
+            })
         } finally {
             setStatus(PageStatus.SUCCESS)
         }
-    }, [page, limit])
-
+    }, [user, page, limit, search])
 
     const updatePage = (page: number) => {
         setPage(page)
@@ -55,10 +53,13 @@ export const useController = () => {
     }
 
     useEffect(() => {
-        fetchProductData()
-    }, [fetchProductData])
+        if (user) {
+            fetchProductData()
+        }
+    }, [user, fetchProductData])
 
     return {
+        user,
         search,
         page,
         limit,
@@ -66,6 +67,6 @@ export const useController = () => {
         products,
         updatePage,
         updateLimit,
-        updateSearch,
+        updateSearch
     }
 }

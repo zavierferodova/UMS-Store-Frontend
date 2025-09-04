@@ -7,10 +7,11 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Product } from "@/domain/model/product";
-import { Page } from "@/lib/page";
+import { IPaginationResponse } from "@/domain/model/response";
+import { toTitleCase } from "@/lib/string";
 
 interface ProductsTableProps {
-  products: Page<Product>;
+  products: IPaginationResponse<Product>;
 }
 
 export function ProductsTable({ products }: ProductsTableProps) {
@@ -28,15 +29,17 @@ export function ProductsTable({ products }: ProductsTableProps) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {products.content.map((product, index) => (
+        {products.data.map((product, index) => (
           <TableRow key={product.id}>
             <TableCell>
               <div className="flex justify-center">{index + 1}</div>
             </TableCell>
-            <TableCell>{product.sku}</TableCell>
+            <TableCell>
+              {product.skus.map((sku) => { return <div key={sku.sku}>{sku.sku}<br/></div>; })}
+            </TableCell>
             <TableCell>{product.name}</TableCell>
-            <TableCell>{product.category.name}</TableCell>
-            <TableCell>{product.price}</TableCell>
+            <TableCell>{toTitleCase(product.category.name)}</TableCell>
+            <TableCell>{product.price.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</TableCell>
           </TableRow>
         ))}
       </TableBody>

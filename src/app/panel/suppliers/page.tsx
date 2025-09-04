@@ -55,25 +55,25 @@ export default function SuppliersPage() {
   return (
     <Card>
       <CardHeader>
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col md:flex-row justify-between md:items-center">
           <div>
             <CardTitle>Daftar Pemasok</CardTitle>
             <CardDescription>Daftar semua pemasok yang terdaftar di sistem</CardDescription>
           </div>
-          <div className="flex gap-2">
-            <div className="relative">
+          <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto mt-4 md:mt-0">
+            <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 onChange={(e) => updateSearch(e.target.value)}
                 value={search}
                 placeholder="Cari pemasok"
-                className="pl-10"
+                className="pl-10 w-full md:w-64"
               />
             </div>
             {isAdmin(user) && <StatusFilter onFilterChange={updateIsDeleted} />}
-            <Link href={panelRoutes.supplierAdd}>
-              <Button className="cursor-pointer">
-                <PlusIcon /> Tambah
+            <Link href={panelRoutes.supplierAdd} className="w-full md:w-auto">
+              <Button className="cursor-pointer w-full">
+                <PlusIcon className="h-4 w-4" /> <span className="ml-1">Tambah</span>
               </Button>
             </Link>
           </div>

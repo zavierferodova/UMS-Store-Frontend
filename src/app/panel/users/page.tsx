@@ -54,12 +54,12 @@ export default function UsersPage() {
   return (
     <Card>
       <CardHeader>
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col md:flex-row justify-between md:items-center">
           <div>
             <CardTitle>Daftar Pengguna</CardTitle>
             <CardDescription>Daftar semua pengguna yang terdaftar di sistem</CardDescription>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 md:mt-0 mt-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input

@@ -178,8 +178,8 @@ export function AddProductForm() {
   }, [open]);
 
   return (
-    <div className="flex justify-center">
-      <div className="w-4/5">
+    <div className="flex justify-center mb-6">
+      <div className="w-full md:w-4/5">
         <Card>
           <CardHeader>
             <CardTitle>Detail Produk</CardTitle>

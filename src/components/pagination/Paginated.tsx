@@ -68,8 +68,8 @@ export function Paginated({ meta, onPageChange, onLimitChange }: PaginatedProps)
   const endEntry = Math.min(meta.page * meta.limit, meta.total)
 
   return (
-    <div className="flex flex-wrap justify-between gap-5 w-full mt-6">
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+    <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-5 w-full mt-6">
+      <div className="w-full flex-shrink-0 md:w-max flex justify-center md:justify-start gap-2 text-sm text-muted-foreground">
         {onLimitChange && (
           <select
             value={meta.limit}
@@ -85,7 +85,7 @@ export function Paginated({ meta, onPageChange, onLimitChange }: PaginatedProps)
         )}
         <span>Showing {startEntry} to {endEntry} of {meta.total} entries</span>
       </div>
-      <Pagination className="w-max mx-0">
+      <Pagination className="w-full flex justify-center md:justify-end">
         <PaginationContent>
         <PaginationItem>
           <PaginationPrevious 

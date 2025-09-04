@@ -1,5 +1,5 @@
 "use client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Paginated } from "@/components/pagination/Paginated";
 import { usePanelHeader } from "@/components/panel/Header";
@@ -42,21 +42,24 @@ export default function ProductsPage() {
   return (
     <Card>
       <CardHeader>
-        <div className="flex justify-between items-center">
-          <CardTitle>Daftar Produk</CardTitle>
-          <div className="flex gap-2">
-            <div className="relative">
+        <div className="flex flex-col md:flex-row justify-between md:items-center">
+          <div>
+            <CardTitle>Daftar Produk</CardTitle>
+            <CardDescription>Daftar semua produk yang terdaftar di sistem</CardDescription>
+          </div>
+          <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto mt-4 md:mt-0">
+            <div className="relative flex-1">
               <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 onChange={(e) => updateSearch(e.target.value)}
                 value={search}
                 placeholder="Cari produk"
-                className="pl-10"
+                className="pl-10 w-full md:w-64"
               />
             </div>
-            <Button className="cursor-pointer" variant="default" asChild>
-              <Link href={panelRoutes.addProduct}>
-                <PlusIcon/> Tambah
+            <Button className="cursor-pointer w-full md:w-auto" variant="default" asChild>
+              <Link href={panelRoutes.addProduct} className="flex items-center justify-center">
+                <PlusIcon className="h-4 w-4" /> <span className="ml-1">Tambah</span>
               </Link>
             </Button>
           </div>
@@ -66,13 +69,7 @@ export default function ProductsPage() {
         {status == PageStatus.LOADING ? (
           <ProductsTableSkeleton />
         ) : (
-          <ProductsTable products={{
-            content: products.data,
-            number: products.meta.page,
-            size: products.meta.limit,
-            totalElements: products.meta.total,
-            totalPages: Math.ceil(products.meta.total / products.meta.limit),
-          }} />
+          <ProductsTable products={products} />
         )}
         {isEmpty && (
           <div className="mt-8 mb-8">

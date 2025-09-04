@@ -144,26 +144,29 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                   </FormItem>
                 )}
               />
-              {
-                isAdmin(user) && (
-                  <FormField
-                    control={form.control}
-                    name="active"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-center justify-start gap-2 h-full mt-3">
-                        <FormControl>
-                          <Checkbox
-                            className="cursor-pointer"
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormLabel>Aktif</FormLabel>
-                      </FormItem>
-                    )}
-                  />
-                )
-              }
+              <div className="flex flex-col gap-2">
+                <FormLabel>Status</FormLabel>
+                {
+                  isAdmin(user) && (
+                    <FormField
+                      control={form.control}
+                      name="active"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-start gap-2 h-full">
+                          <FormControl>
+                            <Checkbox
+                              className="cursor-pointer"
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <FormLabel className="font-normal">Aktif</FormLabel>
+                        </FormItem>
+                      )}
+                    />
+                  )
+                }
+              </div>
             </div>
             <div className="flex justify-end gap-2">
               <Button className="w-max cursor-pointer" type="submit">
