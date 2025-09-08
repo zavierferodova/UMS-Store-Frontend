@@ -28,7 +28,7 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  category: ProductCategory;
+  category?: ProductCategory;
   images: ProductImages[];
   additional_info: ProductAdditionalInfo[];
   skus: ProductSKU[];

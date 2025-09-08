@@ -1,6 +1,6 @@
 import { userDataServer } from "@/data/user";
 import { ProfilePageContainer } from "./container";
-import { PanelNotFound } from "../../../../components/panel/PanelNotFound";
+import { PanelNotFound } from "@/components/panel/PanelNotFound";
 
 export default async function ProfilePage({ params }: { params: { id: string } }) {
   const { id } = await params;

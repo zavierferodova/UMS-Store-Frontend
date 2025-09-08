@@ -38,7 +38,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
               {product.skus.map((sku) => { return <div key={sku.sku}>{sku.sku}<br/></div>; })}
             </TableCell>
             <TableCell>{product.name}</TableCell>
-            <TableCell>{toTitleCase(product.category.name)}</TableCell>
+            <TableCell>{product.category?.name ?? "-"}</TableCell>
             <TableCell>{product.price.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</TableCell>
           </TableRow>
         ))}
