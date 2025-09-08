@@ -35,6 +35,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { IPaginationResponse } from "@/domain/model/response";
+import { useSession } from "next-auth/react";
 
 export type Category = {
   value: string;
@@ -50,6 +51,8 @@ export function SelectProductCategory({
   value,
   onChange,
 }: SelectProductCategoryProps) {
+  const { data: session } = useSession()
+  const isEditable = session?.user.role?.includes("admin") || session?.user.role?.includes("staff")
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [triggerWidth, setTriggerWidth] = useState(0);
   const [open, setOpen] = useState(false);
@@ -138,7 +141,7 @@ export function SelectProductCategory({
 
       toast.promise(promise, {
         loading: "Sedang mengubah kategori...",
-        success: (data) => {
+        success: () => {
           fetchCategories(1, false);
           setPage(1);
           return "Kategori berhasil diubah!";
@@ -153,7 +156,7 @@ export function SelectProductCategory({
       const response = productData.deleteCategory(categoryToDelete.value);
       toast.promise(response, {
         loading: "Sedang menghapus kategori...",
-        success: (data) => {
+        success: () => {
           fetchCategories(1, false);
           setPage(1);
           return "Kategori berhasil dihapus!";
@@ -248,7 +251,7 @@ export function SelectProductCategory({
                 )}
               </CommandItem>
 
-              {isLoading && page === 1 && (
+              {isLoading && (
                 <CommandItem disabled className="opacity-50">
                   Loading...
                 </CommandItem>

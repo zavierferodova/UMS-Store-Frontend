@@ -1,7 +1,7 @@
 import { PlusCircleIcon, XCircle } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
 export type AdditionalInfoItem = {
   label: string;
@@ -11,12 +11,30 @@ export type AdditionalInfoItem = {
 export type ProductAdditionalInputsProps = {
   additionalInfo: AdditionalInfoItem[];
   onAdditionalInfoChange: (info: AdditionalInfoItem[]) => void;
+  errors?: Array<{
+    label?: string;
+    value?: string;
+  }> | string;
 };
 
 export function ProductAdditionalInputs({ 
   additionalInfo, 
-  onAdditionalInfoChange 
+  onAdditionalInfoChange,
+  errors 
 }: ProductAdditionalInputsProps) {
+  const getError = (index: number, field: 'label' | 'value') => {
+    if (!errors) return null;
+    
+    if (Array.isArray(errors) && errors[index]) {
+      return errors[index][field];
+    }
+    
+    if (typeof errors === 'string') {
+      return errors;
+    }
+    
+    return null;
+  };
   const handleAdditionalInfoChange = (
     index: number,
     field: keyof AdditionalInfoItem,
@@ -40,38 +58,66 @@ export function ProductAdditionalInputs({
   };
 
   return (
-    <div className="space-y-2">
-      {additionalInfo.map((item, index) => (
-        <div key={index} className="flex items-center gap-2">
-          <Input
-            placeholder="Label"
-            value={item.label}
-            onChange={(e) =>
-              handleAdditionalInfoChange(index, "label", e.target.value)
-            }
-            className="w-1/2"
-          />
-          <Input
-            placeholder="Nilai"
-            value={item.value}
-            onChange={(e) =>
-              handleAdditionalInfoChange(index, "value", e.target.value)
-            }
-            className="w-1/2"
-          />
-          {additionalInfo.length > 1 && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="cursor-pointer"
-              onClick={() => removeAdditionalInfo(index)}
-              type="button"
-            >
-              <XCircle className="h-4 w-4" />
-            </Button>
-          )}
-        </div>
-      ))}
+    <div className="space-y-4">
+      {additionalInfo.map((item, index) => {
+        const labelError = getError(index, 'label');
+        const valueError = getError(index, 'value');
+        
+        return (
+          <div key={index} className="space-y-2">
+            <div className="flex items-start gap-2">
+              <div className="w-1/2 space-y-1">
+                <Input
+                  placeholder="Label"
+                  value={item.label}
+                  onChange={(e) =>
+                    handleAdditionalInfoChange(index, "label", e.target.value)
+                  }
+                  className={cn({
+                    "border-destructive focus-visible:ring-destructive": labelError
+                  })}
+                  aria-invalid={!!labelError}
+                />
+                {labelError && (
+                  <p className="text-sm font-medium text-destructive">
+                    {labelError}
+                  </p>
+                )}
+              </div>
+              <div className="w-1/2 space-y-1">
+                <Input
+                  placeholder="Nilai"
+                  value={item.value}
+                  onChange={(e) =>
+                    handleAdditionalInfoChange(index, "value", e.target.value)
+                  }
+                  className={cn({
+                    "border-destructive focus-visible:ring-destructive": valueError
+                  })}
+                  aria-invalid={!!valueError}
+                />
+                {valueError && (
+                  <p className="text-sm font-medium text-destructive">
+                    {valueError}
+                  </p>
+                )}
+              </div>
+              {additionalInfo.length > 1 && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="cursor-pointer h-9 w-9 mt-1"
+                  onClick={() => removeAdditionalInfo(index)}
+                  type="button"
+                  aria-label="Hapus info tambahan"
+                >
+                  <XCircle className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          </div>
+        );
+      })}
       <div className="flex justify-center">
         <Button
           variant="ghost"
