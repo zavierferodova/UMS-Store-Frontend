@@ -6,7 +6,7 @@ import { AdditionalInfoItem } from "@/components/panel/Form/ProductAdditionalInp
 
 export const useController = () => {
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema) as any, // Type assertion needed due to complex generic types
+    resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       description: "",
@@ -19,6 +19,7 @@ export const useController = () => {
   });
 
   const onSubmit = (data: FormValues) => {
+    console.log(data);
   };
 
   return {

@@ -5,18 +5,11 @@ import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
-
-const formSchema = z.object({
-  name: z.string().min(1, "Nama tidak boleh kosong"),
-  gender: z.enum(["male", "female"]).or(z.string().optional()),
-  phone: z.string().regex(/^[0-9]+$/, "Nomor telepon hanya boleh berisi angka").or(z.string().optional()),
-  address: z.string().optional(),
-});
+import { formSchema, FormValues } from "./validation";
 
 export const useController = (user: User | null) => {
   const { data: session } = useSession()
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -26,7 +19,7 @@ export const useController = (user: User | null) => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = (data: FormValues) => {
     if (user) {
       const promise = new Promise((resolve, reject) => {
         userData

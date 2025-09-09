@@ -9,11 +9,15 @@ export default function AddProductPage() {
   useEffect(() => {
     setMenu([
       {
+        name: "Beranda",
+        href: panelRoutes.home,
+      },
+      {
         name: "Produk",
         href: panelRoutes.products,
       },
       {
-        name: "Tambah Produk",
+        name: "Tambah",
         href: panelRoutes.addProduct,
       },
     ]);

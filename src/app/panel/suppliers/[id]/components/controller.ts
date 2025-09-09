@@ -7,30 +7,13 @@ import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-
-const formSchema = z.object({
-  name: z.string().min(1, "Nama tidak boleh kosong"),
-  phone: z
-    .string()
-    .min(1, "No telp tidak boleh kosong")
-    .regex(/^[0-9]+$/, "Nomor telepon hanya boleh berisi angka"),
-  email: z.email("Email tidak valid").or(z.string().optional()),
-  address: z.string().min(1, "Alamat tidak boleh kosong"),
-  discount: z
-    .string()
-    .transform((val) => (val === "" ? 0 : Number(val)))
-    .refine((val) => val >= 0 && val <= 100, {
-      message: "Diskon harus antara 0–100",
-    })
-    .transform((val) => val.toString()),
-  active: z.boolean(),
-});
+import { formSchema, FormValues } from "./validation";
 
 export const useController = (supplier: Supplier | null) => {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -108,8 +91,8 @@ export const useController = (supplier: Supplier | null) => {
   return {
     user,
     form,
-    onSubmit,
     open,
+    onSubmit,
     setOpen,
     onDelete,
   };

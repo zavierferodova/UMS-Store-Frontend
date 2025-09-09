@@ -59,7 +59,8 @@ export default function ProductsPage() {
             </div>
             <Button className="cursor-pointer w-full md:w-auto" variant="default" asChild>
               <Link href={panelRoutes.addProduct} className="flex items-center justify-center">
-                <PlusIcon className="h-4 w-4" /> <span className="ml-1">Tambah</span>
+                <PlusIcon className="h-4 w-4" />
+                <span className="ml-1">Tambah</span>
               </Link>
             </Button>
           </div>

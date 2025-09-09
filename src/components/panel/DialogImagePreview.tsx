@@ -2,6 +2,7 @@ import { XIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import Image from "next/image";
 
 type DialogImagePreviewProps = {
   isOpen: boolean;
@@ -34,11 +35,17 @@ export function DialogImagePreview({ isOpen, onOpenChange, src }: DialogImagePre
             centerOnInit
           >
             <TransformComponent>
-              <img 
-                src={src} 
-                alt="Product Preview" 
-                className="max-w-[90vw]"
-              />
+              <div className="relative w-[90vw] h-[100vh] overflow-hidden">
+                <Image
+                  src={src}
+                  alt="Product Preview"
+                  fill
+                  style={{
+                    objectFit: 'contain',
+                  }}
+                  priority
+                />
+              </div>
             </TransformComponent>
           </TransformWrapper>
         </div>

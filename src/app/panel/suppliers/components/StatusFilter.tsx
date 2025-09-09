@@ -6,8 +6,8 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { FunnelSimpleIcon, SealCheckIcon } from "@phosphor-icons/react/dist/ssr";
-import { useEffect, useState } from "react";
+import { SealCheckIcon } from "@phosphor-icons/react/dist/ssr";
+import { useEffect, useState, useRef, useCallback } from "react";
 
 export type StatusFilterProps = {
   onFilterChange?: (status: string[]) => void;
@@ -16,13 +16,24 @@ export type StatusFilterProps = {
 export function StatusFilter({ onFilterChange }: StatusFilterProps) {
   const [showDeleted, setShowDeleted] = useState(false);
   const [showActive, setShowActive] = useState(false);
+  const prevStatusRef = useRef<string[]>([]);
 
-  useEffect(() => {
+  const handleFilterChange = useCallback(() => {
+    if (typeof onFilterChange !== 'function') return;
+    
     const statusList: string[] = [];
     if (showDeleted) statusList.push("deleted");
     if (showActive) statusList.push("active");
-    onFilterChange?.(statusList);
-  }, [showDeleted, showActive]);
+    
+    if (JSON.stringify(statusList) !== JSON.stringify(prevStatusRef.current)) {
+      onFilterChange(statusList);
+      prevStatusRef.current = statusList;
+    }
+  }, [showDeleted, showActive, onFilterChange]);
+
+  useEffect(() => {
+    handleFilterChange();
+  }, [handleFilterChange]);
 
   return (
     <DropdownMenu>

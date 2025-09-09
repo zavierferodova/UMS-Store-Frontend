@@ -26,15 +26,17 @@ export const useController = () => {
     const user = session?.user;
 
     const fetchSupplierData = useCallback(async () => {
-        setStatus(PageStatus.LOADING);
-        try {
-            const response = await supplierData.getSuppliers({ page, limit, search, status: dataStatus });
-            setSuppliers({
-                data: response.data,
-                meta: response.meta
-            });
-        } finally {
-            setStatus(PageStatus.SUCCESS);
+        if (user) {
+            setStatus(PageStatus.LOADING);
+            try {
+                const response = await supplierData.getSuppliers({ page, limit, search, status: dataStatus });
+                setSuppliers({
+                    data: response.data,
+                    meta: response.meta
+                });
+            } finally {
+                setStatus(PageStatus.SUCCESS);
+            }
         }
     }, [user, page, limit, search, dataStatus]);
 
@@ -58,10 +60,8 @@ export const useController = () => {
     };
 
     useEffect(() => {
-        if (user) {
-            fetchSupplierData();
-        }
-    }, [user, fetchSupplierData]);
+        fetchSupplierData();
+    }, [fetchSupplierData]);
 
     return {
         user,

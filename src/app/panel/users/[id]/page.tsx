@@ -13,6 +13,6 @@ export default async function ProfilePage({ params }: { params: { id: string } }
   }
 
   return (
-    <ProfilePageContainer user={user} pathId={Number(id)} />
+    <ProfilePageContainer user={user} pathId={id} />
   )
 }

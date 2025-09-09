@@ -6,41 +6,18 @@ import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
-
-const formSchema = z.object({
-  email: z.email("Email tidak valid"),
-  username: z
-    .string()
-    .regex(
-      /^$|^[a-zA-Z0-9_]+$/,
-      "Username hanya boleh berisi huruf, angka, dan underscore"
-    )
-    .or(z.string().optional()),
-});
-
-const avatarSchema = z.object({
-  profileImage: z
-    .instanceof(File)
-    .refine((file) => file.size > 0, "Gambar tidak boleh kosong")
-    .refine((file) => file.size <= 5 * 1024 * 1024, "Ukuran gambar maksimal 5MB")
-    .refine(
-      (file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type),
-      "Hanya format JPG, PNG, dan WEBP yang diizinkan"
-    )
-    .optional(),
-});
+import { avatarSchema, formSchema, AvatarFormValues, FormValues } from "./validation";
 
 export const useController = () => {
   const { update: updateSession, data: session } = useSession();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const avatarForm = useForm<z.infer<typeof avatarSchema>>({
+  const avatarForm = useForm<AvatarFormValues>({
     resolver: zodResolver(avatarSchema),
   });
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
@@ -64,7 +41,7 @@ export const useController = () => {
     fileInputRef.current?.click();
   };
 
-  const onSubmitAvatar = (data: z.infer<typeof avatarSchema>) => {
+  const onSubmitAvatar = (data: AvatarFormValues) => {
     const promise = new Promise((resolve, reject) => {
       if (!data.profileImage) {
         reject(new Error("Gambar tidak boleh kosong"));
@@ -96,7 +73,7 @@ export const useController = () => {
     });
   };
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = (data: FormValues) => {
     const promise = new Promise((resolve, reject) => {
       authData
         .updateUser(data)

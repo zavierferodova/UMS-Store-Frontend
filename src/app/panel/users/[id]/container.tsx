@@ -5,13 +5,12 @@ import { AccountForm } from "./components/AccountForm/AccountForm";
 import { ProfileForm } from "./components/ProfileForm/ProfileForm";
 import { panelRoutes } from "@/routes/route";
 import { useEffect } from "react";
-import { useController } from "./controller";
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 export type ProfilePageContainerProps = {
   user: User;
-  pathId: number;
+  pathId: string;
 };
 
 export function ProfilePageContainer({
@@ -22,10 +21,13 @@ export function ProfilePageContainer({
   const { data: session } = useSession();
 
   useEffect(() => {
+    console.log(session?.user)
+    console.log(pathId)
+
     if (session?.user.id === pathId) {
       redirect(panelRoutes.profile);
     }
-  }, [session]);
+  }, [session, pathId]);
 
   useEffect(() => {
     setMenu([

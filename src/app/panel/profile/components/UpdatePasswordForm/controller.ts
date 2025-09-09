@@ -1,24 +1,12 @@
 "use client";
 import authData from "@/data/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSession } from "next-auth/react";
+import { formSchema, FormValues } from "./validation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
-
-const formSchema = z.object({
-  newPassword: z.string().min(8, "Password minimal 8 karakter"),
-  confirmPassword: z
-    .string()
-    .min(8, "Konfirmasi password minimal 8 karakter"),
-}).refine((data) => data.newPassword === data.confirmPassword, {
-  message: "Password tidak cocok",
-  path: ["confirmPassword"],
-});
 
 export const useController = () => {
-  const { update: updateSession } = useSession();
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       newPassword: "",
@@ -26,7 +14,7 @@ export const useController = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = (data: FormValues) => {
     const promise = new Promise((resolve, reject) => {
       authData
         .updatePassword(data.newPassword, data.confirmPassword)
@@ -44,7 +32,7 @@ export const useController = () => {
 
     toast.promise(promise, {
       loading: "Sedang memperbaharui password",
-      success: (data) => {
+      success: () => {
         return "Password berhasil diperbarui!";
       },
       error: "Gagal memperbarui password!",

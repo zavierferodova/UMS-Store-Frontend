@@ -2,7 +2,6 @@
 import { z } from "zod";
 import { ImageFile } from "@/components/panel/Form/ProductImagesInput";
 
-// Base schema for form validation
 export const formSchema = z.object({
   name: z.string().min(1, { message: "Nama produk tidak boleh kosong" }),
   description: z.string().min(1, { message: "Deskripsi produk tidak boleh kosong" }),
@@ -23,19 +22,18 @@ export const formSchema = z.object({
   skus: z.array(z.string().min(1, { message: "SKU tidak boleh kosong" }))
     .min(1, { message: "SKU produk minimal 1" }),
   additionalInfo: z.array(z.object({
-    label: z.string().min(1, { message: "Label tidak boleh kosong" }),
-    value: z.string().min(1, { message: "Nilai tidak boleh kosong" }),
+    label: z.string(),
+    value: z.string(),
   }))
   .optional()
   .refine(
     (items) => {
       if (!items) return true;
-      const labels = items.map(item => item.label.trim().toLowerCase());
+      const labels = items.map(item => (item.label ?? "").trim().toLowerCase());
       return new Set(labels).size === labels.length;
     },
     { message: "Label harus unik" }
   ),
 });
 
-// Type for form values
 export type FormValues = z.infer<typeof formSchema>;

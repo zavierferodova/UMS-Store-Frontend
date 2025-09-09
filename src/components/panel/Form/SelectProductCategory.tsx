@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import {
   CheckIcon,
   CaretUpDownIcon,
@@ -36,6 +36,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { IPaginationResponse } from "@/domain/model/response";
 import { useSession } from "next-auth/react";
+import { ProductCategory } from "@/domain/model/product";
 
 export type Category = {
   value: string;
@@ -52,7 +53,8 @@ export function SelectProductCategory({
   onChange,
 }: SelectProductCategoryProps) {
   const { data: session } = useSession()
-  const isEditable = session?.user.role?.includes("admin") || session?.user.role?.includes("staff")
+  const isEditable = session?.user.role?.includes("admin")
+    || session?.user.role?.includes("staff")
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [triggerWidth, setTriggerWidth] = useState(0);
   const [open, setOpen] = useState(false);
@@ -69,9 +71,9 @@ export function SelectProductCategory({
   );
   const [page, setPage] = useState(1);
   const [pagination, setPagination] =
-    useState<IPaginationResponse<any>["meta"] | null>(null);
+    useState<IPaginationResponse<ProductCategory>["meta"] | null>(null);
 
-  const fetchCategories = async (
+  const fetchCategories = useCallback(async (
     newPage: number = 1,
     loadMore: boolean = false
   ) => {
@@ -93,7 +95,7 @@ export function SelectProductCategory({
       }
       setPagination(response.meta);
     }
-  };
+  }, [search]);
 
   const handleAddCategory = async () => {
     setIsAddingCategory(false);
@@ -113,7 +115,7 @@ export function SelectProductCategory({
 
       toast.promise(promise, {
         loading: "Sedang menambahkan kategori...",
-        success: (data) => {
+        success: () => {
           fetchCategories(1, false);
           setPage(1);
           return "Kategori berhasil ditambahkan!";
@@ -178,7 +180,7 @@ export function SelectProductCategory({
   useEffect(() => {
     fetchCategories(1, false);
     setPage(1);
-  }, [search]);
+  }, [fetchCategories]);
 
   return (
     <>
@@ -205,12 +207,13 @@ export function SelectProductCategory({
               placeholder="Cari kategori..."
             />
             <CommandGroup>
-              <CommandItem
-                onSelect={() => {
-                  setIsAddingCategory(true);
-                }}
-                className="flex items-center justify-between gap-2 cursor-pointer"
-              >
+              {isEditable && (
+                <CommandItem
+                  onSelect={() => {
+                    setIsAddingCategory(true);
+                  }}
+                  className="flex items-center justify-between gap-2 cursor-pointer"
+                >
                 {isAddingCategory ? (
                   <>
                     <Input
@@ -248,8 +251,9 @@ export function SelectProductCategory({
                     <PlusIcon className="h-4 w-4" />
                     <span>Buat kategori baru</span>
                   </div>
-                )}
-              </CommandItem>
+                  )}
+                </CommandItem>
+              )}
 
               {isLoading && (
                 <CommandItem disabled className="opacity-50">
@@ -329,34 +333,36 @@ export function SelectProductCategory({
                         />
                         {category.label}
                       </div>
-                      <div className="flex items-center gap-1">
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="h-6 w-6 cursor-pointer"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setCategoryToEdit(category);
-                            setCategoryToEditLabel(category.label);
-                          }}
-                        >
-                          <PencilSimpleIcon className="h-3 w-3" />
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="h-6 w-6 cursor-pointer"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setCategoryToDelete(category);
-                            setDeleteDialogOpen(true);
-                          }}
-                        >
-                          <TrashIcon className="h-3 w-3" />
-                        </Button>
-                      </div>
+                      {isEditable && (
+                        <div className="flex items-center gap-1">
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6 cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCategoryToEdit(category);
+                              setCategoryToEditLabel(category.label);
+                            }}
+                          >
+                            <PencilSimpleIcon className="h-3 w-3" />
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6 cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCategoryToDelete(category);
+                              setDeleteDialogOpen(true);
+                            }}
+                          >
+                            <TrashIcon className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      )}
                     </>
                   )}
                 </CommandItem>
@@ -387,8 +393,8 @@ export function SelectProductCategory({
           <AlertDialogHeader>
             <AlertDialogTitle>Apakah anda yakin?</AlertDialogTitle>
             <AlertDialogDescription>
-              Semua data produk yang terkait dengan kategori "
-              {categoryToDelete?.label}" akan menjadi kosong.
+              Semua data produk yang terkait dengan kategori &quot;{categoryToDelete?.label}&quot;
+              akan menjadi kosong.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

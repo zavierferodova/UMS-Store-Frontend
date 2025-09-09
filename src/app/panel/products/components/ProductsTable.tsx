@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/table";
 import { Product } from "@/domain/model/product";
 import { IPaginationResponse } from "@/domain/model/response";
-import { toTitleCase } from "@/lib/string";
 
 interface ProductsTableProps {
   products: IPaginationResponse<Product>;

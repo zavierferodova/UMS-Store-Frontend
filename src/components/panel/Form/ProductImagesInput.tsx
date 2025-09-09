@@ -1,8 +1,9 @@
 import { useRef, useState, useEffect } from "react";
 import { Reorder } from "motion/react";
 import { Button } from "@/components/ui/button";
-import { ImageIcon, EyeIcon, TrashIcon, X } from "@phosphor-icons/react";
+import { ImageIcon, EyeIcon, TrashIcon } from "@phosphor-icons/react";
 import { DialogImagePreview } from "../DialogImagePreview";
+import Image from "next/image";
 
 export type ImageFile = {
   id: string;
@@ -72,10 +73,11 @@ export function ProductImagesInput({ onImagesChange, images = [] }: ProductImage
               className="relative h-24 w-24 flex-shrink-0"
             >
               <div className="group relative w-full h-full">
-                <img
+                <Image
                   src={image.src}
                   alt="Pratinjau Produk"
-                  className="h-full w-full rounded-md object-cover"
+                  fill
+                  className="rounded-md object-cover"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-50 group-hover:flex hidden items-center justify-center gap-2 rounded-md">
                   <Button

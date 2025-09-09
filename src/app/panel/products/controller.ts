@@ -26,15 +26,17 @@ export const useController = () => {
     const user = session?.user
 
     const fetchProductData = useCallback(async () => {
-        setStatus(PageStatus.LOADING)
-        try {
-            const response = await productData.getProducts({ page, limit, search })
-            setProducts({
-                data: response.data,
-                meta: response.meta
-            })
-        } finally {
-            setStatus(PageStatus.SUCCESS)
+        if (user) {
+            setStatus(PageStatus.LOADING)
+            try {
+                const response = await productData.getProducts({ page, limit, search })
+                setProducts({
+                    data: response.data,
+                    meta: response.meta
+                })
+            } finally {
+                setStatus(PageStatus.SUCCESS)
+            }
         }
     }, [user, page, limit, search])
 
@@ -53,10 +55,8 @@ export const useController = () => {
     }
 
     useEffect(() => {
-        if (user) {
-            fetchProductData()
-        }
-    }, [user, fetchProductData])
+        fetchProductData()
+    }, [fetchProductData])
 
     return {
         user,

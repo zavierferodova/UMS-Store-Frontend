@@ -3,29 +3,17 @@
 import userData from "@/data/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { useEffect, useState } from "react";
 import { User } from "@/domain/model/user";
 import { UpdateUserParams } from "@/domain/data/user";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
-
-const formSchema = z.object({
-  email: z.email("Email tidak valid"),
-  username: z
-    .string()
-    .regex(
-      /^$|^[a-zA-Z0-9_]+$/,
-      "Username hanya boleh berisi huruf, angka, dan underscore"
-    )
-    .or(z.string().optional()),
-  role: z.enum(["admin", "procurement", "cashier"]).or(z.string().optional()),
-});
+import { formSchema, FormValues } from "./validation";
 
 export const useController = (user: User | null) => {
   const { data: session } = useSession()
   const [userImage, setUserImage] = useState<string>("");
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
@@ -33,7 +21,7 @@ export const useController = (user: User | null) => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = (data: FormValues) => {
     if (user) {
       const promise = new Promise((resolve, reject) => {
         userData.updateUser(user.id.toString(), {

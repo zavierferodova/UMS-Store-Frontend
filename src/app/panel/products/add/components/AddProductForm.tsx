@@ -25,7 +25,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Separator } from "@/components/ui/separator";
 
 export function AddProductForm() {
   const { form, onSubmit } = useController();
@@ -46,7 +45,7 @@ export function AddProductForm() {
               <FormField
                 control={form.control}
                 name="images"
-                render={({ field, fieldState: { error } }) => (
+                render={({ field }) => (
                   <FormItem>
                     <FormLabel>Gambar Produk</FormLabel>
                     <FormControl>
@@ -55,6 +54,29 @@ export function AddProductForm() {
                         onImagesChange={(newImages: ImageFile[]) => {
                           field.onChange(newImages);
                         }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="skus"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>SKU Produk</FormLabel>
+                    <FormControl>
+                      <MultiSkuInput
+                        skus={field.value}
+                        onSkusChange={(newSkus) => {
+                          field.onChange(newSkus);
+                        }}
+                        errors={form.formState.errors.skus?.message || 
+                               (Array.isArray(form.formState.errors.skus) 
+                                ? form.formState.errors.skus.map(e => e?.message || '')
+                                : [])}
                       />
                     </FormControl>
                     <FormMessage />
@@ -71,6 +93,25 @@ export function AddProductForm() {
                     <FormControl>
                       <Input
                         placeholder="Masukkan nama produk"
+                        {...field}
+                        onChange={(e) => field.onChange(e.target.value)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Harga (IDR)</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="Masukkan harga produk"
                         {...field}
                         onChange={(e) => field.onChange(e.target.value)}
                       />
@@ -124,7 +165,7 @@ export function AddProductForm() {
                     <FormLabel>Informasi Tambahan</FormLabel>
                     <FormControl>
                       <ProductAdditionalInputs
-                        additionalInfo={field.value ?? []}
+                        additionalInfo={field.value || []}
                         onAdditionalInfoChange={(newInfo) => {
                           field.onChange(newInfo);
                         }}
@@ -141,52 +182,8 @@ export function AddProductForm() {
                 )}
               />
 
-              <Separator />
-
-              <FormField
-                control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Harga (IDR)</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Masukkan harga produk"
-                        {...field}
-                        onChange={(e) => field.onChange(Number(e.target.value))}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="skus"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>SKU Produk</FormLabel>
-                    <FormControl>
-                      <MultiSkuInput
-                        skus={field.value}
-                        onSkusChange={(newSkus) => {
-                          field.onChange(newSkus);
-                        }}
-                        errors={form.formState.errors.skus?.message || 
-                               (Array.isArray(form.formState.errors.skus) 
-                                ? form.formState.errors.skus.map(e => e?.message || '')
-                                : [])}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="flex justify-end gap-4 pt-6">
-                <Button type="submit" className="w-40">
+              <div className="flex justify-end">
+                <Button type="submit">
                   Simpan
                 </Button>
               </div>

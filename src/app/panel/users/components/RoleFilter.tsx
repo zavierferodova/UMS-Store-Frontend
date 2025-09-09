@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { UserCircleIcon } from "@phosphor-icons/react/dist/ssr";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 export type RoleFilterProps = {
   onFilterChange?: (roles: string[]) => void;
@@ -17,14 +17,25 @@ export function RoleFilter({ onFilterChange }: RoleFilterProps) {
   const [showAdmin, setShowAdmin] = useState(false);
   const [showProcurement, setShowProcurement] = useState(false);
   const [showCashier, setShowCashier] = useState(false);
+  const prevRolesRef = useRef<string[]>([]);
+
+  const handleFilterChange = useCallback(() => {
+    if (typeof onFilterChange !== 'function') return;
+    
+    const roleList: string[] = [];
+    if (showAdmin) roleList.push("admin");
+    if (showProcurement) roleList.push("procurement");
+    if (showCashier) roleList.push("cashier");
+    
+    if (JSON.stringify(roleList) !== JSON.stringify(prevRolesRef.current)) {
+      onFilterChange(roleList);
+      prevRolesRef.current = roleList;
+    }
+  }, [showAdmin, showProcurement, showCashier, onFilterChange]);
 
   useEffect(() => {
-    const roleList: string[] = []
-    if (showAdmin) roleList.push("admin")
-    if (showProcurement) roleList.push("procurement")
-    if (showCashier) roleList.push("cashier")
-    onFilterChange?.(roleList)
-  }, [showAdmin, showProcurement, showCashier]);
+    handleFilterChange();
+  }, [handleFilterChange]);
 
   return (
     <DropdownMenu>
