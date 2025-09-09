@@ -46,7 +46,7 @@ export const MyProfileForm = () => {
                   <FormItem>
                     <FormLabel>Nama</FormLabel>
                     <FormControl>
-                      <Input placeholder="Masukkan nama lengkap anda" {...field} />
+                      <Input placeholder="Masukkan nama lengkap anda" maxLength={128} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -84,7 +84,7 @@ export const MyProfileForm = () => {
                   <FormItem className="content-start">
                     <FormLabel>No Telp</FormLabel>
                     <FormControl>
-                      <Input placeholder="Masukkan no telp" {...field} />
+                      <Input placeholder="Masukkan no telp" maxLength={20} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -100,6 +100,7 @@ export const MyProfileForm = () => {
                       <Textarea
                         placeholder="Jl Raya Kebangsaan, Mendungan. Sukoharjo"
                         className="min-h-35 max-h-40"
+                        maxLength={255}
                         {...field}
                       />
                     </FormControl>

@@ -59,7 +59,7 @@ export const AccountForm = ({ user }: AccountFormProps) => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="email@example.com" {...field} />
+                    <Input placeholder="email@example.com" maxLength={255} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -72,7 +72,7 @@ export const AccountForm = ({ user }: AccountFormProps) => {
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="Username anda" {...field} />
+                    <Input placeholder="Username anda" maxLength={30} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

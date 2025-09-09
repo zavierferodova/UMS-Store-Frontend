@@ -6,7 +6,7 @@ export const formSchema = z.object({
     .string()
     .min(1, "No telp tidak boleh kosong")
     .regex(/^[0-9]+$/, "Nomor telepon hanya boleh berisi angka"),
-  email: z.string().email("Email tidak valid").or(z.literal("")).optional(),
+  email: z.email("Email tidak valid").or(z.literal("")).optional(),
   address: z.string().min(1, "Alamat tidak boleh kosong"),
   discount: z
     .string()

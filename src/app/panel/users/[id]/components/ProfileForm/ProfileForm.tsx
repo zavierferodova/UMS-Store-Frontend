@@ -52,7 +52,7 @@ export const ProfileForm = ({ user }: ProfileFormProps) => {
                   <FormItem>
                     <FormLabel>Nama</FormLabel>
                     <FormControl>
-                      <Input placeholder="Nama anda" {...field} />
+                      <Input placeholder="Nama pengguna" maxLength={128} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -91,7 +91,7 @@ export const ProfileForm = ({ user }: ProfileFormProps) => {
                   <FormItem className="content-start">
                     <FormLabel>No Telp</FormLabel>
                     <FormControl>
-                      <Input placeholder="628xxxxxxxxxx" {...field} />
+                      <Input placeholder="Masukan no telp" maxLength={20} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -107,6 +107,7 @@ export const ProfileForm = ({ user }: ProfileFormProps) => {
                       <Textarea
                         placeholder="Jl Raya Kebangsaan, Mendungan. Sukoharjo"
                         className="min-h-53 max-h-53"
+                        maxLength={255}
                         {...field}
                       />
                     </FormControl>

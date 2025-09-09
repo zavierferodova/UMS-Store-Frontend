@@ -28,6 +28,15 @@ export const useController = () => {
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      if (file.size > 800 * 1024) {
+        toast.error("Ukuran file melebihi batas 800KB. Silakan pilih file yang lebih kecil.");
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+          setImagePreview(null);
+        }
+        return;
+      }
+      
       avatarForm.setValue("profileImage", file);
       const reader = new FileReader();
       reader.onloadend = () => {

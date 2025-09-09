@@ -37,7 +37,7 @@ export const AddSupplierForm = () => {
                   <FormItem>
                     <FormLabel>Nama</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Masukan nama pemasok" />
+                      <Input {...field} maxLength={128} placeholder="Masukan nama pemasok" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -50,7 +50,7 @@ export const AddSupplierForm = () => {
                   <FormItem>
                     <FormLabel>No Telp</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Masukan nomor telepon" />
+                      <Input {...field} maxLength={20} placeholder="Masukan nomor telepon" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -63,7 +63,7 @@ export const AddSupplierForm = () => {
                   <FormItem className="items-start h-max">
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Masukan email" />
+                      <Input {...field} maxLength={255} placeholder="Masukan email" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -80,6 +80,7 @@ export const AddSupplierForm = () => {
                         {...field}
                         placeholder="Masukan alamat"
                         className="min-h-30"
+                        maxLength={255}
                       />
                     </FormControl>
                     <FormMessage />

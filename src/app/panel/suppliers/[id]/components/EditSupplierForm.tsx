@@ -75,7 +75,7 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                   <FormItem>
                     <FormLabel>Nama</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Masukan nama pemasok" />
+                      <Input {...field} maxLength={128} placeholder="Masukan nama pemasok" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -88,7 +88,7 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                   <FormItem>
                     <FormLabel>No Telp</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Masukan nomor telepon" />
+                      <Input {...field} maxLength={20} placeholder="Masukan nomor telepon" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -101,7 +101,7 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Masukan email" />
+                      <Input {...field} maxLength={255} placeholder="Masukan email" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -116,6 +116,7 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                     <FormControl>
                       <Textarea
                         {...field}
+                        maxLength={255}
                         placeholder="Masukan alamat"
                         className="min-h-30"
                       />

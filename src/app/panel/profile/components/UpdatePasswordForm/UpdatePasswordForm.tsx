@@ -42,6 +42,7 @@ export const UpdatePasswordForm = () => {
                     <Input
                       type="password"
                       placeholder="Masukkan password baru"
+                      maxLength={100}
                       {...field}
                     />
                   </FormControl>
@@ -59,6 +60,7 @@ export const UpdatePasswordForm = () => {
                     <Input
                       type="password"
                       placeholder="Konfirmasi password baru"
+                      maxLength={100}
                       {...field}
                     />
                   </FormControl>

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ImageIcon, EyeIcon, TrashIcon } from "@phosphor-icons/react";
 import { DialogImagePreview } from "../DialogImagePreview";
 import Image from "next/image";
+import { toast } from "sonner";
 
 export type ImageFile = {
   id: string;
@@ -24,7 +25,15 @@ export function ProductImagesInput({ onImagesChange, images = [] }: ProductImage
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      const newImages: ImageFile[] = Array.from(event.target.files).map((file) => ({
+      const files = Array.from(event.target.files);
+      const oversizedFiles = files.filter(file => file.size > 800 * 1024);
+      
+      if (oversizedFiles.length > 0) {
+        toast.error("Ukuran file melebihi batas 800KB. Silakan pilih file yang lebih kecil.");
+        return;
+      }
+
+      const newImages: ImageFile[] = files.map((file) => ({
         id: `image-${nextId.current++}`,
         file,
         src: URL.createObjectURL(file),

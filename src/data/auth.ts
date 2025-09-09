@@ -186,7 +186,7 @@ class AuthData implements IAuthData {
     try {
       const formData = new FormData();
       formData.append("profile_image", image);
-      const session = await getServerSession();
+      const session = await this.getAuthSession();
       const response = await fetchJSON(`${APP_URL}/apis/auth/user/profile-image`, {
         method: "PATCH",
         headers: {
