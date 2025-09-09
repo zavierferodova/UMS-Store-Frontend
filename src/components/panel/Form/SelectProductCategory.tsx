@@ -46,11 +46,13 @@ export type Category = {
 export type SelectProductCategoryProps = {
   value: string;
   onChange: (value: string) => void;
+  error?: boolean;
 };
 
 export function SelectProductCategory({
   value,
   onChange,
+  error,
 }: SelectProductCategoryProps) {
   const { data: session } = useSession()
   const isEditable = session?.user.role?.includes("admin")
@@ -191,7 +193,10 @@ export function SelectProductCategory({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-between cursor-pointer"
+            className={cn(
+              "w-full justify-between cursor-pointer",
+              error && "border-destructive text-destructive"
+            )}
           >
             {value
               ? categories.find((category) => category.value === value)?.label
@@ -219,6 +224,7 @@ export function SelectProductCategory({
                     <Input
                       value={newCategory}
                       onChange={(e) => setNewCategory(e.target.value)}
+                      maxLength={128}
                       placeholder="Nama kategori baru"
                       className="h-8"
                     />

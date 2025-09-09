@@ -5,7 +5,7 @@ export interface ProductCategory {
   updated_at: string;
 }
 
-export interface ProductImages {
+export interface ProductImage {
   id: string;
   image: string;
   order_number: number;
@@ -29,7 +29,7 @@ export interface Product {
   description: string;
   price: number;
   category?: ProductCategory;
-  images: ProductImages[];
+  images: ProductImage[];
   additional_info: ProductAdditionalInfo[];
   skus: ProductSKU[];
   created_at: string;

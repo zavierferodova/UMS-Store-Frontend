@@ -3,6 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema, FormValues } from "./validation";
 import { ImageFile } from "@/components/panel/Form/ProductImagesInput";
 import { AdditionalInfoItem } from "@/components/panel/Form/ProductAdditionalInputs";
+import productData from "@/data/product";
+import { toast } from "sonner";
 
 export const useController = () => {
   const form = useForm<FormValues>({
@@ -18,8 +20,34 @@ export const useController = () => {
     },
   });
 
-  const onSubmit = (data: FormValues) => {
-    console.log(data);
+  const onSubmit = async (data: FormValues) => {
+    const promise = new Promise(async (resolve, reject) => {
+      const product = await productData.addProduct({
+        name: data.name,
+        description: data.description,
+        price: data.price,
+        category: data.category,
+        images: data.images.map((image) => image.file),
+        skus: data.skus,
+        additionalInfo: data.additionalInfo?.map((info) => ({ label: info.label, value: info.value })) || [],
+      })
+
+      if (product) {
+        resolve(product);
+      } else {
+        reject(new Error("Gagal menambahkan produk"));
+      }
+    });
+
+    toast.promise(promise, {
+      loading: "Menambahkan produk...",
+      success: (data) => {
+        console.log(data);
+        form.reset();
+        return "Produk berhasil ditambahkan"
+      },
+      error: "Gagal menambahkan produk",
+    });
   };
 
   return {

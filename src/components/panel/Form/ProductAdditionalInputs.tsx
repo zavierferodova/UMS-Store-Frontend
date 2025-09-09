@@ -70,6 +70,7 @@ export function ProductAdditionalInputs({
                 <Input
                   placeholder="Label"
                   value={item.label}
+                  maxLength={128}
                   onChange={(e) =>
                     handleAdditionalInfoChange(index, "label", e.target.value)
                   }
@@ -91,6 +92,7 @@ export function ProductAdditionalInputs({
                   onChange={(e) =>
                     handleAdditionalInfoChange(index, "value", e.target.value)
                   }
+                  maxLength={128}
                   className={cn({
                     "border-destructive focus-visible:ring-destructive": valueError
                   })}

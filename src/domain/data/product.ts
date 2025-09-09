@@ -13,4 +13,5 @@ export interface IProductData {
     getCategories(): Promise<IPaginationResponse<ProductCategory>>;
     updateCategory(id: string, name: string): Promise<ProductCategory | null>;
     deleteCategory(id: string): Promise<boolean>;
+    checkSKU(sku: string): Promise<boolean>;
 }

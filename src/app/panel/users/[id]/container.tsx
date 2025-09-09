@@ -21,9 +21,6 @@ export function ProfilePageContainer({
   const { data: session } = useSession();
 
   useEffect(() => {
-    console.log(session?.user)
-    console.log(pathId)
-
     if (session?.user.id === pathId) {
       redirect(panelRoutes.profile);
     }

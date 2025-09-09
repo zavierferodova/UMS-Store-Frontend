@@ -1,4 +1,4 @@
-import { PlusCircleIcon, XCircle } from "@phosphor-icons/react";
+import { PlusCircleIcon, XCircleIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -71,6 +71,7 @@ export function MultiSkuInput({
                 id={`sku-${index}`}
                 placeholder="Masukkan SKU"
                 value={sku}
+                maxLength={12}
                 onChange={(e) => handleSkuChange(index, e.target.value)}
                 onBlur={() => handleBlur(index)}
                 className={cn("w-full", {
@@ -87,7 +88,7 @@ export function MultiSkuInput({
                   type="button"
                   aria-label="Hapus SKU"
                 >
-                  <XCircle className="h-4 w-4" />
+                  <XCircleIcon className="h-4 w-4" />
                 </Button>
               )}
             </div>
