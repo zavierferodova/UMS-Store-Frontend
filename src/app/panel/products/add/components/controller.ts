@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema, FormValues } from "./validation";
 import { ImageFile } from "@/components/panel/Form/ProductImagesInput";
-import { AdditionalInfoItem } from "@/components/panel/Form/ProductAdditionalInputs";
 import productData from "@/data/product";
 import { toast } from "sonner";
 
@@ -15,8 +14,8 @@ export const useController = () => {
       price: 0,
       category: "",
       images: [] as ImageFile[],
-      skus: [""],
-      additionalInfo: [{ label: "", value: "" }] as AdditionalInfoItem[],
+      skus: [{ sku: "" }],
+      additionalInfo: [{ label: "", value: "" }],
     },
   });
 
@@ -28,8 +27,8 @@ export const useController = () => {
         price: data.price,
         category: data.category,
         images: data.images.map((image) => image.file),
-        skus: data.skus,
-        additionalInfo: data.additionalInfo?.map((info) => ({ label: info.label, value: info.value })) || [],
+        skus: data.skus.map(sku => sku.sku),
+        additional_info: data.additionalInfo?.map((info) => ({ label: info.label, value: info.value })) || [],
       })
 
       if (product) {
@@ -41,8 +40,7 @@ export const useController = () => {
 
     toast.promise(promise, {
       loading: "Menambahkan produk...",
-      success: (data) => {
-        console.log(data);
+      success: () => {
         form.reset();
         return "Produk berhasil ditambahkan"
       },

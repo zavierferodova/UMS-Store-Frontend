@@ -1,6 +1,6 @@
 "use client"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator } from "@/components/ui/sidebar";
-import { ArrowDownRightIcon, ClipboardTextIcon, MoneyIcon, ShoppingBagIcon, ShoppingCartIcon, StudentIcon } from "@phosphor-icons/react/dist/ssr";
+import { ArrowDownRightIcon, ClipboardTextIcon, MoneyIcon, ShoppingBagIcon, ShoppingCartIcon } from "@phosphor-icons/react/dist/ssr";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { BadgeCheckIcon, BellIcon, ChevronsUpDownIcon, HomeIcon, LogOutIcon, MoonIcon, SunIcon, TagIcon } from "lucide-react";
 import { UserIcon } from "@phosphor-icons/react/dist/ssr";
@@ -75,12 +75,6 @@ const menu: MenuGroup[] = [
                 title: "Kupon",
                 href: "#",
                 icon: <TagIcon />,
-                roles: [role.admin, role.procurement]
-            },
-            {
-                title: "Mahasiswa",
-                href: "#",
-                icon: <StudentIcon />,
                 roles: [role.admin, role.procurement]
             },
             {

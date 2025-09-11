@@ -4,15 +4,20 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
+export type SKUItem = {
+  id?: string;
+  sku: string;
+}
+
 export type MultiSkuInputProps = {
-  skus: string[];
-  onSkusChange: (skus: string[]) => void;
-  errors?: string[] | string;
+  skus: SKUItem[];
+  onSkusChange: (skus: SKUItem[]) => void;
+  errors?: string[];
 };
 
 export function MultiSkuInput({ 
   skus, 
-  onSkusChange, 
+  onSkusChange,
   errors,
 }: MultiSkuInputProps) {
   const [localTouched, setLocalTouched] = useState<boolean[]>([]);
@@ -25,34 +30,26 @@ export function MultiSkuInput({
     }
   };
 
-  // Get error message for a specific SKU
   const getError = (index: number) => {
     if (!errors) return null;
-    
-    // Handle array of errors (one per SKU)
-    if (Array.isArray(errors)) {
-      if (index < errors.length && errors[index]) {
-        return errors[index];
-      }
-      return null;
-    }
-    
-    // Handle single error message
-    if (typeof errors === 'string' && !skus[index] && localTouched[index]) {
-      return errors;
-    }
-    
-    return null;
+    return errors[index] ?? null;
   };
   
   const handleSkuChange = (index: number, value: string) => {
     const newSkus = [...skus];
-    newSkus[index] = value;
+    newSkus[index] = { 
+      id: newSkus[index]?.id ?? undefined, 
+      sku: value ? value.trim() : '' 
+    };
     onSkusChange(newSkus);
   };
 
   const addSku = () => {
-    onSkusChange([...skus, ""]);
+    onSkusChange([...skus, { id: undefined, sku: "" }]);
+  };
+
+  const getSafeSku = (skuItem: SKUItem | undefined) => {
+    return skuItem?.sku ?? '';
   };
 
   const removeSku = (index: number) => {
@@ -68,9 +65,8 @@ export function MultiSkuInput({
           <div key={index} className="space-y-1">
             <div className="flex items-center gap-2">
               <Input
-                id={`sku-${index}`}
                 placeholder="Masukkan SKU"
-                value={sku}
+                value={getSafeSku(sku)}
                 maxLength={12}
                 onChange={(e) => handleSkuChange(index, e.target.value)}
                 onBlur={() => handleBlur(index)}
@@ -86,6 +82,7 @@ export function MultiSkuInput({
                   className="cursor-pointer h-9 w-9"
                   onClick={() => removeSku(index)}
                   type="button"
+                  disabled={!!(sku.id)}
                   aria-label="Hapus SKU"
                 >
                   <XCircleIcon className="h-4 w-4" />
@@ -93,7 +90,7 @@ export function MultiSkuInput({
               )}
             </div>
             {error && (
-              <p className="text-sm font-medium text-destructive" id={`sku-${index}-error`}>
+              <p className="text-sm text-destructive" id={`sku-${index}-error`}>
                 {error}
               </p>
             )}

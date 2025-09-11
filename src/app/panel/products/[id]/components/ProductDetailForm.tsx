@@ -25,9 +25,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Product } from "@/domain/model/product";
 
-export function AddProductForm() {
-  const { form, onSubmit } = useController();
+export function ProductDetailForm({ product }: { product: Product }) { 
+  const { form, onSubmit } = useController(product);
 
   return (
     <FormProvider {...form}>
@@ -192,7 +193,7 @@ export function AddProductForm() {
               />
 
               <div className="flex justify-end">
-                <Button type="submit">
+                <Button type="submit" className="cursor-pointer">
                   Simpan
                 </Button>
               </div>

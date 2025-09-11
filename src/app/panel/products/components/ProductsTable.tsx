@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/table";
 import { Product } from "@/domain/model/product";
 import { IPaginationResponse } from "@/domain/model/response";
+import Link from "next/link";
 
 interface ProductsTableProps {
   products: IPaginationResponse<Product>;
@@ -36,7 +37,9 @@ export function ProductsTable({ products }: ProductsTableProps) {
             <TableCell>
               {product.skus.map((sku) => { return <div key={sku.sku}>{sku.sku}<br/></div>; })}
             </TableCell>
-            <TableCell>{product.name}</TableCell>
+            <TableCell>
+              <Link href={`/panel/products/${product.id}`} className="hover:underline font-medium">{product.name}</Link>
+            </TableCell>
             <TableCell>{product.category?.name ?? "-"}</TableCell>
             <TableCell>{product.price.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</TableCell>
           </TableRow>

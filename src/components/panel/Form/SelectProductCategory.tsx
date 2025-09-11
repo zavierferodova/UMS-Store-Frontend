@@ -171,14 +171,12 @@ export function SelectProductCategory({
     }
   };
 
-  // Change popover width
   useEffect(() => {
     if (triggerRef.current) {
       setTriggerWidth(triggerRef.current.offsetWidth);
     }
   }, [open]);
 
-  // Fetch categories
   useEffect(() => {
     fetchCategories(1, false);
     setPage(1);

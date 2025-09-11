@@ -19,6 +19,7 @@ export interface ProductAdditionalInfo {
 }
 
 export interface ProductSKU {
+  id: string;
   sku: string;
   stock: number;
 }
@@ -30,7 +31,7 @@ export interface Product {
   price: number;
   category?: ProductCategory;
   images: ProductImage[];
-  additional_info: ProductAdditionalInfo[];
+  additional_info: ProductAdditionalInfo[] | null;
   skus: ProductSKU[];
   created_at: string;
   updated_at: string;

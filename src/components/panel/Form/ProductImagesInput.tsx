@@ -8,7 +8,7 @@ import { toast } from "sonner";
 
 export type ImageFile = {
   id: string;
-  file: File;
+  file?: File;
   src: string;
 };
 
@@ -45,7 +45,9 @@ export function ProductImagesInput({ onImagesChange, images = [] }: ProductImage
   const removeImage = (id: string) => {
     const imageToRemove = images?.find((img) => img.id === id);
     if (imageToRemove) {
-      URL.revokeObjectURL(imageToRemove.src);
+      if (imageToRemove.file) {
+        URL.revokeObjectURL(imageToRemove.src);
+      }
       onImagesChange?.(images.filter((img) => img.id !== id));
     }
   };
@@ -59,10 +61,13 @@ export function ProductImagesInput({ onImagesChange, images = [] }: ProductImage
     setShowImageDialog(true);
   };
 
-  // Clean up object URLs when component unmounts
   useEffect(() => {
     return () => {
-      images?.forEach((image) => URL.revokeObjectURL(image.src));
+      images?.forEach((image) => {
+        if (image.file) {
+          URL.revokeObjectURL(image.src);
+        }
+      });
     };
   }, [images]);
 
@@ -82,6 +87,9 @@ export function ProductImagesInput({ onImagesChange, images = [] }: ProductImage
               className="relative h-24 w-24 flex-shrink-0"
             >
               <div className="group relative w-full h-full">
+                <div className="w-full h-full flex items-center absolute justify-center bg-gray-100 rounded-md">
+                  <ImageIcon className="h-8 w-8 text-muted-foreground" />
+                </div>
                 <Image
                   src={image.src}
                   alt="Pratinjau Produk"

@@ -10,39 +10,47 @@ export const formSchema = z.object({
   price: z.number()
     .min(0, { message: "Harga tidak boleh negatif" })
     .min(1, { message: "Harga produk tidak boleh kosong" }),
-  category: z
-    .string()
-    .min(1, { message: "Kategori produk tidak boleh kosong" }),
+  category: z.any().refine((value) => typeof value === "string" && value.trim() !== "", { message: "Kategori produk tidak boleh kosong" }),
   images: z
     .array(z.any())
     .min(1, { message: "Gambar tidak boleh kosong" })
     .refine(
-      (files) =>
-        files.every((file: ImageFile) => file?.file?.size <= 5 * 1024 * 1024),
-      { message: "Ukuran gambar maksimal 5MB" }
+      (images) =>
+        images.every((image: ImageFile) => image.file?.size || 0 <= 8 * 1024),
+      { message: "Ukuran gambar maksimal 8KB" }
     )
     .refine(
-      (files) =>
-        files.every((file: ImageFile) =>
-          ["image/jpeg", "image/png"].includes(file?.file?.type)
+      (images) =>
+        images.every((image: ImageFile) =>
+          ["image/jpeg", "image/png"].includes(image.file?.type || "")
         ),
       { message: "Hanya format JPG, PNG yang diizinkan" }
     ),
   skus: z
     .array(
-      z
-        .string()
-        .min(1, { message: "SKU tidak boleh kosong" })
-        .refine(
-          async (sku) => {
-            if (sku.trim() === "") return false;
-            const available = await productData.checkSKU(sku);
-            return available;
-          },
-          { message: "SKU sudah ada" }
-        )
+      z.object({
+        id: z.string().optional(),
+        sku: z
+          .string()
+          .min(1, { message: "SKU tidak boleh kosong" })
+          .refine(
+            async (sku) => {
+              if (sku.trim() === "" ) return false;
+              const available = await productData.checkSKU(sku);
+              return available;
+            },
+            { message: "SKU sudah ada" }
+          )
+      })
     )
-    .min(1, { message: "SKU produk minimal 1" }),
+    .min(1, { message: "SKU produk minimal 1" })
+    .refine(
+      (skus) => {
+        const skuValues = skus.map(s => s.sku.trim().toLowerCase());
+        return new Set(skuValues).size === skuValues.length;
+      },
+      { message: "SKU tidak boleh sama" }
+    ),
   additionalInfo: z
     .array(
       z.object({

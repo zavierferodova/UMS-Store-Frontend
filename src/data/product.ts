@@ -1,27 +1,11 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { APP_URL } from "@/config/env";
-import { GetProductsParams, IProductData } from "@/domain/data/product";
+import { AddProductParams, GetCategoriesParams, GetProductsParams, IProductData, UpdateImageParams, UpdateProductParams, UpdateSKUParams } from "@/domain/data/product";
 import { IPaginationResponse } from "@/domain/model/response";
-import { Product, ProductCategory, ProductImage } from "@/domain/model/product";
+import { Product, ProductCategory, ProductImage, ProductSKU } from "@/domain/model/product";
 import { fetchJSON } from "@/lib/fetch";
 import { getServerSession, Session } from "next-auth";
 import { getSession } from "next-auth/react";
-
-export type GetCategoriesParams = {
-    search?: string;
-    limit?: number;
-    page?: number;
-};
-
-export type AddProductParams = {
-    name: string;
-    description: string;
-    price: number;
-    category: string;
-    images: File[];
-    skus: string[];
-    additionalInfo: { label: string; value: string }[];
-};
 
 class ProductData implements IProductData {
     constructor(private readonly serverside: boolean) {
@@ -64,10 +48,170 @@ class ProductData implements IProductData {
         }
     }
 
+    async updateImage(id: string, params: UpdateImageParams): Promise<ProductImage | null> {
+        try {
+            const formData = new FormData();
+
+            if (params.image) {
+                formData.append('image', params.image);
+            }
+
+            if (params.order_number) {
+                formData.append('order_number', params.order_number.toString());
+            }
+
+            const session = await this.getAuthSession();
+            const response = await fetchJSON(`${APP_URL}/apis/products/images/${id}`, {
+                method: 'PATCH',
+                headers: {
+                    ...(session?.access_token && { 'Authorization': `Bearer ${session.access_token}` }),
+                },
+                body: formData,
+            });
+
+            if (response) {
+                return response.data;
+            }
+
+            return null;
+        } catch {
+            return null;
+        }
+    }
+
+    async deleteImage(id: string): Promise<boolean> {
+        try {
+            const session = await this.getAuthSession();
+            const response = await fetchJSON(`${APP_URL}/apis/products/images/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    ...(session?.access_token && { 'Authorization': `Bearer ${session.access_token}` }),
+                },
+            });
+
+            if (response) {
+                return true;
+            }
+
+            return false;
+        } catch {
+            return false;
+        }
+    }
+
+    async updateProduct(id: string, product: UpdateProductParams): Promise<Product | null> {
+        try {
+            const { images, skus, ...rest } = product;
+            const additionalInfo = rest.additional_info.filter(item => item.label && item.value);
+
+            const session = await this.getAuthSession();
+            const response = await fetchJSON(`${APP_URL}/apis/products/${id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(session?.access_token && { 'Authorization': `Bearer ${session.access_token}` }),
+                },
+                body: JSON.stringify({
+                    ...rest,
+                    additional_info: additionalInfo.length ? additionalInfo : null,
+                }),
+            });
+
+            if (!response) {
+                return null;
+            }
+
+            const responseImages = response.data.images;
+            const addedImages = images.filter(img => !responseImages.some((i: ProductImage) => i.id === img.id));
+            const deletedImages = responseImages.filter((img: ProductImage) => !images.some((i: UpdateProductParams["images"][number]) => i.id === img.id));
+            const imageIdOrders = images.map(img => responseImages.find((i: ProductImage) => i.id === img.id)?.id ?? null);
+            let addImagePromise: Promise<ProductImage[]> = Promise.all([]);
+            let deleteImagePromises = [];
+            let updateImagePromises: Promise<ProductImage|null>[] = [];
+
+            if (deletedImages.length) {
+                deleteImagePromises = deletedImages.map((img: ProductImage) => this.deleteImage(img.id));
+                const deletedImagesResponse = await Promise.all(deleteImagePromises);
+
+                if (!deletedImagesResponse.every(res => res)) {
+                    return null;
+                }
+            }
+
+            if (addedImages.length) {
+                addImagePromise = this.uploadImages(id, addedImages.map(img => img.file!));
+
+                const addedImagesResponse = await addImagePromise;
+                if (addedImagesResponse?.length) {
+                    const emptyIdIndex: number[] = imageIdOrders.map((id, index) => !id ? index : -1).filter(index => index !== -1);
+                    for (let i = 0; i < emptyIdIndex.length; i++) {
+                        imageIdOrders[emptyIdIndex[i]] = addedImagesResponse[i].id;
+                    }
+                } else {
+                    return null;
+                }
+            }
+
+            if (imageIdOrders.length) {
+                updateImagePromises = imageIdOrders.map((id, index) => id ? this.updateImage(id, { order_number: index }) : Promise.resolve(null));
+                const updateImagesResponse = await Promise.all(updateImagePromises);
+                if (!updateImagesResponse.every(res => res !== null)) {
+                    return null;
+                }
+            }
+
+            const editedSkus = skus.filter(sku => sku.id)
+            const addedSkus = skus.filter(sku => !sku.id);
+            let editSkuPromises: Promise<ProductSKU|null>[] = [];
+            let addSkuPromises: Promise<ProductSKU|null>[] = [];
+
+            if (skus?.length) {
+                editSkuPromises = editedSkus.map(sku => {
+                    const found = response.data.skus.find((s: ProductSKU) => s.id === sku.id);
+                    return found ? this.updateSKU(found.sku, { sku: sku.sku }) : Promise.resolve(null);
+                });
+            }
+
+            if (addedSkus?.length) {
+                addSkuPromises = addedSkus.map(sku => this.addSKU(id, sku.sku));
+            }
+
+            const skusResponses = await Promise.all([...editSkuPromises, ...addSkuPromises]);
+            if (skusResponses.every(sku => sku !== null)) {
+                return { ...response.data, skus: skusResponses.filter(sku => sku) };
+            }
+
+            return null;
+        } catch {
+            return null;
+        }
+    }
+
+    async getProduct(id: string): Promise<Product | null> {
+        try {
+            const session = await this.getAuthSession();
+            const response = await fetchJSON(`${APP_URL}/apis/products/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(session?.access_token && { 'Authorization': `Bearer ${session.access_token}` }),
+                },
+            });
+
+            if (response) {
+                return response.data;
+            }
+
+            return null;
+        } catch {
+            return null;
+        }
+    }
+
     async addProduct(params: AddProductParams): Promise<Product | null> {
         try {
             const { images, ...rest } = params;
-            const additionalInfo = rest.additionalInfo.filter(item => item.label && item.value);
+            const additionalInfo = rest.additional_info.filter(item => item.label && item.value);
 
             const session = await this.getAuthSession();
             const response = await fetchJSON(`${APP_URL}/apis/products`, {
@@ -78,7 +222,7 @@ class ProductData implements IProductData {
                 },
                 body: JSON.stringify({
                     ...rest,
-                    additionalInfo
+                    additional_info: additionalInfo.length ? additionalInfo : undefined,
                 }),
             });
             
@@ -232,16 +376,65 @@ class ProductData implements IProductData {
     async deleteCategory(id: string): Promise<boolean> {
         try {
             const session = await this.getAuthSession();
-            await fetchJSON(`${APP_URL}/apis/products/categories/${id}`, {
+            const response = await fetchJSON(`${APP_URL}/apis/products/categories/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                     ...(session?.access_token && { 'Authorization': `Bearer ${session.access_token}` }),
                 },
             });
-            return true;
+
+            if (response) {
+                return true;
+            }
+
+            return false;
         } catch {
             return false;
+        }
+    }
+
+    async addSKU(product_id: string, sku: string): Promise<ProductSKU | null> {
+        try {
+            const session = await this.getAuthSession();
+            const response = await fetchJSON(`${APP_URL}/apis/products/sku`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(session?.access_token && { 'Authorization': `Bearer ${session.access_token}` }),
+                },
+                body: JSON.stringify({ product_id, sku }),
+            });
+
+            if (response) {
+                return response.data;
+            }
+
+            return null;
+        } catch {
+            return null;
+        }
+    }
+
+    async updateSKU(sku: string, params: UpdateSKUParams): Promise<ProductSKU | null> {
+        try {
+            const session = await this.getAuthSession();
+            const response = await fetchJSON(`${APP_URL}/apis/products/sku/${sku}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(session?.access_token && { 'Authorization': `Bearer ${session.access_token}` }),
+                },
+                body: JSON.stringify(params),
+            });
+
+            if (response) {
+                return response.data;
+            }
+
+            return null;
+        } catch {
+            return null;
         }
     }
 

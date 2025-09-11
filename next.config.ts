@@ -2,6 +2,14 @@ import type { NextConfig } from "next";
 import { API_URL } from "@/config/env";
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'storage.googleapis.com',
+      },
+    ],
+  },
   async rewrites() {
     return [
       {
