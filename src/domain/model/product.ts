@@ -26,13 +26,14 @@ export interface ProductSKU {
 
 export interface Product {
   id: string;
+  images: ProductImage[];
   name: string;
   description: string;
   price: number;
   category?: ProductCategory;
-  images: ProductImage[];
-  additional_info: ProductAdditionalInfo[] | null;
   skus: ProductSKU[];
+  additional_info: ProductAdditionalInfo[] | null;
+  is_deleted: boolean;
   created_at: string;
   updated_at: string;
 }

@@ -99,11 +99,41 @@ class ProductData implements IProductData {
         }
     }
 
+
+    async addProduct(params: AddProductParams): Promise<Product | null> {
+        try {
+            const { images, ...rest } = params;
+            const additionalInfo = rest.additional_info.filter(item => item.label && item.value);
+
+            const session = await this.getAuthSession();
+            const response = await fetchJSON(`${APP_URL}/apis/products`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(session?.access_token && { 'Authorization': `Bearer ${session.access_token}` }),
+                },
+                body: JSON.stringify({
+                    ...rest,
+                    additional_info: additionalInfo.length ? additionalInfo : undefined,
+                }),
+            });
+            
+            if (response) {
+                const { id } = response.data;
+                const uploadedImages = await this.uploadImages(id, images);
+                return { ...response.data, images: uploadedImages };
+            }
+            
+            return null;
+        } catch {
+            return null;
+        }
+    }
+
     async updateProduct(id: string, product: UpdateProductParams): Promise<Product | null> {
         try {
             const { images, skus, ...rest } = product;
             const additionalInfo = rest.additional_info.filter(item => item.label && item.value);
-
             const session = await this.getAuthSession();
             const response = await fetchJSON(`${APP_URL}/apis/products/${id}`, {
                 method: 'PATCH',
@@ -208,44 +238,22 @@ class ProductData implements IProductData {
         }
     }
 
-    async addProduct(params: AddProductParams): Promise<Product | null> {
-        try {
-            const { images, ...rest } = params;
-            const additionalInfo = rest.additional_info.filter(item => item.label && item.value);
-
-            const session = await this.getAuthSession();
-            const response = await fetchJSON(`${APP_URL}/apis/products`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...(session?.access_token && { 'Authorization': `Bearer ${session.access_token}` }),
-                },
-                body: JSON.stringify({
-                    ...rest,
-                    additional_info: additionalInfo.length ? additionalInfo : undefined,
-                }),
-            });
-            
-            if (response) {
-                const { id } = response.data;
-                const uploadedImages = await this.uploadImages(id, images);
-                return { ...response.data, images: uploadedImages };
-            }
-            
-            return null;
-        } catch {
-            return null;
-        }
-    }
-
     async getProducts(params?: GetProductsParams): Promise<IPaginationResponse<Product>> {
         try {
-            const { page = 1, limit = 10, search } = params ?? {};
+            const { page = 1, limit = 10, search, status, categories } = params ?? {};
             
             let query = `?page=${page}&limit=${limit}`;
             
             if (search) {
                 query += `&search=${encodeURIComponent(search)}`;
+            }
+
+            if (status) {
+                query += `&status=${status.join(",")}`;
+            }
+
+            if (categories) {
+                query += `&categories=${categories.join(",")}`;
             }
             
             const session = await this.getAuthSession();
@@ -276,6 +284,27 @@ class ProductData implements IProductData {
                     previous: null,
                 },
             };
+        }
+    }
+
+    async deleteProduct(id: string): Promise<boolean> {
+        try {
+            const session = await this.getAuthSession();
+            const response = await fetchJSON(`${APP_URL}/apis/products/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(session?.access_token && { 'Authorization': `Bearer ${session.access_token}` }),
+                },
+            });
+
+            if (response) {
+                return true;
+            }
+
+            return false;
+        } catch {
+            return false;
         }
     }
 

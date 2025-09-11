@@ -10,6 +10,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { SelectProductCategory } from "@/components/panel/Form/SelectProductCategory";
 import {
   ProductImagesInput,
@@ -26,9 +37,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Product } from "@/domain/model/product";
+import { isAdmin } from "@/lib/role";
 
-export function ProductDetailForm({ product }: { product: Product }) { 
-  const { form, onSubmit } = useController(product);
+export function ProductDetailForm({ product }: { product: Product }) {
+  const {
+    form,
+    user,
+    deleteDialogOpen,
+    onSubmit,
+    onDelete,
+    setDeleteDialogOpen,
+  } = useController(product);
 
   return (
     <FormProvider {...form}>
@@ -61,7 +80,7 @@ export function ProductDetailForm({ product }: { product: Product }) {
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="skus"
@@ -77,11 +96,14 @@ export function ProductDetailForm({ product }: { product: Product }) {
                         errors={(() => {
                           const skuErrors = form.formState.errors.skus;
                           if (!skuErrors) return [];
-                          
+
                           if (Array.isArray(skuErrors)) {
-                            return skuErrors.map((error: { sku?: { message: string } }) => (error?.sku?.message ?? ''));
+                            return skuErrors.map(
+                              (error: { sku?: { message: string } }) =>
+                                error?.sku?.message ?? ""
+                            );
                           }
-                          
+
                           return [];
                         })()}
                       />
@@ -121,8 +143,12 @@ export function ProductDetailForm({ product }: { product: Product }) {
                         type="number"
                         placeholder="Masukkan harga produk"
                         {...field}
-                        value={field.value || ''}
-                        onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : 0)}
+                        value={field.value || ""}
+                        onChange={(e) =>
+                          field.onChange(
+                            e.target.value ? Number(e.target.value) : 0
+                          )
+                        }
                       />
                     </FormControl>
                     <FormMessage />
@@ -179,12 +205,16 @@ export function ProductDetailForm({ product }: { product: Product }) {
                         onAdditionalInfoChange={(newInfo) => {
                           field.onChange(newInfo);
                         }}
-                        errors={Array.isArray(form.formState.errors.additionalInfo) 
-                          ? form.formState.errors.additionalInfo.map(err => ({
-                              label: err?.label?.message,
-                              value: err?.value?.message
-                            }))
-                          : undefined}
+                        errors={
+                          Array.isArray(form.formState.errors.additionalInfo)
+                            ? form.formState.errors.additionalInfo.map(
+                                (err) => ({
+                                  label: err?.label?.message,
+                                  value: err?.value?.message,
+                                })
+                              )
+                            : undefined
+                        }
                       />
                     </FormControl>
                     <FormMessage />
@@ -192,11 +222,69 @@ export function ProductDetailForm({ product }: { product: Product }) {
                 )}
               />
 
-              <div className="flex justify-end">
+              {isAdmin(user) && (
+                <div>
+                  <FormLabel className="mb-1">Status</FormLabel>
+                  <FormField
+                    control={form.control}
+                    name="active"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center justify-start gap-2 h-full">
+                        <FormControl>
+                          <Checkbox
+                            className="cursor-pointer"
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="font-normal text-sm">Aktif</div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              )}
+
+              <div className="flex justify-end items-center gap-2 mt-4">
                 <Button type="submit" className="cursor-pointer">
                   Simpan
                 </Button>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  className="cursor-pointer"
+                  onClick={() => setDeleteDialogOpen(true)}
+                >
+                  Hapus
+                </Button>
               </div>
+
+              <AlertDialog
+                open={deleteDialogOpen}
+                onOpenChange={setDeleteDialogOpen}
+              >
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Apakah anda yakin untuk menghapus produk ?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Produk akan dihapus dan tidak akan muncul di katalog
+                      penjualan.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className="cursor-pointer">
+                      Batal
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={onDelete}
+                      className="cursor-pointer bg-destructive hover:bg-destructive/90"
+                    >
+                      Hapus
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </CardContent>
           </Card>
         </div>

@@ -2,7 +2,13 @@
 import { Textarea } from "@/components/ui/textarea";
 import { Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardDescription,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Supplier } from "@/domain/model/supplier";
@@ -35,7 +41,8 @@ export interface EditSupplierFormProps {
 }
 
 export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
-  const { user, form, onSubmit, open, setOpen, onDelete } = useController(supplier);
+  const { user, form, onSubmit, deleteDialogOpen, setDeleteDialogOpen, onDelete } =
+    useController(supplier);
 
   return (
     <Card>
@@ -75,7 +82,11 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                   <FormItem>
                     <FormLabel>Nama</FormLabel>
                     <FormControl>
-                      <Input {...field} maxLength={128} placeholder="Masukan nama pemasok" />
+                      <Input
+                        {...field}
+                        maxLength={128}
+                        placeholder="Masukan nama pemasok"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -88,7 +99,11 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                   <FormItem>
                     <FormLabel>No Telp</FormLabel>
                     <FormControl>
-                      <Input {...field} maxLength={20} placeholder="Masukan nomor telepon" />
+                      <Input
+                        {...field}
+                        maxLength={20}
+                        placeholder="Masukan nomor telepon"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -101,7 +116,11 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input {...field} maxLength={255} placeholder="Masukan email" />
+                      <Input
+                        {...field}
+                        maxLength={255}
+                        placeholder="Masukan email"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -146,9 +165,9 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                 )}
               />
               <div className="flex flex-col gap-2">
-                <FormLabel>Status</FormLabel>
-                {
-                  isAdmin(user) && (
+                {isAdmin(user) && (
+                  <>
+                    <FormLabel>Status</FormLabel>
                     <FormField
                       control={form.control}
                       name="active"
@@ -165,8 +184,8 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                         </FormItem>
                       )}
                     />
-                  )
-                }
+                  </>
+                )}
               </div>
             </div>
             <div className="flex justify-end gap-2">
@@ -178,7 +197,7 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                   className="w-max cursor-pointer"
                   type="button"
                   variant="destructive"
-                  onClick={() => setOpen(true)}
+                  onClick={() => setDeleteDialogOpen(true)}
                 >
                   Hapus
                 </Button>
@@ -186,15 +205,14 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
             </div>
           </form>
         </Form>
-        <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>
                 Apakah anda yakin untuk menghapus pemasok ?
               </AlertDialogTitle>
               <AlertDialogDescription>
-                Tindakan ini tidak dapat diurungkan. Ini akan menghapus pemasok
-                secara permanen.
+                Pemasok akan dihapus dan tidak akan muncul pada tabel data pemasok.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

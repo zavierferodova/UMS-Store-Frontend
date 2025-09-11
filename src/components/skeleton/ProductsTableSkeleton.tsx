@@ -8,13 +8,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-export function ProductsTableSkeleton() {
+export interface ProductsTableSkeletonProps {
+  showStatusColumn: boolean;
+}
+
+export function ProductsTableSkeleton({ showStatusColumn }: ProductsTableSkeletonProps) {
   return (
     <div className="space-y-2">
       <Table>
         <TableHeader>
           <TableRow>
-            {Array.from({ length: 5 }).map((_, i) => (
+            {Array.from({ length: showStatusColumn ? 6 : 5 }).map((_, i) => (
               <TableHead key={i}>
                 <Skeleton className="h-4 w-3/4" />
               </TableHead>
@@ -37,8 +41,13 @@ export function ProductsTableSkeleton() {
                 <Skeleton className="h-4 w-20" />
               </TableCell>
               <TableCell>
-                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-4 w-20" />
               </TableCell>
+              {showStatusColumn && (
+                <TableCell>
+                  <Skeleton className="h-4 w-24" />
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>

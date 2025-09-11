@@ -1,11 +1,20 @@
+import productData from "@/data/product";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema, FormValues } from "./validation";
-import productData from "@/data/product";
 import { toast } from "sonner";
 import { Product } from "@/domain/model/product";
+import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { panelRoutes } from "@/routes/route";
+import { useRouter } from "next/navigation";
 
 export const useController = (product: Product) => {
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const { data: session } = useSession()
+  const router = useRouter()
+  const user = session?.user
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -15,7 +24,8 @@ export const useController = (product: Product) => {
       category: product.category?.id,
       images: product.images.map(image => ({ id: image.id, src: image.image })),
       skus: product.skus.map(sku => ({ id: sku.id, sku: sku.sku })),
-      additionalInfo: (!product.additional_info || product.additional_info.length === 0) ? [{ label: "", value: "" }] : product.additional_info.map(info => ({ label: info.label, value: info.value }))
+      additionalInfo: (!product.additional_info || product.additional_info.length === 0) ? [{ label: "", value: "" }] : product.additional_info.map(info => ({ label: info.label, value: info.value })),
+      active: !product.is_deleted
     },
   });
 
@@ -40,11 +50,33 @@ export const useController = (product: Product) => {
           category: product.category?.id,
           images: product.images.map(image => ({ id: image.id, src: image.image })),
           skus: product.skus.map(sku => ({ id: sku.id, sku: sku.sku })),
-          additionalInfo: (!product.additional_info || product.additional_info.length === 0) ? [{ label: "", value: "" }] : product.additional_info.map(info => ({ label: info.label, value: info.value }))
+          additionalInfo: (!product.additional_info || product.additional_info.length === 0) ? [{ label: "", value: "" }] : product.additional_info.map(info => ({ label: info.label, value: info.value })),
+          active: !product.is_deleted
         });
         return "Produk berhasil dimuat"
       },
       error: "Gagal memuat produk",
+    });
+  };
+
+  const onDelete = () => {
+    setDeleteDialogOpen(false);
+    const promise = new Promise<boolean>(async (resolve, reject) => {
+      const success = await productData.deleteProduct(product.id)
+      if (success) {
+        resolve(success);
+      } else {
+        reject(new Error("Gagal menghapus produk"));
+      }
+    });
+
+    toast.promise(promise, {
+      loading: "Menghapus produk...",
+      success: () => {
+        router.push(panelRoutes.products)
+        return "Produk berhasil dihapus"
+      },
+      error: "Gagal menghapus produk"
     });
   };
 
@@ -61,6 +93,7 @@ export const useController = (product: Product) => {
         images: data.images.map(img => ({ id: img.id, file: img.file, src: img.src })),
         skus: [...oldSkus, ...newSkus],
         additional_info: data.additionalInfo?.map((info) => ({ label: info.label, value: info.value })) || [],
+        is_deleted: !data.active,
       })
 
       if (updatedProduct) {
@@ -82,6 +115,10 @@ export const useController = (product: Product) => {
 
   return {
     form,
+    user,
+    deleteDialogOpen,
     onSubmit,
+    onDelete,
+    setDeleteDialogOpen,
   };
 };

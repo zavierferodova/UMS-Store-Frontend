@@ -65,6 +65,7 @@ export const formSchema = addFormSchema.extend({
       },
       { message: "Hanya format JPG, PNG yang diizinkan" }
     ),
+    active: z.boolean(),
 });
 
 export type FormValues = z.infer<typeof formSchema>;

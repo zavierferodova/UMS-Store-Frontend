@@ -11,6 +11,8 @@ export const useController = () => {
     const [limit, setLimit] = useState(10)
     const [page, setPage] = useState(1)
     const [search, setSearch] = useState("")
+    const [statusFilter, setStatusFilter] = useState<string[]>([])
+    const [categoryFilter, setCategoryFilter] = useState<string[]>([])
     const [products, setProducts] = useState<IPaginationResponse<Product>>({
         data: [],
         meta: {
@@ -29,7 +31,13 @@ export const useController = () => {
         if (user) {
             setStatus(PageStatus.LOADING)
             try {
-                const response = await productData.getProducts({ page, limit, search })
+                const response = await productData.getProducts({
+                    limit,
+                    page,
+                    search,
+                    status: statusFilter,
+                    categories: categoryFilter
+                })
                 setProducts({
                     data: response.data,
                     meta: response.meta
@@ -38,7 +46,7 @@ export const useController = () => {
                 setStatus(PageStatus.SUCCESS)
             }
         }
-    }, [user, page, limit, search])
+    }, [user, page, limit, search, statusFilter, categoryFilter])
 
     const updatePage = (page: number) => {
         setPage(page)
@@ -50,8 +58,18 @@ export const useController = () => {
     }
 
     const updateSearch = (search: string) => {
-        setPage(1)
         setSearch(search)
+        setPage(1)
+    }
+
+    const handleStatusFilterChange = (status: string[]) => {
+        setStatusFilter(status)
+        setPage(1)
+    }
+
+    const handleCategoryFilterChange = (category: string[]) => {
+        setCategoryFilter(category)
+        setPage(1)
     }
 
     useEffect(() => {
@@ -65,8 +83,12 @@ export const useController = () => {
         limit,
         status,
         products,
+        statusFilter,
+        categoryFilter,
         updatePage,
         updateLimit,
-        updateSearch
+        updateSearch,
+        onStatusFilterChange: handleStatusFilterChange,
+        onCategoryFilterChange: handleCategoryFilterChange
     }
 }

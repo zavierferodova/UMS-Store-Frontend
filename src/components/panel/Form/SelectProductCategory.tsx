@@ -14,6 +14,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from "@/components/ui/command";
 import {
   Popover,
@@ -258,7 +259,9 @@ export function SelectProductCategory({
                   )}
                 </CommandItem>
               )}
-
+            </CommandGroup>
+            <CommandGroup>
+              <CommandList className="max-h-[250px] overflow-y-auto">
               {isLoading && (
                 <CommandItem disabled className="opacity-50">
                   Loading...
@@ -388,6 +391,7 @@ export function SelectProductCategory({
                   Loading...
                 </CommandItem>
               )}
+              </CommandList>
             </CommandGroup>
           </Command>
         </PopoverContent>

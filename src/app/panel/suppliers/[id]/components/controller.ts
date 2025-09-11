@@ -11,7 +11,7 @@ import { formSchema, FormValues } from "./validation";
 
 export const useController = (supplier: Supplier | null) => {
   const { data: session } = useSession();
-  const [open, setOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -91,9 +91,9 @@ export const useController = (supplier: Supplier | null) => {
   return {
     user,
     form,
-    open,
+    deleteDialogOpen,
+    setDeleteDialogOpen,
     onSubmit,
-    setOpen,
     onDelete,
   };
 };

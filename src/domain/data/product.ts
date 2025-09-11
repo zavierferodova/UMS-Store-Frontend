@@ -5,6 +5,8 @@ export type GetProductsParams = {
     search?: string;
     limit?: number;
     page?: number;
+    status?: string[];
+    categories?: string[];
 }
 
 export type GetCategoriesParams = {
@@ -30,6 +32,7 @@ export type UpdateProductParams = {
     category: string;
     images: { id: string; file?: File; src: string }[];
     skus: { id?: string; sku: string; }[];
+    is_deleted?: boolean;
     additional_info: { label: string; value: string }[];
 }
 
@@ -51,10 +54,11 @@ export interface IProductData {
     updateProduct(id: string, product: UpdateProductParams): Promise<Product | null>;
     getProduct(id: string): Promise<Product | null>;
     getProducts(params?: GetProductsParams): Promise<IPaginationResponse<Product>>;
+    deleteProduct(id: string): Promise<boolean>;
     createCategory(name: string): Promise<ProductCategory | null>;
     getCategories(params?: GetCategoriesParams): Promise<IPaginationResponse<ProductCategory>>;
-    updateCategory(id: string, name: string): Promise<ProductCategory | null>;
-    deleteCategory(id: string): Promise<boolean>;
+    updateCategory(category_id: string, name: string): Promise<ProductCategory | null>;
+    deleteCategory(category_id: string): Promise<boolean>;
     addSKU(product_id: string, sku: string): Promise<ProductSKU|null>;
     updateSKU(sku: string, params: UpdateSKUParams): Promise<ProductSKU|null>;
     checkSKU(sku: string): Promise<boolean>;

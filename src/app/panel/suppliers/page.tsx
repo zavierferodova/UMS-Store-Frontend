@@ -21,7 +21,7 @@ import { localeDateFormat } from "@/lib/utils";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { PlusIcon } from "@phosphor-icons/react/dist/ssr";
-import { StatusFilter } from "./components/StatusFilter";
+import { StatusFilter } from "../../../components/filter/StatusFilter";
 import { isAdmin } from "@/lib/role";
 import { EmptyDisplay } from "@/components/display/EmptyDisplay";
 
