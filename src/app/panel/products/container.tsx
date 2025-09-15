@@ -14,10 +14,10 @@ import { Button } from "@/components/ui/button";
 import { PlusIcon, MagnifyingGlassIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { isAdmin } from "@/lib/role";
-import { useSession } from "next-auth/react";
 import { FilterDialog } from "@/app/panel/products/components/FilterDialog";
+import { User } from "@/domain/model/user"
 
-export default function ProductsPage() {
+export function ProductsPageContainer(user: User) {
   const {
     search,
     status,
@@ -31,9 +31,7 @@ export default function ProductsPage() {
     onCategoryFilterChange,
   } = useController();
   const { setMenu } = usePanelHeader();
-  const { data: session } = useSession();
   const isEmpty = status == PageStatus.SUCCESS && products.data.length == 0;
-  const user = session?.user;
 
   useEffect(() => {
     setMenu([

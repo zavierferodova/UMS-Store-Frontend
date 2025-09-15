@@ -94,6 +94,7 @@ export default function SuppliersPage() {
                 <TableHead>No Telp</TableHead>
                 <TableHead>Email</TableHead>
                 <TableHead>Dibuat</TableHead>
+                <TableHead>Diubah</TableHead>
                 {isAdmin(user) && <TableHead>Status</TableHead>}
               </TableRow>
             </TableHeader>
@@ -117,6 +118,11 @@ export default function SuppliersPage() {
                   <TableCell>
                     {supplier.created_at
                       ? localeDateFormat(supplier.created_at)
+                      : "-"}
+                  </TableCell>
+                  <TableCell>
+                    {supplier.updated_at
+                      ? localeDateFormat(supplier.updated_at)
                       : "-"}
                   </TableCell>
                   {isAdmin(user) && (

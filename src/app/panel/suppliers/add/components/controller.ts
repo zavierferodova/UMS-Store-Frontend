@@ -17,16 +17,20 @@ export const useController = () => {
       email: "",
       address: "",
       discount: "",
+      contacts: [{ name: "", phone: "" }],
     },
   });
 
   const onSubmit = (data: FormValues) => {
+    const cleanedData = {
+      ...data,
+      discount: Number(data.discount),
+      sales: data.contacts?.filter(contact => contact.name.trim() !== '' || contact.phone.trim() !== ''),
+    };
+
     const promise = new Promise((resolve, reject) => {
       supplierData
-        .createSupplier({
-          ...data,
-          discount: Number(data.discount),
-        })
+        .createSupplier(cleanedData)
         .then((res) => {
           if (res) {
             resolve(res);

@@ -50,7 +50,7 @@ export const ProfileForm = ({ user }: ProfileFormProps) => {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nama</FormLabel>
+                    <FormLabel>Nama*</FormLabel>
                     <FormControl>
                       <Input placeholder="Nama pengguna" maxLength={128} {...field} />
                     </FormControl>

@@ -15,6 +15,15 @@ export const formSchema = z.object({
       message: "Diskon harus antara 0–100",
     })
     .transform(val => val.toString()),
+  contacts: z.array(
+    z.object({
+      name: z.string().min(1, "Nama tidak boleh kosong"),
+      phone: z
+        .string()
+        .min(1, "No telp tidak boleh kosong")
+        .regex(/^[0-9]+$/, "Nomor telepon hanya boleh berisi angka"),
+    })
+  ),
 });
 
 export type FormValues = z.infer<typeof formSchema>;

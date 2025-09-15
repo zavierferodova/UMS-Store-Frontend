@@ -44,7 +44,7 @@ export const MyProfileForm = () => {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nama</FormLabel>
+                    <FormLabel>Nama*</FormLabel>
                     <FormControl>
                       <Input placeholder="Masukkan nama lengkap anda" maxLength={128} {...field} />
                     </FormControl>

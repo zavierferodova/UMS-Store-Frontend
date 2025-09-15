@@ -57,7 +57,7 @@ export const AccountForm = ({ user }: AccountFormProps) => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Email*</FormLabel>
                   <FormControl>
                     <Input placeholder="email@example.com" maxLength={255} {...field} />
                   </FormControl>
@@ -83,7 +83,7 @@ export const AccountForm = ({ user }: AccountFormProps) => {
               name="role"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Role</FormLabel>
+                  <FormLabel>Role*</FormLabel>
                   <Select 
                     onValueChange={field.onChange}
                     value={field.value}

@@ -15,7 +15,11 @@ export type UpdateSupplierParams = {
     address?: string;
     discount?: number;
     is_deleted?: boolean;
-}
+    sales?: {
+        name: string;
+        phone: string;
+    }[];
+};
 
 export type CreateSupplierParams = {
     name: string;
@@ -23,6 +27,10 @@ export type CreateSupplierParams = {
     phone: string;
     address: string;
     discount?: number;
+    sales?: {
+        name: string;
+        phone: string;
+    }[];
 }
 
 export interface ISupplierData {

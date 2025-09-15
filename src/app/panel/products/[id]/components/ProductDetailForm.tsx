@@ -55,7 +55,7 @@ export function ProductDetailForm({ product }: { product: Product }) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex justify-center mb-6"
       >
-        <div className="w-full max-w-4xl">
+        <div className="w-full">
           <Card>
             <CardHeader>
               <CardTitle>Detail Produk</CardTitle>
@@ -67,7 +67,7 @@ export function ProductDetailForm({ product }: { product: Product }) {
                 name="images"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Gambar Produk</FormLabel>
+                    <FormLabel>Gambar Produk*</FormLabel>
                     <FormControl>
                       <ProductImagesInput
                         images={field.value}
@@ -86,7 +86,7 @@ export function ProductDetailForm({ product }: { product: Product }) {
                 name="skus"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>SKU Produk</FormLabel>
+                    <FormLabel>SKU Produk*</FormLabel>
                     <FormControl>
                       <MultiSkuInput
                         skus={field.value}
@@ -118,7 +118,7 @@ export function ProductDetailForm({ product }: { product: Product }) {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nama Produk</FormLabel>
+                    <FormLabel>Nama Produk*</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Masukkan nama produk"
@@ -137,7 +137,7 @@ export function ProductDetailForm({ product }: { product: Product }) {
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Harga (IDR)</FormLabel>
+                    <FormLabel>Harga (IDR)*</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -161,7 +161,7 @@ export function ProductDetailForm({ product }: { product: Product }) {
                 name="category"
                 render={({ field, fieldState: { error } }) => (
                   <FormItem>
-                    <FormLabel>Kategori Produk</FormLabel>
+                    <FormLabel>Kategori Produk*</FormLabel>
                     <FormControl>
                       <SelectProductCategory
                         value={field.value}
@@ -179,7 +179,7 @@ export function ProductDetailForm({ product }: { product: Product }) {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Deskripsi Produk</FormLabel>
+                    <FormLabel>Deskripsi Produk*</FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="Masukkan deskripsi produk"

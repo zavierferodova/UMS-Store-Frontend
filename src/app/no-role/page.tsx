@@ -3,6 +3,7 @@
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { publicRoutes } from "@/routes/route";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 
@@ -40,7 +41,9 @@ export default function NoRolePage() {
           <div className="grid grid-cols-1">
             <button
               onClick={() =>
-                signOut()
+                signOut({
+                  callbackUrl: publicRoutes.login,
+                })
               }
               className={cn(buttonVariants({ variant: "default" }), "cursor-pointer p-5")}
             >

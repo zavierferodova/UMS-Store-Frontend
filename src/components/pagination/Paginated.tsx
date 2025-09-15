@@ -69,7 +69,7 @@ export function Paginated({ meta, onPageChange, onLimitChange }: PaginatedProps)
 
   return (
     <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-5 w-full mt-6">
-      <div className="w-full flex-shrink-0 md:w-max flex justify-center md:justify-start gap-2 text-sm text-muted-foreground">
+      <div className="w-full flex-shrink-0 md:w-max flex justify-center md:justify-start items-center gap-2 text-sm text-muted-foreground">
         {onLimitChange && (
           <select
             value={meta.limit}

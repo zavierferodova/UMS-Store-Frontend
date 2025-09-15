@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { SlidersHorizontalIcon } from "@phosphor-icons/react";
-import { CategorySelect } from "../../../../components/panel/Form/CategorySelect";
+import { ProductCategorySelect } from "../../../../components/panel/Form/ProductCategorySelect";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useSession } from "next-auth/react";
@@ -90,7 +90,7 @@ export function FilterDialog({
 
           <div className="space-y-2">
             <div className="text-sm font-medium">Kategori</div>
-            <CategorySelect
+            <ProductCategorySelect
               value={categoryFilter}
               onChange={onCategoryFilterChange}
               placeholder="Pilih kategori..."

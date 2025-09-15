@@ -11,6 +11,7 @@ import { IPaginationResponse } from "@/domain/model/response";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { isAdmin } from "@/lib/role";
+import { localeDateFormat } from "@/lib/utils";
 
 interface ProductsTableProps {
   products: IPaginationResponse<Product>;
@@ -32,6 +33,8 @@ export function ProductsTable({ products }: ProductsTableProps) {
             <TableHead>Nama</TableHead>
             <TableHead>Kategori</TableHead>
             <TableHead>Harga</TableHead>
+            <TableHead>Dibuat</TableHead>
+            <TableHead>Diubah</TableHead>
             {isAdmin(user) && (
               <TableHead className="text-center">Status</TableHead>
             )}
@@ -68,6 +71,8 @@ export function ProductsTable({ products }: ProductsTableProps) {
                   maximumFractionDigits: 0,
                 })}
               </TableCell>
+              <TableCell>{localeDateFormat(product.created_at)}</TableCell>
+              <TableCell>{localeDateFormat(product.updated_at)}</TableCell>
               {isAdmin(user) && (
                 <TableCell>
                   <div className="flex justify-center">

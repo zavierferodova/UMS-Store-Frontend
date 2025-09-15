@@ -1,7 +1,13 @@
 "use client";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardDescription,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useController } from "./controller";
 import {
@@ -12,32 +18,38 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Separator } from "@/components/ui/separator";
+import { SalesContactInput } from "@/components/panel/Form/SalesContactInput";
 
 export const AddSupplierForm = () => {
   const { form, onSubmit } = useController();
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Pemasok</CardTitle>
-        <CardDescription>Formulir untuk menambah pemasok baru.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-4"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4"
+      >
+        <Card>
+          <CardHeader>
+            <CardTitle>Pemasok</CardTitle>
+            <CardDescription>
+              Formulir untuk menambah pemasok baru.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col gap-4">
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nama</FormLabel>
+                    <FormLabel>Nama*</FormLabel>
                     <FormControl>
-                      <Input {...field} maxLength={128} placeholder="Masukan nama pemasok" />
+                      <Input
+                        {...field}
+                        maxLength={128}
+                        placeholder="Masukan nama pemasok"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -48,9 +60,13 @@ export const AddSupplierForm = () => {
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>No Telp</FormLabel>
+                    <FormLabel>No Telp*</FormLabel>
                     <FormControl>
-                      <Input {...field} maxLength={20} placeholder="Masukan nomor telepon" />
+                      <Input
+                        {...field}
+                        maxLength={20}
+                        placeholder="Masukan nomor telepon"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -63,7 +79,11 @@ export const AddSupplierForm = () => {
                   <FormItem className="items-start h-max">
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input {...field} maxLength={255} placeholder="Masukan email" />
+                      <Input
+                        {...field}
+                        maxLength={255}
+                        placeholder="Masukan email"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -74,7 +94,7 @@ export const AddSupplierForm = () => {
                 name="address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Alamat</FormLabel>
+                    <FormLabel>Alamat*</FormLabel>
                     <FormControl>
                       <Textarea
                         {...field}
@@ -88,34 +108,73 @@ export const AddSupplierForm = () => {
                 )}
               />
             </div>
-            <Separator className="mt-5"/>
-            <div className="grid grid-cols-1 mt-2 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="discount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Diskon Penjualan</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="number"
-                        placeholder="Masukan diskon"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="flex justify-end">
-              <Button className="w-max cursor-pointer" type="submit">
-                Simpan
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+          </CardContent>
+        </Card>
+        <div>
+          <Card className="h-max">
+            <CardHeader>
+              <CardTitle>Informasi Tambahan</CardTitle>
+              <CardDescription>
+                Informasi tambahan tentang pemasok
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col gap-4">
+                <FormField
+                  control={form.control}
+                  name="discount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Diskon Penjualan Default</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="number"
+                          placeholder="Masukan diskon"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="contacts"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Kontak Sales</FormLabel>
+                      <FormControl>
+                        <SalesContactInput
+                          contacts={field.value || []}
+                          onContactsChange={(contacts) => {
+                            field.onChange(contacts);
+                          }}
+                          errors={
+                            Array.isArray(form.formState.errors.contacts)
+                              ? form.formState.errors.contacts.map(
+                                  (err: any) => ({
+                                    name: err?.name?.message,
+                                    phone: err?.phone?.message,
+                                  })
+                                )
+                              : undefined
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </CardContent>
+          </Card>
+          <div className="flex justify-end mt-4">
+            <Button className="w-max cursor-pointer" type="submit">
+              Simpan
+            </Button>
+          </div>
+        </div>
+      </form>
+    </Form>
   );
 };

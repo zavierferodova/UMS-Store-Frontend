@@ -24,7 +24,7 @@ export type Category = {
   label: string;
 };
 
-export type CategorySelectProps = {
+export type ProductCategorySelectProps = {
   value: string[];
   onChange: (value: string[]) => void;
   placeholder?: string;
@@ -32,13 +32,13 @@ export type CategorySelectProps = {
   disabled?: boolean;
 };
 
-export function CategorySelect({
+export function ProductCategorySelect({
   value = [],
   onChange,
   placeholder = "Pilih kategori...",
   className,
   disabled = false,
-}: CategorySelectProps) {
+}: ProductCategorySelectProps) {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [search, setSearch] = useState("");
@@ -184,4 +184,4 @@ export function CategorySelect({
   );
 }
 
-export default CategorySelect;
+export default ProductCategorySelect;

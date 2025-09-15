@@ -61,6 +61,7 @@ export const MyAccountForm = () => {
                 )}
               />
               <div className="relative">
+                <FormLabel className="mb-3">Foto Profil</FormLabel>
                 <Avatar
                   className="h-20 w-20 cursor-pointer rounded-md"
                   onClick={handleAvatarClick}
@@ -94,7 +95,7 @@ export const MyAccountForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Email*</FormLabel>
                   <FormControl>
                     <Input placeholder="Masukkan email anda" maxLength={255} {...field} />
                   </FormControl>

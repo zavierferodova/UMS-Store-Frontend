@@ -22,6 +22,7 @@ export const useController = (supplier: Supplier | null) => {
       address: "",
       discount: "",
       active: true,
+      contacts: [],
     },
   });
   const user = session?.user;
@@ -35,6 +36,10 @@ export const useController = (supplier: Supplier | null) => {
         address: supplier.address || "",
         discount: supplier.discount?.toString() || "",
         active: !supplier.is_deleted,
+        contacts: supplier.sales?.map(contact => ({
+          name: contact.name,
+          phone: contact.phone,
+        })) || [],
       });
     }
   }, [supplier, form]);
@@ -47,6 +52,10 @@ export const useController = (supplier: Supplier | null) => {
             ...data,
             discount: Number(data.discount),
             is_deleted: !data.active,
+            sales: data.contacts?.map(contact => ({
+              name: contact.name,
+              phone: contact.phone,
+            })) || [],
           })
           .then((res) => {
             if (res) {

@@ -18,7 +18,7 @@ export function ProductsTableSkeleton({ showStatusColumn }: ProductsTableSkeleto
       <Table>
         <TableHeader>
           <TableRow>
-            {Array.from({ length: showStatusColumn ? 6 : 5 }).map((_, i) => (
+            {Array.from({ length: showStatusColumn ? 8 : 7 }).map((_, i) => (
               <TableHead key={i}>
                 <Skeleton className="h-4 w-3/4" />
               </TableHead>
@@ -36,6 +36,12 @@ export function ProductsTableSkeleton({ showStatusColumn }: ProductsTableSkeleto
               </TableCell>
               <TableCell>
                 <Skeleton className="h-4 w-32" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-4 w-20" />
+              </TableCell>
+              <TableCell>
+                <Skeleton className="h-4 w-20" />
               </TableCell>
               <TableCell>
                 <Skeleton className="h-4 w-20" />
