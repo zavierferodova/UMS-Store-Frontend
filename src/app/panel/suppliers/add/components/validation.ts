@@ -1,28 +1,28 @@
-import * as z from "zod";
+import * as z from 'zod';
 
 export const formSchema = z.object({
-  name: z.string().min(1, "Nama tidak boleh kosong"),
+  name: z.string().min(1, 'Nama tidak boleh kosong'),
   phone: z
     .string()
-    .min(1, "No telp tidak boleh kosong")
-    .regex(/^[0-9]+$/, "Nomor telepon hanya boleh berisi angka"),
-  email: z.email("Email tidak valid").or(z.literal("")).optional(),
-  address: z.string().min(1, "Alamat tidak boleh kosong"),
+    .min(1, 'No telp tidak boleh kosong')
+    .regex(/^[0-9]+$/, 'Nomor telepon hanya boleh berisi angka'),
+  email: z.email('Email tidak valid').or(z.literal('')).optional(),
+  address: z.string().min(1, 'Alamat tidak boleh kosong'),
   discount: z
     .string()
-    .transform((val) => (val === "" ? 0 : Number(val)))
+    .transform((val) => (val === '' ? 0 : Number(val)))
     .refine((val) => val >= 0 && val <= 100, {
-      message: "Diskon harus antara 0–100",
+      message: 'Diskon harus antara 0–100',
     })
-    .transform(val => val.toString()),
+    .transform((val) => val.toString()),
   contacts: z.array(
     z.object({
-      name: z.string().min(1, "Nama tidak boleh kosong"),
+      name: z.string().min(1, 'Nama tidak boleh kosong'),
       phone: z
         .string()
-        .min(1, "No telp tidak boleh kosong")
-        .regex(/^[0-9]+$/, "Nomor telepon hanya boleh berisi angka"),
-    })
+        .min(1, 'No telp tidak boleh kosong')
+        .regex(/^[0-9]+$/, 'Nomor telepon hanya boleh berisi angka'),
+    }),
   ),
 });
 

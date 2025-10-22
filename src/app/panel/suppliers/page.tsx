@@ -1,6 +1,6 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+'use client';
+import { Button } from '@/components/ui/button';
+import { Card, CardDescription, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
   TableHeader,
@@ -8,22 +8,22 @@ import {
   TableHead,
   TableBody,
   TableCell,
-} from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Paginated } from "@/components/pagination/Paginated";
-import { usePanelHeader } from "@/components/panel/Header";
-import { useEffect } from "react";
-import { panelRoutes } from "@/routes/route";
-import { useController } from "./controller";
-import { SuppliersTableSkeleton } from "@/components/skeleton/SuppliersTableSkeleton";
-import { PageStatus } from "@/lib/page";
-import { localeDateFormat } from "@/lib/utils";
-import Link from "next/link";
-import { Search } from "lucide-react";
-import { PlusIcon } from "@phosphor-icons/react/dist/ssr";
-import { StatusFilter } from "../../../components/filter/StatusFilter";
-import { isAdmin } from "@/lib/role";
-import { EmptyDisplay } from "@/components/display/EmptyDisplay";
+} from '@/components/ui/table';
+import { Input } from '@/components/ui/input';
+import { Paginated } from '@/components/pagination/Paginated';
+import { usePanelHeader } from '@/components/panel/Header';
+import { useEffect } from 'react';
+import { panelRoutes } from '@/routes/route';
+import { useController } from './controller';
+import { PageStatus } from '@/lib/page';
+import { localeDateFormat } from '@/lib/utils';
+import Link from 'next/link';
+import { Search } from 'lucide-react';
+import { PlusIcon } from '@phosphor-icons/react/dist/ssr';
+import { StatusFilter } from '../../../components/filter/StatusFilter';
+import { isAdmin } from '@/lib/role';
+import { EmptyDisplay } from '@/components/display/EmptyDisplay';
+import { SpinAnimation } from '@/components/animation/SpinAnimation';
 
 export default function SuppliersPage() {
   const {
@@ -42,11 +42,11 @@ export default function SuppliersPage() {
   useEffect(() => {
     setMenu([
       {
-        name: "Beranda",
+        name: 'Beranda',
         href: panelRoutes.home,
       },
       {
-        name: "Pemasok",
+        name: 'Pemasok',
         href: panelRoutes.suppliers,
       },
     ]);
@@ -81,7 +81,7 @@ export default function SuppliersPage() {
       </CardHeader>
       <CardContent>
         {status == PageStatus.LOADING ? (
-          <SuppliersTableSkeleton showStatusColumn={isAdmin(user)} />
+          <SpinAnimation />
         ) : (
           <Table>
             <TableHeader>
@@ -114,21 +114,15 @@ export default function SuppliersPage() {
                     </Link>
                   </TableCell>
                   <TableCell>{supplier.phone}</TableCell>
-                  <TableCell>{supplier.email || "-"}</TableCell>
+                  <TableCell>{supplier.email || '-'}</TableCell>
                   <TableCell>
-                    {supplier.created_at
-                      ? localeDateFormat(supplier.created_at)
-                      : "-"}
+                    {supplier.created_at ? localeDateFormat(supplier.created_at) : '-'}
                   </TableCell>
                   <TableCell>
-                    {supplier.updated_at
-                      ? localeDateFormat(supplier.updated_at)
-                      : "-"}
+                    {supplier.updated_at ? localeDateFormat(supplier.updated_at) : '-'}
                   </TableCell>
                   {isAdmin(user) && (
-                    <TableCell>
-                      {supplier.is_deleted ? "Dihapus" : "Aktif"}
-                    </TableCell>
+                    <TableCell>{supplier.is_deleted ? 'Dihapus' : 'Aktif'}</TableCell>
                   )}
                 </TableRow>
               ))}
@@ -140,7 +134,7 @@ export default function SuppliersPage() {
             <EmptyDisplay
               title="Kosong"
               description={
-                search ? "Tidak ada data yang ditemukan" : "Belum ada pemasok yang terdaftar"
+                search ? 'Tidak ada data yang ditemukan' : 'Belum ada pemasok yang terdaftar'
               }
             />
           </div>

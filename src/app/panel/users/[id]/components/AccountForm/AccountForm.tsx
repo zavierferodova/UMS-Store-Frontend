@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Card, CardDescription, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -11,20 +11,26 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { CameraIcon } from "lucide-react";
-import { UserIcon } from "@phosphor-icons/react/dist/ssr";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useController } from "./controller";
-import { User } from "@/domain/model/user";
-import { isAdmin } from "@/lib/role";
+} from '@/components/ui/form';
+import { CameraIcon } from 'lucide-react';
+import { UserIcon } from '@phosphor-icons/react/dist/ssr';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useController } from './controller';
+import { User } from '@/domain/model/user';
+import { isAdmin } from '@/lib/role';
 
 export type AccountFormProps = {
-  user: User | null
-}
+  user: User | null;
+};
 
 export const AccountForm = ({ user }: AccountFormProps) => {
-   const { session, form, userImage, onSubmit } = useController(user);
+  const { session, form, userImage, onSubmit } = useController(user);
 
   return (
     <Card>
@@ -84,12 +90,12 @@ export const AccountForm = ({ user }: AccountFormProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Role*</FormLabel>
-                  <Select 
+                  <Select
                     onValueChange={field.onChange}
                     value={field.value}
                     defaultValue={field.value}
                     disabled={!isAdmin(session?.user)}
-                    >
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Pilih role" />

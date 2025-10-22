@@ -1,8 +1,8 @@
-import supplierData from "@/data/supplier";
-import { Supplier } from "@/domain/model/supplier";
-import { useParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import { toast } from "sonner";
+import supplierData from '@/data/supplier';
+import { Supplier } from '@/domain/model/supplier';
+import { useParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 export const useController = () => {
   const params = useParams();
@@ -16,19 +16,19 @@ export const useController = () => {
           if (data) {
             resolve(data);
           } else {
-            reject(new Error("Gagal memuat pemasok"));
+            reject(new Error('Gagal memuat pemasok'));
           }
         });
       });
 
       toast.promise(promise, {
-        loading: "Sedang memuat pemasok",
+        loading: 'Sedang memuat pemasok',
         success: (data) => {
           const supplier = data as Supplier;
           setSupplier(supplier);
-          return "Pemasok berhasil dimuat!";
+          return 'Pemasok berhasil dimuat!';
         },
-        error: "Gagal memuat pemasok!",
+        error: 'Gagal memuat pemasok!',
       });
     }
   }, [params]);

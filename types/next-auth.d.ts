@@ -1,8 +1,8 @@
 // next-auth.d.ts
-import NextAuth from "next-auth";
-import { User as BaseUser } from "@/domain/model/user";
+import NextAuth from 'next-auth';
+import { User as BaseUser } from '@/domain/model/user';
 
-declare module "next-auth" {
+declare module 'next-auth' {
   interface Session {
     user: BaseUser;
     access_token: string;
@@ -17,7 +17,7 @@ declare module "next-auth" {
   }
 }
 
-declare module "next-auth/jwt" {
+declare module 'next-auth/jwt' {
   interface JWT {
     user: BaseUser;
     access_token: string;

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -8,8 +8,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -17,8 +17,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { useController } from "./controller";
+} from '@/components/ui/form';
+import { useController } from './controller';
 
 export const UpdatePasswordForm = () => {
   const { form, onSubmit } = useController();
@@ -70,7 +70,9 @@ export const UpdatePasswordForm = () => {
             />
           </CardContent>
           <CardFooter className="justify-end">
-            <Button type="submit" className="cursor-pointer">Simpan</Button>
+            <Button type="submit" className="cursor-pointer">
+              Simpan
+            </Button>
           </CardFooter>
         </Card>
       </form>

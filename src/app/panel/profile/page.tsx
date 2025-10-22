@@ -1,26 +1,26 @@
-"use client";
-import { UpdatePasswordForm } from "./components/UpdatePasswordForm/UpdatePasswordForm";
-import { MyAccountForm } from "./components/MyAccountForm/MyAccountForm";
-import { MyProfileForm } from "./components/MyProfileForm/MyProfileForm";
-import { usePanelHeader } from "@/components/panel/Header";
-import { useEffect } from "react";
-import { panelRoutes } from "@/routes/route";
+'use client';
+import { UpdatePasswordForm } from './components/UpdatePasswordForm/UpdatePasswordForm';
+import { MyAccountForm } from './components/MyAccountForm/MyAccountForm';
+import { MyProfileForm } from './components/MyProfileForm/MyProfileForm';
+import { usePanelHeader } from '@/components/panel/Header';
+import { useEffect } from 'react';
+import { panelRoutes } from '@/routes/route';
 
 export default function ProfilePage() {
-  const { setMenu } = usePanelHeader()
+  const { setMenu } = usePanelHeader();
 
   useEffect(() => {
     setMenu([
       {
-        name: "Beranda",
+        name: 'Beranda',
         href: panelRoutes.home,
       },
       {
-        name: "Profile",
+        name: 'Profile',
         href: panelRoutes.profile,
       },
-    ])
-  }, [setMenu])
+    ]);
+  }, [setMenu]);
 
   return (
     <>
@@ -30,7 +30,7 @@ export default function ProfilePage() {
           <UpdatePasswordForm />
         </div>
         <div className="w-full lg:w-[60%]">
-          <MyProfileForm/>
+          <MyProfileForm />
         </div>
       </div>
     </>

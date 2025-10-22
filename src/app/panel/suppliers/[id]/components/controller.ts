@@ -1,13 +1,13 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Supplier } from "@/domain/model/supplier";
-import supplierData from "@/data/supplier";
-import { toast } from "sonner";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { formSchema, FormValues } from "./validation";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Supplier } from '@/domain/model/supplier';
+import supplierData from '@/data/supplier';
+import { toast } from 'sonner';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { formSchema, FormValues } from './validation';
 
 export const useController = (supplier: Supplier | null) => {
   const { data: session } = useSession();
@@ -16,11 +16,11 @@ export const useController = (supplier: Supplier | null) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      phone: "",
-      email: "",
-      address: "",
-      discount: "",
+      name: '',
+      phone: '',
+      email: '',
+      address: '',
+      discount: '',
       active: true,
       contacts: [],
     },
@@ -32,14 +32,15 @@ export const useController = (supplier: Supplier | null) => {
       form.reset({
         name: supplier.name,
         phone: supplier.phone,
-        email: supplier.email || "",
-        address: supplier.address || "",
-        discount: supplier.discount?.toString() || "",
+        email: supplier.email || '',
+        address: supplier.address || '',
+        discount: supplier.discount?.toString() || '',
         active: !supplier.is_deleted,
-        contacts: supplier.sales?.map(contact => ({
-          name: contact.name,
-          phone: contact.phone,
-        })) || [],
+        contacts:
+          supplier.sales?.map((contact) => ({
+            name: contact.name,
+            phone: contact.phone,
+          })) || [],
       });
     }
   }, [supplier, form]);
@@ -52,24 +53,25 @@ export const useController = (supplier: Supplier | null) => {
             ...data,
             discount: Number(data.discount),
             is_deleted: !data.active,
-            sales: data.contacts?.map(contact => ({
-              name: contact.name,
-              phone: contact.phone,
-            })) || [],
+            sales:
+              data.contacts?.map((contact) => ({
+                name: contact.name,
+                phone: contact.phone,
+              })) || [],
           })
           .then((res) => {
             if (res) {
               resolve(res);
             } else {
-              reject(new Error("Gagal mengubah data pemasok"));
+              reject(new Error('Gagal mengubah data pemasok'));
             }
           });
       });
 
       toast.promise(promise, {
-        loading: "Sedang mengubah data pemasok",
-        success: "Data pemasok berhasil diubah",
-        error: "Gagal mengubah data pemasok",
+        loading: 'Sedang mengubah data pemasok',
+        success: 'Data pemasok berhasil diubah',
+        error: 'Gagal mengubah data pemasok',
       });
     }
   };
@@ -79,20 +81,20 @@ export const useController = (supplier: Supplier | null) => {
       const promise = new Promise((resolve, reject) => {
         supplierData.deleteSupplier(supplier.id).then((success) => {
           if (success) {
-            resolve("Data pemasok berhasil dihapus");
+            resolve('Data pemasok berhasil dihapus');
           } else {
-            reject(new Error("Gagal menghapus data pemasok"));
+            reject(new Error('Gagal menghapus data pemasok'));
           }
         });
       });
 
       toast.promise(promise, {
-        loading: "Sedang menghapus data pemasok",
+        loading: 'Sedang menghapus data pemasok',
         success: (message) => {
-          router.push("/panel/suppliers");
+          router.push('/panel/suppliers');
           return message as string;
         },
-        error: "Gagal menghapus data pemasok",
+        error: 'Gagal menghapus data pemasok',
       });
     }
   };

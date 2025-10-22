@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardDescription,
@@ -6,8 +6,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -15,22 +15,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { useController } from "./controller";
-import { User } from "@/domain/model/user";
-import { isAdmin } from "@/lib/role";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { useController } from './controller';
+import { User } from '@/domain/model/user';
+import { isAdmin } from '@/lib/role';
 
 export type ProfileFormProps = {
-  user: User | null
-}
+  user: User | null;
+};
 
 export const ProfileForm = ({ user }: ProfileFormProps) => {
   const { session, form, onSubmit } = useController(user);
@@ -75,8 +75,12 @@ export const ProfileForm = ({ user }: ProfileFormProps) => {
                           <SelectValue placeholder="Pilih jenis kelamin" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="male" className="cursor-pointer">Laki-laki</SelectItem>
-                          <SelectItem value="female" className="cursor-pointer">Perempuan</SelectItem>
+                          <SelectItem value="male" className="cursor-pointer">
+                            Laki-laki
+                          </SelectItem>
+                          <SelectItem value="female" className="cursor-pointer">
+                            Perempuan
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>

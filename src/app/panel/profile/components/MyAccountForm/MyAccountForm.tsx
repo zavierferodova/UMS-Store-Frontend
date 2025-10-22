@@ -1,15 +1,9 @@
-"use client";
+'use client';
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -17,10 +11,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { CameraIcon } from "lucide-react";
-import { useController } from "./controller";
-import { UserIcon } from "@phosphor-icons/react/dist/ssr";
+} from '@/components/ui/form';
+import { CameraIcon } from 'lucide-react';
+import { useController } from './controller';
+import { UserIcon } from '@phosphor-icons/react/dist/ssr';
 
 export const MyAccountForm = () => {
   const {
@@ -43,7 +37,10 @@ export const MyAccountForm = () => {
       <CardContent className="space-y-4">
         <div>
           <Form {...avatarForm}>
-            <form onSubmit={avatarForm.handleSubmit(onSubmitAvatar)} className="mb-6 flex items-center space-x-4">
+            <form
+              onSubmit={avatarForm.handleSubmit(onSubmitAvatar)}
+              className="mb-6 flex items-center space-x-4"
+            >
               <FormField
                 control={avatarForm.control}
                 name="profileImage"
@@ -62,12 +59,9 @@ export const MyAccountForm = () => {
               />
               <div className="relative">
                 <FormLabel className="mb-3">Foto Profil</FormLabel>
-                <Avatar
-                  className="h-20 w-20 cursor-pointer rounded-md"
-                  onClick={handleAvatarClick}
-                >
+                <Avatar className="h-20 w-20 cursor-pointer rounded-md" onClick={handleAvatarClick}>
                   <AvatarImage
-                    src={imagePreview || ""}
+                    src={imagePreview || ''}
                     alt="User profile image"
                     className="object-cover w-full h-full"
                   />
@@ -83,7 +77,9 @@ export const MyAccountForm = () => {
                 </div>
               </div>
               <div className="flex flex-wrap gap-1">
-                <Button variant="outline" type="submit" className="cursor-pointer">Ubah avatar</Button>
+                <Button variant="outline" type="submit" className="cursor-pointer">
+                  Ubah avatar
+                </Button>
               </div>
             </form>
           </Form>

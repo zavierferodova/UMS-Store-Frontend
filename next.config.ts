@@ -1,5 +1,5 @@
-import type { NextConfig } from "next";
-import { API_URL } from "@/config/env";
+import type { NextConfig } from 'next';
+import { API_URL } from '@/config/env';
 
 const nextConfig: NextConfig = {
   images: {
@@ -16,8 +16,8 @@ const nextConfig: NextConfig = {
         source: '/apis/:path*',
         destination: `${API_URL}/api/:path*`,
         basePath: false,
-      }
-    ]
+      },
+    ];
   },
 };
 

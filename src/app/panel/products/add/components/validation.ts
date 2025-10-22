@@ -1,30 +1,31 @@
-import { z } from "zod";
-import { ImageFile } from "@/components/panel/Form/ProductImagesInput";
-import productData from "@/data/product";
+import { z } from 'zod';
+import { ImageFile } from '@/components/panel/Form/ProductImagesInput';
+import productData from '@/data/product';
 
 export const formSchema = z.object({
-  name: z.string().min(1, { message: "Nama produk tidak boleh kosong" }),
-  description: z
-    .string()
-    .min(1, { message: "Deskripsi produk tidak boleh kosong" }),
-  price: z.number()
-    .min(0, { message: "Harga tidak boleh negatif" })
-    .min(1, { message: "Harga produk tidak boleh kosong" }),
-  category: z.any().refine((value) => typeof value === "string" && value.trim() !== "", { message: "Kategori produk tidak boleh kosong" }),
+  name: z.string().min(1, { message: 'Nama produk tidak boleh kosong' }),
+  description: z.string().min(1, { message: 'Deskripsi produk tidak boleh kosong' }),
+  price: z
+    .number()
+    .min(0, { message: 'Harga tidak boleh negatif' })
+    .min(1, { message: 'Harga produk tidak boleh kosong' }),
+  category: z
+    .any()
+    .refine((value) => typeof value === 'string' && value.trim() !== '', {
+      message: 'Kategori produk tidak boleh kosong',
+    }),
   images: z
     .array(z.any())
-    .min(1, { message: "Gambar tidak boleh kosong" })
-    .refine(
-      (images) =>
-        images.every((image: ImageFile) => image.file?.size || 0 <= 8 * 1024),
-      { message: "Ukuran gambar maksimal 8KB" }
-    )
+    .min(1, { message: 'Gambar tidak boleh kosong' })
+    .refine((images) => images.every((image: ImageFile) => image.file?.size || 0 <= 8 * 1024), {
+      message: 'Ukuran gambar maksimal 8KB',
+    })
     .refine(
       (images) =>
         images.every((image: ImageFile) =>
-          ["image/jpeg", "image/png"].includes(image.file?.type || "")
+          ['image/jpeg', 'image/png'].includes(image.file?.type || ''),
         ),
-      { message: "Hanya format JPG, PNG yang diizinkan" }
+      { message: 'Hanya format JPG, PNG yang diizinkan' },
     ),
   skus: z
     .array(
@@ -32,42 +33,40 @@ export const formSchema = z.object({
         id: z.string().optional(),
         sku: z
           .string()
-          .min(1, { message: "SKU tidak boleh kosong" })
+          .min(1, { message: 'SKU tidak boleh kosong' })
           .refine(
             async (sku) => {
-              if (sku.trim() === "" ) return false;
+              if (sku.trim() === '') return false;
               const available = await productData.checkSKU(sku);
               return available;
             },
-            { message: "SKU sudah ada" }
-          )
-      })
+            { message: 'SKU sudah ada' },
+          ),
+      }),
     )
-    .min(1, { message: "SKU produk minimal 1" })
+    .min(1, { message: 'SKU produk minimal 1' })
     .refine(
       (skus) => {
-        const skuValues = skus.map(s => s.sku.trim().toLowerCase());
+        const skuValues = skus.map((s) => s.sku.trim().toLowerCase());
         return new Set(skuValues).size === skuValues.length;
       },
-      { message: "SKU tidak boleh sama" }
+      { message: 'SKU tidak boleh sama' },
     ),
   additionalInfo: z
     .array(
       z.object({
         label: z.string(),
         value: z.string(),
-      })
+      }),
     )
     .optional()
     .refine(
       (items) => {
         if (!items) return true;
-        const labels = items.map((item) =>
-          (item.label ?? "").trim().toLowerCase()
-        );
+        const labels = items.map((item) => (item.label ?? '').trim().toLowerCase());
         return new Set(labels).size === labels.length;
       },
-      { message: "Label harus unik" }
+      { message: 'Label harus unik' },
     ),
 });
 

@@ -4,14 +4,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { SlidersHorizontalIcon } from "@phosphor-icons/react";
-import { ProductCategorySelect } from "../../../../components/panel/Form/ProductCategorySelect";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { useSession } from "next-auth/react";
-import { isAdmin } from "@/lib/role";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { SlidersHorizontalIcon } from '@phosphor-icons/react';
+import { ProductCategorySelect } from '../../../../components/panel/Form/ProductCategorySelect';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import { useSession } from 'next-auth/react';
+import { isAdmin } from '@/lib/role';
 
 type StatusOption = {
   value: string;
@@ -19,8 +19,8 @@ type StatusOption = {
 };
 
 const statusOptions: StatusOption[] = [
-  { value: "active", label: "Aktif" },
-  { value: "deleted", label: "Dihapus" },
+  { value: 'active', label: 'Aktif' },
+  { value: 'deleted', label: 'Dihapus' },
 ];
 
 type FilterDialogProps = {
@@ -64,10 +64,7 @@ export function FilterDialog({
               <div className="text-sm font-medium">Status</div>
               <div className="space-y-2">
                 {statusOptions.map((option) => (
-                  <div
-                    key={option.value}
-                    className="flex items-center space-x-2"
-                  >
+                  <div key={option.value} className="flex items-center space-x-2">
                     <Checkbox
                       id={`status-${option.value}`}
                       checked={statusFilter.includes(option.value)}
@@ -76,10 +73,7 @@ export function FilterDialog({
                         handleStatusChange(option.value, checked as boolean)
                       }
                     />
-                    <Label
-                      htmlFor={`status-${option.value}`}
-                      className="cursor-pointer"
-                    >
+                    <Label htmlFor={`status-${option.value}`} className="cursor-pointer">
                       {option.label}
                     </Label>
                   </div>

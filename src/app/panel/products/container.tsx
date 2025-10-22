@@ -1,21 +1,21 @@
-"use client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Paginated } from "@/components/pagination/Paginated";
-import { usePanelHeader } from "@/components/panel/Header";
-import { useEffect } from "react";
-import { panelRoutes } from "@/routes/route";
-import { useController } from "./controller";
-import { ProductsTableSkeleton } from "@/components/skeleton/ProductsTableSkeleton";
-import { PageStatus } from "@/lib/page";
-import { EmptyDisplay } from "@/components/display/EmptyDisplay";
-import { ProductsTable } from "./components/ProductsTable";
-import { Button } from "@/components/ui/button";
-import { PlusIcon, MagnifyingGlassIcon } from "@phosphor-icons/react";
-import Link from "next/link";
-import { isAdmin } from "@/lib/role";
-import { FilterDialog } from "@/app/panel/products/components/FilterDialog";
-import { User } from "@/domain/model/user"
+'use client';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Paginated } from '@/components/pagination/Paginated';
+import { usePanelHeader } from '@/components/panel/Header';
+import { useEffect } from 'react';
+import { panelRoutes } from '@/routes/route';
+import { useController } from './controller';
+import { ProductsTableSkeleton } from '@/components/skeleton/ProductsTableSkeleton';
+import { PageStatus } from '@/lib/page';
+import { EmptyDisplay } from '@/components/display/EmptyDisplay';
+import { ProductsTable } from './components/ProductsTable';
+import { Button } from '@/components/ui/button';
+import { PlusIcon, MagnifyingGlassIcon } from '@phosphor-icons/react';
+import Link from 'next/link';
+import { isAdmin } from '@/lib/role';
+import { FilterDialog } from '@/app/panel/products/components/FilterDialog';
+import { User } from '@/domain/model/user';
 
 export function ProductsPageContainer(user: User) {
   const {
@@ -36,11 +36,11 @@ export function ProductsPageContainer(user: User) {
   useEffect(() => {
     setMenu([
       {
-        name: "Beranda",
+        name: 'Beranda',
         href: panelRoutes.home,
       },
       {
-        name: "Produk",
+        name: 'Produk',
         href: panelRoutes.products,
       },
     ]);
@@ -64,7 +64,7 @@ export function ProductsPageContainer(user: User) {
                 onChange={(e) => updateSearch(e.target.value)}
               />
             </div>
-            <FilterDialog 
+            <FilterDialog
               statusFilter={statusFilter}
               onStatusFilterChange={onStatusFilterChange}
               categoryFilter={categoryFilter}
@@ -89,7 +89,7 @@ export function ProductsPageContainer(user: User) {
             <EmptyDisplay
               title="Kosong"
               description={
-                search ? "Tidak ada data yang ditemukan" : "Belum ada produk yang terdaftar"
+                search ? 'Tidak ada data yang ditemukan' : 'Belum ada produk yang terdaftar'
               }
             />
           </div>

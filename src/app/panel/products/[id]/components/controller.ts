@@ -1,19 +1,19 @@
-import productData from "@/data/product";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { formSchema, FormValues } from "./validation";
-import { toast } from "sonner";
-import { Product } from "@/domain/model/product";
-import { useState } from "react";
-import { useSession } from "next-auth/react";
-import { panelRoutes } from "@/routes/route";
-import { useRouter } from "next/navigation";
+import productData from '@/data/product';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { formSchema, FormValues } from './validation';
+import { toast } from 'sonner';
+import { Product } from '@/domain/model/product';
+import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { panelRoutes } from '@/routes/route';
+import { useRouter } from 'next/navigation';
 
 export const useController = (product: Product) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const { data: session } = useSession()
-  const router = useRouter()
-  const user = session?.user
+  const { data: session } = useSession();
+  const router = useRouter();
+  const user = session?.user;
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -22,10 +22,13 @@ export const useController = (product: Product) => {
       description: product.description,
       price: product.price,
       category: product.category?.id,
-      images: product.images.map(image => ({ id: image.id, src: image.image })),
-      skus: product.skus.map(sku => ({ id: sku.id, sku: sku.sku })),
-      additionalInfo: (!product.additional_info || product.additional_info.length === 0) ? [{ label: "", value: "" }] : product.additional_info.map(info => ({ label: info.label, value: info.value })),
-      active: !product.is_deleted
+      images: product.images.map((image) => ({ id: image.id, src: image.image })),
+      skus: product.skus.map((sku) => ({ id: sku.id, sku: sku.sku })),
+      additionalInfo:
+        !product.additional_info || product.additional_info.length === 0
+          ? [{ label: '', value: '' }]
+          : product.additional_info.map((info) => ({ label: info.label, value: info.value })),
+      active: !product.is_deleted,
     },
   });
 
@@ -35,81 +38,85 @@ export const useController = (product: Product) => {
         if (response) {
           resolve(response);
         } else {
-          reject(new Error("Gagal memuat produk"));
+          reject(new Error('Gagal memuat produk'));
         }
       });
     });
 
     toast.promise(promise, {
-      loading: "Memuat data baru...",
+      loading: 'Memuat data baru...',
       success: (product) => {
         form.reset({
           name: product.name,
           description: product.description,
           price: product.price,
           category: product.category?.id,
-          images: product.images.map(image => ({ id: image.id, src: image.image })),
-          skus: product.skus.map(sku => ({ id: sku.id, sku: sku.sku })),
-          additionalInfo: (!product.additional_info || product.additional_info.length === 0) ? [{ label: "", value: "" }] : product.additional_info.map(info => ({ label: info.label, value: info.value })),
-          active: !product.is_deleted
+          images: product.images.map((image) => ({ id: image.id, src: image.image })),
+          skus: product.skus.map((sku) => ({ id: sku.id, sku: sku.sku })),
+          additionalInfo:
+            !product.additional_info || product.additional_info.length === 0
+              ? [{ label: '', value: '' }]
+              : product.additional_info.map((info) => ({ label: info.label, value: info.value })),
+          active: !product.is_deleted,
         });
-        return "Produk berhasil dimuat"
+        return 'Produk berhasil dimuat';
       },
-      error: "Gagal memuat produk",
+      error: 'Gagal memuat produk',
     });
   };
 
   const onDelete = () => {
     setDeleteDialogOpen(false);
     const promise = new Promise<boolean>(async (resolve, reject) => {
-      const success = await productData.deleteProduct(product.id)
+      const success = await productData.deleteProduct(product.id);
       if (success) {
         resolve(success);
       } else {
-        reject(new Error("Gagal menghapus produk"));
+        reject(new Error('Gagal menghapus produk'));
       }
     });
 
     toast.promise(promise, {
-      loading: "Menghapus produk...",
+      loading: 'Menghapus produk...',
       success: () => {
-        router.push(panelRoutes.products)
-        return "Produk berhasil dihapus"
+        router.push(panelRoutes.products);
+        return 'Produk berhasil dihapus';
       },
-      error: "Gagal menghapus produk"
+      error: 'Gagal menghapus produk',
     });
   };
 
   const onSubmit = async (data: FormValues) => {
     const promise = new Promise(async (resolve, reject) => {
-      const oldSkus = data.skus.filter(sku => sku.id);
-      const newSkus = data.skus.filter(sku => !sku.id);
+      const oldSkus = data.skus.filter((sku) => sku.id);
+      const newSkus = data.skus.filter((sku) => !sku.id);
 
       const updatedProduct = await productData.updateProduct(product.id, {
         name: data.name,
         description: data.description,
         price: data.price,
         category: data.category,
-        images: data.images.map(img => ({ id: img.id, file: img.file, src: img.src })),
+        images: data.images.map((img) => ({ id: img.id, file: img.file, src: img.src })),
         skus: [...oldSkus, ...newSkus],
-        additional_info: data.additionalInfo?.map((info) => ({ label: info.label, value: info.value })) || [],
+        additional_info:
+          data.additionalInfo?.map((info) => ({ label: info.label, value: info.value })) || [],
         is_deleted: !data.active,
-      })
+      });
 
       if (updatedProduct) {
         resolve(updatedProduct);
       } else {
-        reject(new Error("Gagal memperbarui produk"));
+        reject(new Error('Gagal memperbarui produk'));
       }
     });
 
     toast.promise(promise, {
-      loading: "Memperbarui produk...",
+      loading: 'Memperbarui produk...',
       success: () => {
         updateProductForm();
-        return "Produk berhasil diperbarui";
+        return 'Produk berhasil diperbarui';
       },
-      error: "Gagal memperbarui produk",
+      error: 'Gagal memperbarui produk',
     });
   };
 

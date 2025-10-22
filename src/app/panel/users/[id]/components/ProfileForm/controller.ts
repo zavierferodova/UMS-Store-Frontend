@@ -1,21 +1,21 @@
-import userData from "@/data/user";
-import { User } from "@/domain/model/user";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useSession } from "next-auth/react";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { formSchema, FormValues } from "./validation";
+import userData from '@/data/user';
+import { User } from '@/domain/model/user';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useSession } from 'next-auth/react';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { formSchema, FormValues } from './validation';
 
 export const useController = (user: User | null) => {
-  const { data: session } = useSession()
+  const { data: session } = useSession();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      gender: "",
-      phone: "",
-      address: "",
+      name: '',
+      gender: '',
+      phone: '',
+      address: '',
     },
   });
 
@@ -33,7 +33,7 @@ export const useController = (user: User | null) => {
             if (user) {
               resolve(user);
             } else {
-              reject("Gagal memperbaharui akun");
+              reject('Gagal memperbaharui akun');
             }
           })
           .catch((error) => {
@@ -42,11 +42,11 @@ export const useController = (user: User | null) => {
       });
 
       toast.promise(promise, {
-        loading: "Sedang memperbaharui akun",
+        loading: 'Sedang memperbaharui akun',
         success: () => {
-          return "Akun berhasil diperbarui!";
+          return 'Akun berhasil diperbarui!';
         },
-        error: "Gagal memperbarui akun!",
+        error: 'Gagal memperbarui akun!',
       });
     }
   };
@@ -55,10 +55,9 @@ export const useController = (user: User | null) => {
     if (user) {
       form.reset({
         name: user.name,
-        gender:
-          user.gender == null ? undefined : (user.gender as "male" | "female"),
-        phone: user.phone || "",
-        address: user.address || "",
+        gender: user.gender == null ? undefined : (user.gender as 'male' | 'female'),
+        phone: user.phone || '',
+        address: user.address || '',
       });
     }
   }, [user, form]);

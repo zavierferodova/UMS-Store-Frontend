@@ -1,16 +1,16 @@
-"use client";
-import authData from "@/data/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { formSchema, FormValues } from "./validation";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+'use client';
+import authData from '@/data/auth';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { formSchema, FormValues } from './validation';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 export const useController = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      newPassword: "",
-      confirmPassword: "",
+      newPassword: '',
+      confirmPassword: '',
     },
   });
 
@@ -22,7 +22,7 @@ export const useController = () => {
           if (result) {
             resolve(result);
           } else {
-            reject(new Error("Gagal memperbarui password"));
+            reject(new Error('Gagal memperbarui password'));
           }
         })
         .catch((error) => {
@@ -31,11 +31,11 @@ export const useController = () => {
     });
 
     toast.promise(promise, {
-      loading: "Sedang memperbaharui password",
+      loading: 'Sedang memperbaharui password',
       success: () => {
-        return "Password berhasil diperbarui!";
+        return 'Password berhasil diperbarui!';
       },
-      error: "Gagal memperbarui password!",
+      error: 'Gagal memperbarui password!',
     });
   };
 

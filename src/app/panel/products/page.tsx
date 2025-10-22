@@ -1,21 +1,20 @@
-"use client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Paginated } from "@/components/pagination/Paginated";
-import { usePanelHeader } from "@/components/panel/Header";
-import { useEffect } from "react";
-import { panelRoutes } from "@/routes/route";
-import { useController } from "./controller";
-import { ProductsTableSkeleton } from "@/components/skeleton/ProductsTableSkeleton";
-import { PageStatus } from "@/lib/page";
-import { EmptyDisplay } from "@/components/display/EmptyDisplay";
-import { ProductsTable } from "./components/ProductsTable";
-import { Button } from "@/components/ui/button";
-import { PlusIcon, MagnifyingGlassIcon } from "@phosphor-icons/react";
-import Link from "next/link";
-import { isAdmin } from "@/lib/role";
-import { useSession } from "next-auth/react";
-import { FilterDialog } from "@/app/panel/products/components/FilterDialog";
+'use client';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Paginated } from '@/components/pagination/Paginated';
+import { usePanelHeader } from '@/components/panel/Header';
+import { useEffect } from 'react';
+import { panelRoutes } from '@/routes/route';
+import { useController } from './controller';
+import { PageStatus } from '@/lib/page';
+import { EmptyDisplay } from '@/components/display/EmptyDisplay';
+import { ProductsTable } from './components/ProductsTable';
+import { Button } from '@/components/ui/button';
+import { PlusIcon, MagnifyingGlassIcon } from '@phosphor-icons/react';
+import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+import { FilterDialog } from '@/app/panel/products/components/FilterDialog';
+import { SpinAnimation } from '@/components/animation/SpinAnimation';
 
 export default function ProductsPage() {
   const {
@@ -38,11 +37,11 @@ export default function ProductsPage() {
   useEffect(() => {
     setMenu([
       {
-        name: "Beranda",
+        name: 'Beranda',
         href: panelRoutes.home,
       },
       {
-        name: "Produk",
+        name: 'Produk',
         href: panelRoutes.products,
       },
     ]);
@@ -66,7 +65,7 @@ export default function ProductsPage() {
                 onChange={(e) => updateSearch(e.target.value)}
               />
             </div>
-            <FilterDialog 
+            <FilterDialog
               statusFilter={statusFilter}
               onStatusFilterChange={onStatusFilterChange}
               categoryFilter={categoryFilter}
@@ -81,17 +80,13 @@ export default function ProductsPage() {
         </div>
       </CardHeader>
       <CardContent>
-        {status == PageStatus.LOADING ? (
-          <ProductsTableSkeleton showStatusColumn={isAdmin(user)} />
-        ) : (
-          <ProductsTable products={products} />
-        )}
+        {status == PageStatus.LOADING ? <SpinAnimation /> : <ProductsTable products={products} />}
         {isEmpty && (
           <div className="mt-8 mb-8">
             <EmptyDisplay
               title="Kosong"
               description={
-                search ? "Tidak ada data yang ditemukan" : "Belum ada produk yang terdaftar"
+                search ? 'Tidak ada data yang ditemukan' : 'Belum ada produk yang terdaftar'
               }
             />
           </div>

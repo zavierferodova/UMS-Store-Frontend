@@ -1,8 +1,8 @@
-"use client";
-import { usePanelHeader } from "@/components/panel/Header";
-import { panelRoutes } from "@/routes/route";
-import { useEffect } from "react";
-import { AddSupplierForm } from "./components/AddSupplierForm";
+'use client';
+import { usePanelHeader } from '@/components/panel/Header';
+import { panelRoutes } from '@/routes/route';
+import { useEffect } from 'react';
+import { AddSupplierForm } from './components/AddSupplierForm';
 
 export default function AddSupplierPage() {
   const { setMenu } = usePanelHeader();
@@ -10,16 +10,16 @@ export default function AddSupplierPage() {
   useEffect(() => {
     setMenu([
       {
-        name: "Beranda",
+        name: 'Beranda',
         href: panelRoutes.home,
       },
       {
-        name: "Pemasok",
+        name: 'Pemasok',
         href: panelRoutes.suppliers,
       },
       {
-        name: "Tambah",
-        href: "",
+        name: 'Tambah',
+        href: '',
       },
     ]);
   }, [setMenu]);

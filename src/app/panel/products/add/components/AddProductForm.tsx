@@ -1,40 +1,22 @@
-import React from "react";
-import { FormProvider } from "react-hook-form";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { SelectProductCategory } from "@/components/panel/Form/SelectProductCategory";
-import {
-  ProductImagesInput,
-  ImageFile,
-} from "@/components/panel/Form/ProductImagesInput";
-import { MultiSkuInput } from "@/components/panel/Form/MultiSkuInput";
-import { ProductAdditionalInputs } from "@/components/panel/Form/ProductAdditionalInputs";
-import { useController } from "./controller";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import React from 'react';
+import { FormProvider } from 'react-hook-form';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { SelectProductCategory } from '@/components/panel/Form/SelectProductCategory';
+import { ProductImagesInput, ImageFile } from '@/components/panel/Form/ProductImagesInput';
+import { MultiSkuInput } from '@/components/panel/Form/MultiSkuInput';
+import { ProductAdditionalInputs } from '@/components/panel/Form/ProductAdditionalInputs';
+import { useController } from './controller';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 export function AddProductForm() {
   const { form, onSubmit } = useController();
 
   return (
     <FormProvider {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex justify-center mb-6"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex justify-center mb-6">
         <div className="w-full">
           <Card>
             <CardHeader>
@@ -60,7 +42,7 @@ export function AddProductForm() {
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="skus"
@@ -76,11 +58,13 @@ export function AddProductForm() {
                         errors={(() => {
                           const skuErrors = form.formState.errors.skus;
                           if (!skuErrors) return [];
-                          
+
                           if (Array.isArray(skuErrors)) {
-                            return skuErrors.map((error: { sku?: { message: string } }) => (error?.sku?.message ?? ''));
+                            return skuErrors.map(
+                              (error: { sku?: { message: string } }) => error?.sku?.message ?? '',
+                            );
                           }
-                          
+
                           return [];
                         })()}
                       />
@@ -121,7 +105,9 @@ export function AddProductForm() {
                         placeholder="Masukkan harga produk"
                         {...field}
                         value={field.value || ''}
-                        onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : 0)}
+                        onChange={(e) =>
+                          field.onChange(e.target.value ? Number(e.target.value) : 0)
+                        }
                       />
                     </FormControl>
                     <FormMessage />
@@ -178,12 +164,14 @@ export function AddProductForm() {
                         onAdditionalInfoChange={(newInfo) => {
                           field.onChange(newInfo);
                         }}
-                        errors={Array.isArray(form.formState.errors.additionalInfo) 
-                          ? form.formState.errors.additionalInfo.map(err => ({
-                              label: err?.label?.message,
-                              value: err?.value?.message
-                            }))
-                          : undefined}
+                        errors={
+                          Array.isArray(form.formState.errors.additionalInfo)
+                            ? form.formState.errors.additionalInfo.map((err) => ({
+                                label: err?.label?.message,
+                                value: err?.value?.message,
+                              }))
+                            : undefined
+                        }
                       />
                     </FormControl>
                     <FormMessage />

@@ -1,7 +1,7 @@
-import { PlusCircleIcon, XCircleIcon } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+import { PlusCircleIcon, XCircleIcon } from '@phosphor-icons/react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 
 export type ContactInfoItem = {
   name: string;
@@ -11,45 +11,39 @@ export type ContactInfoItem = {
 export type SalesContactInputProps = {
   contacts: ContactInfoItem[];
   onContactsChange: (contacts: ContactInfoItem[]) => void;
-  errors?: Array<{
-    name?: string;
-    phone?: string;
-  }> | string;
+  errors?:
+    | Array<{
+        name?: string;
+        phone?: string;
+      }>
+    | string;
 };
 
-export function SalesContactInput({ 
-  contacts, 
-  onContactsChange,
-  errors 
-}: SalesContactInputProps) {
+export function SalesContactInput({ contacts, onContactsChange, errors }: SalesContactInputProps) {
   const getError = (index: number, field: 'name' | 'phone') => {
     if (!errors) return null;
-    
+
     if (Array.isArray(errors) && errors[index]) {
       return errors[index][field];
     }
-    
+
     if (typeof errors === 'string') {
       return errors;
     }
-    
+
     return null;
   };
-  const handleContactChange = (
-    index: number,
-    field: keyof ContactInfoItem,
-    value: string
-  ) => {
+  const handleContactChange = (index: number, field: keyof ContactInfoItem, value: string) => {
     const updatedContacts = [...contacts];
     updatedContacts[index] = {
       ...updatedContacts[index],
-      [field]: value
+      [field]: value,
     };
     onContactsChange(updatedContacts);
   };
 
   const addContact = () => {
-    onContactsChange([...contacts, { name: "", phone: "" }]);
+    onContactsChange([...contacts, { name: '', phone: '' }]);
   };
 
   const removeContact = (index: number) => {
@@ -62,7 +56,7 @@ export function SalesContactInput({
       {contacts.map((contact, index) => {
         const nameError = getError(index, 'name');
         const phoneError = getError(index, 'phone');
-        
+
         return (
           <div key={index} className="space-y-2">
             <div className="flex items-start gap-2">
@@ -71,38 +65,26 @@ export function SalesContactInput({
                   placeholder="Nama"
                   value={contact.name}
                   maxLength={128}
-                  onChange={(e) =>
-                    handleContactChange(index, "name", e.target.value)
-                  }
+                  onChange={(e) => handleContactChange(index, 'name', e.target.value)}
                   className={cn({
-                    "border-destructive focus-visible:ring-destructive": nameError
+                    'border-destructive focus-visible:ring-destructive': nameError,
                   })}
                   aria-invalid={!!nameError}
                 />
-                {nameError && (
-                  <p className="text-sm font-medium text-destructive">
-                    {nameError}
-                  </p>
-                )}
+                {nameError && <p className="text-sm font-medium text-destructive">{nameError}</p>}
               </div>
               <div className="w-1/2 space-y-1">
                 <Input
                   placeholder="Nomor Telepon"
                   value={contact.phone}
-                  onChange={(e) =>
-                    handleContactChange(index, "phone", e.target.value)
-                  }
+                  onChange={(e) => handleContactChange(index, 'phone', e.target.value)}
                   maxLength={20}
                   className={cn({
-                    "border-destructive focus-visible:ring-destructive": phoneError
+                    'border-destructive focus-visible:ring-destructive': phoneError,
                   })}
                   aria-invalid={!!phoneError}
                 />
-                {phoneError && (
-                  <p className="text-sm font-medium text-destructive">
-                    {phoneError}
-                  </p>
-                )}
+                {phoneError && <p className="text-sm font-medium text-destructive">{phoneError}</p>}
               </div>
               {contacts.length > 1 && (
                 <Button

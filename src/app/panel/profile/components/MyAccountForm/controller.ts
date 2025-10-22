@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import authData from "@/data/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useSession } from "next-auth/react";
-import { useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { avatarSchema, formSchema, AvatarFormValues, FormValues } from "./validation";
+import authData from '@/data/auth';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useSession } from 'next-auth/react';
+import { useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { avatarSchema, formSchema, AvatarFormValues, FormValues } from './validation';
 
 export const useController = () => {
   const { update: updateSession, data: session } = useSession();
@@ -20,8 +20,8 @@ export const useController = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      username: "",
+      email: '',
+      username: '',
     },
   });
 
@@ -29,15 +29,15 @@ export const useController = () => {
     const file = event.target.files?.[0];
     if (file) {
       if (file.size > 800 * 1024) {
-        toast.error("Ukuran file melebihi batas 800KB. Silakan pilih file yang lebih kecil.");
+        toast.error('Ukuran file melebihi batas 800KB. Silakan pilih file yang lebih kecil.');
         if (fileInputRef.current) {
           fileInputRef.current.value = '';
           setImagePreview(null);
         }
         return;
       }
-      
-      avatarForm.setValue("profileImage", file);
+
+      avatarForm.setValue('profileImage', file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -53,16 +53,17 @@ export const useController = () => {
   const onSubmitAvatar = (data: AvatarFormValues) => {
     const promise = new Promise((resolve, reject) => {
       if (!data.profileImage) {
-        reject(new Error("Gambar tidak boleh kosong"));
+        reject(new Error('Gambar tidak boleh kosong'));
         return;
       }
 
-      authData.uploadProfileImage(data.profileImage)
+      authData
+        .uploadProfileImage(data.profileImage)
         .then((result) => {
           if (result) {
             resolve(result);
           } else {
-            reject(new Error("Gagal memperbarui foto profil"));
+            reject(new Error('Gagal memperbarui foto profil'));
           }
         })
         .catch((error) => {
@@ -71,14 +72,14 @@ export const useController = () => {
     });
 
     toast.promise(promise, {
-      loading: "Sedang memperbaharui foto profil",
+      loading: 'Sedang memperbaharui foto profil',
       success: (data) => {
         updateSession({
           user: data,
         });
-        return "Foto profil berhasil diperbarui!";
+        return 'Foto profil berhasil diperbarui!';
       },
-      error: "Gagal memperbarui foto profil!",
+      error: 'Gagal memperbarui foto profil!',
     });
   };
 
@@ -90,7 +91,7 @@ export const useController = () => {
           if (result) {
             resolve(result);
           } else {
-            reject(new Error("Gagal memperbarui akun"));
+            reject(new Error('Gagal memperbarui akun'));
           }
         })
         .catch((error) => {
@@ -99,22 +100,22 @@ export const useController = () => {
     });
 
     toast.promise(promise, {
-      loading: "Sedang memperbaharui akun",
+      loading: 'Sedang memperbaharui akun',
       success: (data) => {
         updateSession({
           user: data,
         });
-        return "Akun berhasil diperbarui!";
+        return 'Akun berhasil diperbarui!';
       },
-      error: "Gagal memperbarui akun!",
+      error: 'Gagal memperbarui akun!',
     });
   };
 
   useEffect(() => {
     if (session?.user) {
       form.reset({
-        email: session.user.email || "",
-        username: session.user.username || "",
+        email: session.user.email || '',
+        username: session.user.username || '',
       });
       setImagePreview(session.user.profile_image || null);
     }
@@ -128,6 +129,6 @@ export const useController = () => {
     onSubmit,
     onSubmitAvatar,
     handleImageChange,
-    handleAvatarClick
+    handleAvatarClick,
   };
 };

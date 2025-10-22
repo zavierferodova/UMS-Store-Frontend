@@ -1,13 +1,13 @@
-import { PlusCircleIcon, XCircleIcon } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { PlusCircleIcon, XCircleIcon } from '@phosphor-icons/react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
+import { useState } from 'react';
 
 export type SKUItem = {
   id?: string;
   sku: string;
-}
+};
 
 export type MultiSkuInputProps = {
   skus: SKUItem[];
@@ -15,11 +15,7 @@ export type MultiSkuInputProps = {
   errors?: string[];
 };
 
-export function MultiSkuInput({ 
-  skus, 
-  onSkusChange,
-  errors,
-}: MultiSkuInputProps) {
+export function MultiSkuInput({ skus, onSkusChange, errors }: MultiSkuInputProps) {
   const [localTouched, setLocalTouched] = useState<boolean[]>([]);
 
   const handleBlur = (index: number) => {
@@ -34,18 +30,18 @@ export function MultiSkuInput({
     if (!errors) return null;
     return errors[index] ?? null;
   };
-  
+
   const handleSkuChange = (index: number, value: string) => {
     const newSkus = [...skus];
-    newSkus[index] = { 
-      id: newSkus[index]?.id ?? undefined, 
-      sku: value ? value.trim() : '' 
+    newSkus[index] = {
+      id: newSkus[index]?.id ?? undefined,
+      sku: value ? value.trim() : '',
     };
     onSkusChange(newSkus);
   };
 
   const addSku = () => {
-    onSkusChange([...skus, { id: undefined, sku: "" }]);
+    onSkusChange([...skus, { id: undefined, sku: '' }]);
   };
 
   const getSafeSku = (skuItem: SKUItem | undefined) => {
@@ -70,8 +66,8 @@ export function MultiSkuInput({
                 maxLength={12}
                 onChange={(e) => handleSkuChange(index, e.target.value)}
                 onBlur={() => handleBlur(index)}
-                className={cn("w-full", {
-                  "border-destructive focus-visible:ring-destructive": error,
+                className={cn('w-full', {
+                  'border-destructive focus-visible:ring-destructive': error,
                 })}
                 aria-invalid={!!error}
               />
@@ -82,7 +78,7 @@ export function MultiSkuInput({
                   className="cursor-pointer h-9 w-9"
                   onClick={() => removeSku(index)}
                   type="button"
-                  disabled={!!(sku.id)}
+                  disabled={!!sku.id}
                   aria-label="Hapus SKU"
                 >
                   <XCircleIcon className="h-4 w-4" />

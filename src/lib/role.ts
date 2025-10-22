@@ -1,34 +1,34 @@
-import { Role } from "@/domain/model/role"
-import { User } from "@/domain/model/user"
-import { User as NextUser } from "next-auth"
+import { Role } from '@/domain/model/role';
+import { User } from '@/domain/model/user';
+import { User as NextUser } from 'next-auth';
 
 export const role = {
-  admin: "admin" as Role,
-  procurement: "procurement" as Role,
-  cashier: "cashier" as Role,
-}
+  admin: 'admin' as Role,
+  procurement: 'procurement' as Role,
+  cashier: 'cashier' as Role,
+};
 
 export function roleLabel(role: string) {
   switch (role) {
-    case "admin":
-      return "Administrator"
-    case "procurement":
-      return "Pengadaan"
-    case "cashier":
-      return "Kasir"
+    case 'admin':
+      return 'Administrator';
+    case 'procurement':
+      return 'Pengadaan';
+    case 'cashier':
+      return 'Kasir';
     default:
-      return "Unknown"
+      return 'Unknown';
   }
 }
 
 export function isAdmin(user: User | NextUser | null | undefined) {
-  return user?.role === "admin"
+  return user?.role === 'admin';
 }
 
 export function isCashier(user: User | NextUser | null | undefined) {
-  return user?.role === "cashier"
+  return user?.role === 'cashier';
 }
-  
+
 export function isProcurement(user: User | NextUser | null | undefined) {
-  return user?.role === "procurement"
+  return user?.role === 'procurement';
 }

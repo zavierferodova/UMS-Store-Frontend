@@ -5,13 +5,13 @@ import {
   TableHead,
   TableBody,
   TableCell,
-} from "@/components/ui/table";
-import { Product } from "@/domain/model/product";
-import { IPaginationResponse } from "@/domain/model/response";
-import Link from "next/link";
-import { useSession } from "next-auth/react";
-import { isAdmin } from "@/lib/role";
-import { localeDateFormat } from "@/lib/utils";
+} from '@/components/ui/table';
+import { Product } from '@/domain/model/product';
+import { IPaginationResponse } from '@/domain/model/response';
+import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+import { isAdmin } from '@/lib/role';
+import { localeDateFormat } from '@/lib/utils';
 
 interface ProductsTableProps {
   products: IPaginationResponse<Product>;
@@ -35,9 +35,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
             <TableHead>Harga</TableHead>
             <TableHead>Dibuat</TableHead>
             <TableHead>Diubah</TableHead>
-            {isAdmin(user) && (
-              <TableHead className="text-center">Status</TableHead>
-            )}
+            {isAdmin(user) && <TableHead className="text-center">Status</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -53,7 +51,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
                   ? product.skus
                       .map((sku) => sku.sku)
                       .map((sku, index) => <div key={index}>{sku}</div>)
-                  : "-"}
+                  : '-'}
               </TableCell>
               <TableCell>
                 <Link
@@ -63,11 +61,11 @@ export function ProductsTable({ products }: ProductsTableProps) {
                   {product.name}
                 </Link>
               </TableCell>
-              <TableCell>{product.category?.name || "-"}</TableCell>
+              <TableCell>{product.category?.name || '-'}</TableCell>
               <TableCell>
-                {product.price.toLocaleString("id-ID", {
-                  style: "currency",
-                  currency: "IDR",
+                {product.price.toLocaleString('id-ID', {
+                  style: 'currency',
+                  currency: 'IDR',
                   maximumFractionDigits: 0,
                 })}
               </TableCell>
@@ -77,7 +75,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
                 <TableCell>
                   <div className="flex justify-center">
                     <span className="justify-center">
-                      {!product.is_deleted ? "Aktif" : "Dihapus"}
+                      {!product.is_deleted ? 'Aktif' : 'Dihapus'}
                     </span>
                   </div>
                 </TableCell>

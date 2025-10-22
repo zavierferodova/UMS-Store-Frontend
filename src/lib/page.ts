@@ -1,6 +1,6 @@
 export enum PageStatus {
-    LOADING,
-    SUCCESS,
-    WARNING,
-    ERROR
+  LOADING,
+  SUCCESS,
+  WARNING,
+  ERROR,
 }

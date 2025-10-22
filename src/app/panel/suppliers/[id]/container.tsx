@@ -1,13 +1,13 @@
-"use client";
-import { usePanelHeader } from "@/components/panel/Header";
-import { panelRoutes } from "@/routes/route";
-import { useEffect } from "react";
-import { EditSupplierForm } from "./components/EditSupplierForm";
-import { Supplier } from "@/domain/model/supplier";
+'use client';
+import { usePanelHeader } from '@/components/panel/Header';
+import { panelRoutes } from '@/routes/route';
+import { useEffect } from 'react';
+import { EditSupplierForm } from './components/EditSupplierForm';
+import { Supplier } from '@/domain/model/supplier';
 
 export type SupplierPageContainerProps = {
-    supplier: Supplier
-}
+  supplier: Supplier;
+};
 
 export function SupplierPageContainer({ supplier }: SupplierPageContainerProps) {
   const { setMenu } = usePanelHeader();
@@ -15,16 +15,16 @@ export function SupplierPageContainer({ supplier }: SupplierPageContainerProps) 
   useEffect(() => {
     setMenu([
       {
-        name: "Beranda",
+        name: 'Beranda',
         href: panelRoutes.home,
       },
       {
-        name: "Pemasok",
+        name: 'Pemasok',
         href: panelRoutes.suppliers,
       },
       {
-        name: "Detail",
-        href: "",
+        name: 'Detail',
+        href: '',
       },
     ]);
   }, [setMenu]);

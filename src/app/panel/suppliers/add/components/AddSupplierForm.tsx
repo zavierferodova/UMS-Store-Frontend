@@ -1,15 +1,9 @@
-"use client";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { useController } from "./controller";
+'use client';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { Card, CardDescription, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { useController } from './controller';
 import {
   Form,
   FormControl,
@@ -17,8 +11,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { SalesContactInput } from "@/components/panel/Form/SalesContactInput";
+} from '@/components/ui/form';
+import { SalesContactInput } from '@/components/panel/Form/SalesContactInput';
 
 export const AddSupplierForm = () => {
   const { form, onSubmit } = useController();
@@ -32,9 +26,7 @@ export const AddSupplierForm = () => {
         <Card>
           <CardHeader>
             <CardTitle>Pemasok</CardTitle>
-            <CardDescription>
-              Formulir untuk menambah pemasok baru.
-            </CardDescription>
+            <CardDescription>Formulir untuk menambah pemasok baru.</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-4">
@@ -45,11 +37,7 @@ export const AddSupplierForm = () => {
                   <FormItem>
                     <FormLabel>Nama*</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        maxLength={128}
-                        placeholder="Masukan nama pemasok"
-                      />
+                      <Input {...field} maxLength={128} placeholder="Masukan nama pemasok" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -62,11 +50,7 @@ export const AddSupplierForm = () => {
                   <FormItem>
                     <FormLabel>No Telp*</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        maxLength={20}
-                        placeholder="Masukan nomor telepon"
-                      />
+                      <Input {...field} maxLength={20} placeholder="Masukan nomor telepon" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -79,11 +63,7 @@ export const AddSupplierForm = () => {
                   <FormItem className="items-start h-max">
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        maxLength={255}
-                        placeholder="Masukan email"
-                      />
+                      <Input {...field} maxLength={255} placeholder="Masukan email" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -114,9 +94,7 @@ export const AddSupplierForm = () => {
           <Card className="h-max">
             <CardHeader>
               <CardTitle>Informasi Tambahan</CardTitle>
-              <CardDescription>
-                Informasi tambahan tentang pemasok
-              </CardDescription>
+              <CardDescription>Informasi tambahan tentang pemasok</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex flex-col gap-4">
@@ -127,11 +105,7 @@ export const AddSupplierForm = () => {
                     <FormItem>
                       <FormLabel>Diskon Penjualan Default</FormLabel>
                       <FormControl>
-                        <Input
-                          {...field}
-                          type="number"
-                          placeholder="Masukan diskon"
-                        />
+                        <Input {...field} type="number" placeholder="Masukan diskon" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -151,12 +125,10 @@ export const AddSupplierForm = () => {
                           }}
                           errors={
                             Array.isArray(form.formState.errors.contacts)
-                              ? form.formState.errors.contacts.map(
-                                  (err: any) => ({
-                                    name: err?.name?.message,
-                                    phone: err?.phone?.message,
-                                  })
-                                )
+                              ? form.formState.errors.contacts.map((err: any) => ({
+                                  name: err?.name?.message,
+                                  phone: err?.phone?.message,
+                                }))
                               : undefined
                           }
                         />

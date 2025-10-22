@@ -1,8 +1,8 @@
-import userData from "@/data/user";
-import { User } from "@/domain/model/user";
-import { useParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import { toast } from "sonner";
+import userData from '@/data/user';
+import { User } from '@/domain/model/user';
+import { useParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 export const useController = () => {
   const params = useParams();
@@ -16,19 +16,19 @@ export const useController = () => {
           if (data) {
             resolve(data);
           } else {
-            reject(new Error("Gagal memuat pengguna"));
+            reject(new Error('Gagal memuat pengguna'));
           }
         });
       });
 
       toast.promise(promise, {
-        loading: "Sedang memuat pengguna",
+        loading: 'Sedang memuat pengguna',
         success: (data) => {
           const user = data as User;
           setUser(user);
-          return "Pengguna berhasil dimuat!";
+          return 'Pengguna berhasil dimuat!';
         },
-        error: "Gagal memuat pengguna!",
+        error: 'Gagal memuat pengguna!',
       });
     }
   }, [params]);

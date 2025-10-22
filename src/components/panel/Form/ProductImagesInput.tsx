@@ -1,10 +1,10 @@
-import { useRef, useState, useEffect } from "react";
-import { Reorder } from "motion/react";
-import { Button } from "@/components/ui/button";
-import { ImageIcon, EyeIcon, TrashIcon } from "@phosphor-icons/react";
-import { DialogImagePreview } from "../DialogImagePreview";
-import Image from "next/image";
-import { toast } from "sonner";
+import { useRef, useState, useEffect } from 'react';
+import { Reorder } from 'motion/react';
+import { Button } from '@/components/ui/button';
+import { ImageIcon, EyeIcon, TrashIcon } from '@phosphor-icons/react';
+import { DialogImagePreview } from '../DialogImagePreview';
+import Image from 'next/image';
+import { toast } from 'sonner';
 
 export type ImageFile = {
   id: string;
@@ -21,15 +21,15 @@ export function ProductImagesInput({ onImagesChange, images = [] }: ProductImage
   const fileInputRef = useRef<HTMLInputElement>(null);
   const nextId = useRef(0);
   const [showImageDialog, setShowImageDialog] = useState(false);
-  const [currentImagePreview, setCurrentImagePreview] = useState("");
+  const [currentImagePreview, setCurrentImagePreview] = useState('');
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const files = Array.from(event.target.files);
-      const oversizedFiles = files.filter(file => file.size > 800 * 1024);
-      
+      const oversizedFiles = files.filter((file) => file.size > 800 * 1024);
+
       if (oversizedFiles.length > 0) {
-        toast.error("Ukuran file melebihi batas 800KB. Silakan pilih file yang lebih kecil.");
+        toast.error('Ukuran file melebihi batas 800KB. Silakan pilih file yang lebih kecil.');
         return;
       }
 
@@ -81,11 +81,7 @@ export function ProductImagesInput({ onImagesChange, images = [] }: ProductImage
           className="flex items-center gap-2"
         >
           {(images || []).map((image) => (
-            <Reorder.Item
-              key={image.id}
-              value={image}
-              className="relative h-24 w-24 flex-shrink-0"
-            >
+            <Reorder.Item key={image.id} value={image} className="relative h-24 w-24 flex-shrink-0">
               <div className="group relative w-full h-full">
                 <div className="w-full h-full flex items-center absolute justify-center bg-gray-100 rounded-md">
                   <ImageIcon className="h-8 w-8 text-muted-foreground" />
@@ -141,10 +137,10 @@ export function ProductImagesInput({ onImagesChange, images = [] }: ProductImage
           </div>
         </Reorder.Group>
       </div>
-      <DialogImagePreview 
+      <DialogImagePreview
         isOpen={showImageDialog}
         onOpenChange={(open) => {
-          setShowImageDialog(open)
+          setShowImageDialog(open);
         }}
         src={currentImagePreview}
       />

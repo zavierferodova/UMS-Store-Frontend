@@ -1,21 +1,21 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { formSchema, FormValues } from "./validation";
-import { ImageFile } from "@/components/panel/Form/ProductImagesInput";
-import productData from "@/data/product";
-import { toast } from "sonner";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { formSchema, FormValues } from './validation';
+import { ImageFile } from '@/components/panel/Form/ProductImagesInput';
+import productData from '@/data/product';
+import { toast } from 'sonner';
 
 export const useController = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      description: "",
+      name: '',
+      description: '',
       price: 0,
-      category: "",
+      category: '',
       images: [] as ImageFile[],
-      skus: [{ sku: "" }],
-      additionalInfo: [{ label: "", value: "" }],
+      skus: [{ sku: '' }],
+      additionalInfo: [{ label: '', value: '' }],
     },
   });
 
@@ -27,24 +27,25 @@ export const useController = () => {
         price: data.price,
         category: data.category,
         images: data.images.map((image) => image.file),
-        skus: data.skus.map(sku => sku.sku),
-        additional_info: data.additionalInfo?.map((info) => ({ label: info.label, value: info.value })) || [],
-      })
+        skus: data.skus.map((sku) => sku.sku),
+        additional_info:
+          data.additionalInfo?.map((info) => ({ label: info.label, value: info.value })) || [],
+      });
 
       if (product) {
         resolve(product);
       } else {
-        reject(new Error("Gagal menambahkan produk"));
+        reject(new Error('Gagal menambahkan produk'));
       }
     });
 
     toast.promise(promise, {
-      loading: "Menambahkan produk...",
+      loading: 'Menambahkan produk...',
       success: () => {
         form.reset();
-        return "Produk berhasil ditambahkan"
+        return 'Produk berhasil ditambahkan';
       },
-      error: "Gagal menambahkan produk",
+      error: 'Gagal menambahkan produk',
     });
   };
 

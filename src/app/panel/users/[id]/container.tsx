@@ -1,22 +1,19 @@
-"use client";
-import { User } from "@/domain/model/user";
-import { usePanelHeader } from "@/components/panel/Header";
-import { AccountForm } from "./components/AccountForm/AccountForm";
-import { ProfileForm } from "./components/ProfileForm/ProfileForm";
-import { panelRoutes } from "@/routes/route";
-import { useEffect } from "react";
-import { redirect } from "next/navigation";
-import { useSession } from "next-auth/react";
+'use client';
+import { User } from '@/domain/model/user';
+import { usePanelHeader } from '@/components/panel/Header';
+import { AccountForm } from './components/AccountForm/AccountForm';
+import { ProfileForm } from './components/ProfileForm/ProfileForm';
+import { panelRoutes } from '@/routes/route';
+import { useEffect } from 'react';
+import { redirect } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 export type ProfilePageContainerProps = {
   user: User;
   pathId: string;
 };
 
-export function ProfilePageContainer({
-  user,
-  pathId,
-}: ProfilePageContainerProps) {
+export function ProfilePageContainer({ user, pathId }: ProfilePageContainerProps) {
   const { setMenu } = usePanelHeader();
   const { data: session } = useSession();
 
@@ -29,16 +26,16 @@ export function ProfilePageContainer({
   useEffect(() => {
     setMenu([
       {
-        name: "Beranda",
+        name: 'Beranda',
         href: panelRoutes.home,
       },
       {
-        name: "Pengguna",
+        name: 'Pengguna',
         href: panelRoutes.users,
       },
       {
-        name: "Detail",
-        href: "",
+        name: 'Detail',
+        href: '',
       },
     ]);
   }, [setMenu]);

@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
-import { CheckIcon, CaretUpDownIcon } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect, useCallback } from 'react';
+import { CheckIcon, CaretUpDownIcon } from '@phosphor-icons/react';
+import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -8,16 +8,12 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import productData from "@/data/product";
-import { IPaginationResponse } from "@/domain/model/response";
-import { ProductCategory } from "@/domain/model/product";
+} from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+import productData from '@/data/product';
+import { IPaginationResponse } from '@/domain/model/response';
+import { ProductCategory } from '@/domain/model/product';
 
 export type Category = {
   value: string;
@@ -35,16 +31,18 @@ export type ProductCategorySelectProps = {
 export function ProductCategorySelect({
   value = [],
   onChange,
-  placeholder = "Pilih kategori...",
+  placeholder = 'Pilih kategori...',
   className,
   disabled = false,
 }: ProductCategorySelectProps) {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [categories, setCategories] = useState<Category[]>([]);
   const [page, setPage] = useState(1);
-  const [pagination, setPagination] = useState<IPaginationResponse<ProductCategory>["meta"] | null>(null);
+  const [pagination, setPagination] = useState<IPaginationResponse<ProductCategory>['meta'] | null>(
+    null,
+  );
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const fetchCategories = useCallback(
@@ -54,7 +52,7 @@ export function ProductCategorySelect({
       } else {
         setIsLoading(true);
       }
-      
+
       try {
         const response = await productData.getCategories({
           search,
@@ -76,14 +74,13 @@ export function ProductCategorySelect({
           setPagination(response.meta);
           setPage(newPage);
         }
-      } catch (error) {
-        console.error("Error fetching categories:", error);
+      } catch {
       } finally {
         setIsLoading(false);
         setIsLoadingMore(false);
       }
     },
-    [search]
+    [search],
   );
 
   useEffect(() => {
@@ -120,16 +117,21 @@ export function ProductCategorySelect({
           aria-expanded={open}
           disabled={disabled}
           className={cn(
-            "w-full justify-between text-left font-normal overflow-hidden cursor-pointer",
-            !value && "text-muted-foreground",
-            className
+            'w-full justify-between text-left font-normal overflow-hidden cursor-pointer',
+            !value && 'text-muted-foreground',
+            className,
           )}
         >
           <span className="truncate block w-full">{displayValue()}</span>
           <CaretUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0 w-[var(--radix-popover-trigger-width)]" align="start" sideOffset={4} collisionPadding={16}>
+      <PopoverContent
+        className="p-0 w-[var(--radix-popover-trigger-width)]"
+        align="start"
+        sideOffset={4}
+        collisionPadding={16}
+      >
         <Command shouldFilter={false}>
           <CommandInput
             placeholder="Cari kategori..."
@@ -137,9 +139,7 @@ export function ProductCategorySelect({
             value={search}
           />
           <CommandList className="max-h-[250px] overflow-y-auto">
-            <CommandEmpty>
-              {isLoading ? "Memuat..." : "Tidak ada kategori ditemukan"}
-            </CommandEmpty>
+            <CommandEmpty>{isLoading ? 'Memuat...' : 'Tidak ada kategori ditemukan'}</CommandEmpty>
             <CommandGroup>
               {categories.map((category) => (
                 <CommandItem
@@ -151,10 +151,10 @@ export function ProductCategorySelect({
                   <div className="flex items-center">
                     <div
                       className={cn(
-                        "mr-2 flex h-4 w-4 items-center justify-center rounded-[0.2rem] border border-primary",
+                        'mr-2 flex h-4 w-4 items-center justify-center rounded-[0.2rem] border border-primary',
                         value.includes(category.value)
-                          ? "bg-primary text-white"
-                          : "opacity-50 [&_svg]:invisible"
+                          ? 'bg-primary text-white'
+                          : 'opacity-50 [&_svg]:invisible',
                       )}
                     >
                       <CheckIcon className="h-4 w-4 text-white" />

@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -6,8 +6,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -15,16 +15,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { useController } from "./controller";
+} from '@/components/ui/form';
+import { useController } from './controller';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 
 export const MyProfileForm = () => {
   const { form, onSubmit } = useController();
@@ -68,8 +68,12 @@ export const MyProfileForm = () => {
                           <SelectValue placeholder="Pilih jenis kelamin" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="male" className="cursor-pointer">Laki-laki</SelectItem>
-                          <SelectItem value="female" className="cursor-pointer">Perempuan</SelectItem>
+                          <SelectItem value="male" className="cursor-pointer">
+                            Laki-laki
+                          </SelectItem>
+                          <SelectItem value="female" className="cursor-pointer">
+                            Perempuan
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>

@@ -1,5 +1,5 @@
-"use client";
-import { Card, CardDescription, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+'use client';
+import { Card, CardDescription, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
   TableHeader,
@@ -7,45 +7,39 @@ import {
   TableHead,
   TableBody,
   TableCell,
-} from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
-import { Paginated } from "@/components/pagination/Paginated";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { usePanelHeader } from "@/components/panel/Header";
-import { useEffect } from "react";
-import { panelRoutes } from "@/routes/route";
-import { UserIcon } from "@phosphor-icons/react/dist/ssr";
-import { useController } from "./controller";
-import { UsersTableSkeleton } from "@/components/skeleton/UsersTableSkeleton";
-import { PageStatus } from "@/lib/page";
-import { localeDateFormat } from "@/lib/utils";
-import Link from "next/link";
-import { RoleFilter } from "./components/RoleFilter";
-import { roleLabel } from "@/lib/role";
-import { EmptyDisplay } from "@/components/display/EmptyDisplay";
+} from '@/components/ui/table';
+import { Input } from '@/components/ui/input';
+import { Search } from 'lucide-react';
+import { Paginated } from '@/components/pagination/Paginated';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { usePanelHeader } from '@/components/panel/Header';
+import { useEffect } from 'react';
+import { panelRoutes } from '@/routes/route';
+import { UserIcon } from '@phosphor-icons/react/dist/ssr';
+import { useController } from './controller';
+import { UsersTableSkeleton } from '@/components/skeleton/UsersTableSkeleton';
+import { PageStatus } from '@/lib/page';
+import { localeDateFormat } from '@/lib/utils';
+import Link from 'next/link';
+import { RoleFilter } from './components/RoleFilter';
+import { roleLabel } from '@/lib/role';
+import { EmptyDisplay } from '@/components/display/EmptyDisplay';
+import { SpinAnimation } from '@/components/animation/SpinAnimation';
 
 export default function UsersPage() {
-  const {
-    search,
-    status,
-    users,
-    updatePage,
-    updateLimit,
-    updateSearch,
-    updateRole
-  } = useController();
+  const { search, status, users, updatePage, updateLimit, updateSearch, updateRole } =
+    useController();
   const { setMenu } = usePanelHeader();
   const isEmpty = status == PageStatus.SUCCESS && users.data.length == 0;
 
   useEffect(() => {
     setMenu([
       {
-        name: "Beranda",
+        name: 'Beranda',
         href: panelRoutes.home,
       },
       {
-        name: "Pengguna",
+        name: 'Pengguna',
         href: panelRoutes.users,
       },
     ]);
@@ -75,7 +69,7 @@ export default function UsersPage() {
       </CardHeader>
       <CardContent>
         {status == PageStatus.LOADING ? (
-          <UsersTableSkeleton />
+          <SpinAnimation />
         ) : (
           <Table>
             <TableHeader>
@@ -110,18 +104,17 @@ export default function UsersPage() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Link href={panelRoutes.userEdit(user.id.toString())} className="font-medium hover:underline">
-                     {user.name}
+                    <Link
+                      href={panelRoutes.userEdit(user.id.toString())}
+                      className="font-medium hover:underline"
+                    >
+                      {user.name}
                     </Link>
                   </TableCell>
-                  <TableCell>{user.username || "-"}</TableCell>
+                  <TableCell>{user.username || '-'}</TableCell>
                   <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.role ? roleLabel(user.role) : "-"}</TableCell>
-                  <TableCell>
-                    {user.last_login
-                      ? localeDateFormat(user.last_login)
-                      : "-"}
-                  </TableCell>
+                  <TableCell>{user.role ? roleLabel(user.role) : '-'}</TableCell>
+                  <TableCell>{user.last_login ? localeDateFormat(user.last_login) : '-'}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -132,7 +125,7 @@ export default function UsersPage() {
             <EmptyDisplay
               title="Kosong"
               description={
-                search ? "Tidak ada data yang ditemukan" : "Belum ada pengguna yang terdaftar"
+                search ? 'Tidak ada data yang ditemukan' : 'Belum ada pengguna yang terdaftar'
               }
             />
           </div>

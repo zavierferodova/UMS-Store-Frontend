@@ -1,16 +1,10 @@
-import React from "react";
-import { FormProvider } from "react-hook-form";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import React from 'react';
+import { FormProvider } from 'react-hook-form';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,41 +14,23 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { SelectProductCategory } from "@/components/panel/Form/SelectProductCategory";
-import {
-  ProductImagesInput,
-  ImageFile,
-} from "@/components/panel/Form/ProductImagesInput";
-import { MultiSkuInput } from "@/components/panel/Form/MultiSkuInput";
-import { ProductAdditionalInputs } from "@/components/panel/Form/ProductAdditionalInputs";
-import { useController } from "./controller";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Product } from "@/domain/model/product";
-import { isAdmin } from "@/lib/role";
+} from '@/components/ui/alert-dialog';
+import { SelectProductCategory } from '@/components/panel/Form/SelectProductCategory';
+import { ProductImagesInput, ImageFile } from '@/components/panel/Form/ProductImagesInput';
+import { MultiSkuInput } from '@/components/panel/Form/MultiSkuInput';
+import { ProductAdditionalInputs } from '@/components/panel/Form/ProductAdditionalInputs';
+import { useController } from './controller';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Product } from '@/domain/model/product';
+import { isAdmin } from '@/lib/role';
 
 export function ProductDetailForm({ product }: { product: Product }) {
-  const {
-    form,
-    user,
-    deleteDialogOpen,
-    onSubmit,
-    onDelete,
-    setDeleteDialogOpen,
-  } = useController(product);
+  const { form, user, deleteDialogOpen, onSubmit, onDelete, setDeleteDialogOpen } =
+    useController(product);
 
   return (
     <FormProvider {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex justify-center mb-6"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex justify-center mb-6">
         <div className="w-full">
           <Card>
             <CardHeader>
@@ -99,8 +75,7 @@ export function ProductDetailForm({ product }: { product: Product }) {
 
                           if (Array.isArray(skuErrors)) {
                             return skuErrors.map(
-                              (error: { sku?: { message: string } }) =>
-                                error?.sku?.message ?? ""
+                              (error: { sku?: { message: string } }) => error?.sku?.message ?? '',
                             );
                           }
 
@@ -143,11 +118,9 @@ export function ProductDetailForm({ product }: { product: Product }) {
                         type="number"
                         placeholder="Masukkan harga produk"
                         {...field}
-                        value={field.value || ""}
+                        value={field.value || ''}
                         onChange={(e) =>
-                          field.onChange(
-                            e.target.value ? Number(e.target.value) : 0
-                          )
+                          field.onChange(e.target.value ? Number(e.target.value) : 0)
                         }
                       />
                     </FormControl>
@@ -207,12 +180,10 @@ export function ProductDetailForm({ product }: { product: Product }) {
                         }}
                         errors={
                           Array.isArray(form.formState.errors.additionalInfo)
-                            ? form.formState.errors.additionalInfo.map(
-                                (err) => ({
-                                  label: err?.label?.message,
-                                  value: err?.value?.message,
-                                })
-                              )
+                            ? form.formState.errors.additionalInfo.map((err) => ({
+                                label: err?.label?.message,
+                                value: err?.value?.message,
+                              }))
                             : undefined
                         }
                       />
@@ -258,24 +229,16 @@ export function ProductDetailForm({ product }: { product: Product }) {
                 </Button>
               </div>
 
-              <AlertDialog
-                open={deleteDialogOpen}
-                onOpenChange={setDeleteDialogOpen}
-              >
+              <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>
-                      Apakah anda yakin untuk menghapus produk ?
-                    </AlertDialogTitle>
+                    <AlertDialogTitle>Apakah anda yakin untuk menghapus produk ?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Produk akan dihapus dan tidak akan muncul di katalog
-                      penjualan.
+                      Produk akan dihapus dan tidak akan muncul di katalog penjualan.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel className="cursor-pointer">
-                      Batal
-                    </AlertDialogCancel>
+                    <AlertDialogCancel className="cursor-pointer">Batal</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={onDelete}
                       className="cursor-pointer bg-destructive hover:bg-destructive/90"
