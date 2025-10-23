@@ -1,6 +1,7 @@
 'use client';
 
-import { PaginationMeta } from '@/domain/model/response';
+import { useCallback, useEffect, useState } from 'react';
+import { useQueryState, parseAsInteger } from 'nuqs';
 import {
   Pagination,
   PaginationContent,
@@ -11,15 +12,92 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination';
 
+export interface PaginationType {
+  currentPage: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+}
+
+export const usePagination = (defaultPageSize = 10) => {
+  const [page, setPage] = useQueryState<number>(
+    'page',
+    parseAsInteger.withDefault(1).withOptions({ history: 'push' }),
+  );
+
+  const [limit, setLimit] = useQueryState<number>(
+    'limit',
+    parseAsInteger.withDefault(defaultPageSize).withOptions({ history: 'push' }),
+  );
+
+  const safePage = page ?? 1;
+  const safeLimit = limit ?? defaultPageSize;
+
+  const [pagination, setPagination] = useState<PaginationType>({
+    currentPage: safePage,
+    pageSize: safeLimit,
+    totalItems: 0,
+    totalPages: 1,
+  });
+
+  // Handle page changes
+  const handlePageChange = useCallback(
+    async (newPage: number) => {
+      await setPage(newPage);
+    },
+    [setPage],
+  );
+
+  // Handle limit changes
+  const handleLimitChange = useCallback(
+    async (newLimit: number) => {
+      await Promise.all([setLimit(newLimit), setPage(1)]);
+    },
+    [setLimit, setPage],
+  );
+
+  // Update total items
+  const updateTotalItems = useCallback((total: number) => {
+    setPagination((prev) => ({
+      ...prev,
+      totalItems: total,
+      totalPages: Math.ceil(total / prev.pageSize),
+    }));
+  }, []);
+
+  // Sync with URL params on mount and when they change
+  useEffect(() => {
+    setPagination((prev) => ({
+      ...prev,
+      currentPage: safePage,
+      pageSize: safeLimit,
+      totalPages: Math.ceil(prev.totalItems / safeLimit),
+    }));
+  }, [safePage, safeLimit]);
+
+  return {
+    pagination,
+    handlePageChange,
+    handleLimitChange,
+    updateTotalItems,
+  };
+};
+
+export interface PaginationState {
+  totalItems: number;
+  currentPage: number;
+  pageSize: number;
+}
+
 export interface PaginatedProps {
-  meta: PaginationMeta;
+  state: PaginationState;
   onPageChange: (page: number) => void;
   onLimitChange?: (limit: number) => void;
 }
 
-export function Paginated({ meta, onPageChange, onLimitChange }: PaginatedProps) {
-  const totalPages = Math.ceil(meta.total / meta.limit);
-  const currentPage = meta.page;
+export function Paginated({ state, onPageChange, onLimitChange }: PaginatedProps) {
+  const { totalItems, currentPage, pageSize } = state;
+  const totalPages = Math.ceil(totalItems / pageSize);
   const pages: (number | string)[] = [];
 
   if (totalPages <= 4) {
@@ -64,16 +142,16 @@ export function Paginated({ meta, onPageChange, onLimitChange }: PaginatedProps)
   }
 
   const limitOptions = [10, 25, 50, 100];
-  const startEntry = meta.page > 1 ? (meta.page - 1) * meta.limit + 1 : 1;
-  const endEntry = Math.min(meta.page * meta.limit, meta.total);
+  const startEntry = currentPage > 1 ? (currentPage - 1) * pageSize + 1 : 1;
+  const endEntry = Math.min(currentPage * pageSize, totalItems);
 
   return (
     <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-5 w-full mt-6">
       <div className="w-full flex-shrink-0 md:w-max flex justify-center md:justify-start items-center gap-2 text-sm text-muted-foreground">
         {onLimitChange && (
           <select
-            value={meta.limit}
-            onChange={(e) => onLimitChange(Number(e.target.value))}
+            value={pageSize}
+            onChange={(e) => onLimitChange?.(Number(e.target.value))}
             className="h-8 rounded-md border border-input bg-background px-2 py-1 text-sm"
           >
             {limitOptions.map((option) => (
@@ -84,7 +162,7 @@ export function Paginated({ meta, onPageChange, onLimitChange }: PaginatedProps)
           </select>
         )}
         <span>
-          Showing {startEntry} to {endEntry} of {meta.total} entries
+          Showing {startEntry} to {endEntry} of {totalItems} entries
         </span>
       </div>
       <Pagination className="w-full flex justify-center md:justify-end">
@@ -94,11 +172,11 @@ export function Paginated({ meta, onPageChange, onLimitChange }: PaginatedProps)
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                if (meta.previous) {
+                if (currentPage > 1) {
                   onPageChange(currentPage - 1);
                 }
               }}
-              className={!meta.previous ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+              className={currentPage <= 1 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
             />
           </PaginationItem>
 
@@ -135,11 +213,13 @@ export function Paginated({ meta, onPageChange, onLimitChange }: PaginatedProps)
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                if (meta.next) {
+                if (currentPage < totalPages) {
                   onPageChange(currentPage + 1);
                 }
               }}
-              className={!meta.next ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+              className={
+                currentPage >= totalPages ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+              }
             />
           </PaginationItem>
         </PaginationContent>

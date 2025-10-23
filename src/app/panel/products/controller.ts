@@ -5,14 +5,29 @@ import { Product } from '@/domain/model/product';
 import { PageStatus } from '@/lib/page';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
+import { usePagination } from '@/components/pagination/Paginated';
+import { useQueryState, parseAsString, parseAsArrayOf } from 'nuqs';
 
 export const useController = () => {
+  const { pagination, handlePageChange, handleLimitChange, updateTotalItems } = usePagination();
+  const { currentPage, pageSize } = pagination;
   const [status, setStatus] = useState(PageStatus.LOADING);
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string[]>([]);
-  const [categoryFilter, setCategoryFilter] = useState<string[]>([]);
+
+  const [search, setSearch] = useQueryState(
+    'search',
+    parseAsString.withDefault('').withOptions({ history: 'push' }),
+  );
+
+  const [statusFilter, setStatusFilter] = useQueryState(
+    'status',
+    parseAsArrayOf(parseAsString).withDefault([]).withOptions({ history: 'push' }),
+  );
+
+  const [categoryFilter, setCategoryFilter] = useQueryState(
+    'category',
+    parseAsArrayOf(parseAsString).withDefault([]).withOptions({ history: 'push' }),
+  );
+
   const [products, setProducts] = useState<IPaginationResponse<Product>>({
     data: [],
     meta: {
@@ -32,8 +47,8 @@ export const useController = () => {
       setStatus(PageStatus.LOADING);
       try {
         const response = await productData.getProducts({
-          limit,
-          page,
+          limit: pageSize,
+          page: currentPage,
           search,
           status: statusFilter,
           categories: categoryFilter,
@@ -42,34 +57,26 @@ export const useController = () => {
           data: response.data,
           meta: response.meta,
         });
+        updateTotalItems(response.meta.total);
       } finally {
         setStatus(PageStatus.SUCCESS);
       }
     }
-  }, [user, page, limit, search, statusFilter, categoryFilter]);
+  }, [user, currentPage, pageSize, search, statusFilter, categoryFilter, updateTotalItems]);
 
-  const updatePage = (page: number) => {
-    setPage(page);
+  const updateSearch = async (searchTerm: string) => {
+    await setSearch(searchTerm);
+    await handlePageChange(1);
   };
 
-  const updateLimit = (limit: number) => {
-    setPage(1);
-    setLimit(limit);
+  const handleStatusFilterChange = async (statuses: string[]) => {
+    await setStatusFilter(statuses);
+    await handlePageChange(1);
   };
 
-  const updateSearch = (search: string) => {
-    setSearch(search);
-    setPage(1);
-  };
-
-  const handleStatusFilterChange = (status: string[]) => {
-    setStatusFilter(status);
-    setPage(1);
-  };
-
-  const handleCategoryFilterChange = (category: string[]) => {
-    setCategoryFilter(category);
-    setPage(1);
+  const handleCategoryFilterChange = async (categories: string[]) => {
+    await setCategoryFilter(categories);
+    await handlePageChange(1);
   };
 
   useEffect(() => {
@@ -79,14 +86,13 @@ export const useController = () => {
   return {
     user,
     search,
-    page,
-    limit,
+    pagination,
     status,
     products,
     statusFilter,
     categoryFilter,
-    updatePage,
-    updateLimit,
+    updatePage: handlePageChange,
+    updateLimit: handleLimitChange,
     updateSearch,
     onStatusFilterChange: handleStatusFilterChange,
     onCategoryFilterChange: handleCategoryFilterChange,

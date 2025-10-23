@@ -1,4 +1,4 @@
-import { NotFound } from '@/components/not-found/NotFound';
+import { NotFound } from '@/components/messages/NotFound';
 
 export type PanelNotFoundProps = {
   message?: string;

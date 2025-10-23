@@ -12,7 +12,6 @@ import { ProductsTable } from './components/ProductsTable';
 import { Button } from '@/components/ui/button';
 import { PlusIcon, MagnifyingGlassIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
 import { FilterDialog } from '@/app/panel/products/components/FilterDialog';
 import { SpinAnimation } from '@/components/animation/SpinAnimation';
 
@@ -23,6 +22,7 @@ export default function ProductsPage() {
     products,
     statusFilter,
     categoryFilter,
+    pagination,
     updatePage,
     updateLimit,
     updateSearch,
@@ -30,9 +30,8 @@ export default function ProductsPage() {
     onCategoryFilterChange,
   } = useController();
   const { setMenu } = usePanelHeader();
-  const { data: session } = useSession();
   const isEmpty = status == PageStatus.SUCCESS && products.data.length == 0;
-  const user = session?.user;
+  const isLoading = status == PageStatus.LOADING;
 
   useEffect(() => {
     setMenu([
@@ -80,7 +79,7 @@ export default function ProductsPage() {
         </div>
       </CardHeader>
       <CardContent>
-        {status == PageStatus.LOADING ? <SpinAnimation /> : <ProductsTable products={products} />}
+        {isLoading ? <SpinAnimation /> : <ProductsTable products={products} />}
         {isEmpty && (
           <div className="mt-8 mb-8">
             <EmptyDisplay
@@ -91,12 +90,8 @@ export default function ProductsPage() {
             />
           </div>
         )}
-        {!isEmpty && (
-          <Paginated
-            meta={products.meta}
-            onPageChange={(page) => updatePage(page)}
-            onLimitChange={(limit) => updateLimit(limit)}
-          />
+        {!isLoading && !isEmpty && (
+          <Paginated state={pagination} onPageChange={updatePage} onLimitChange={updateLimit} />
         )}
       </CardContent>
     </Card>

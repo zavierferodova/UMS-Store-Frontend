@@ -6,16 +6,15 @@ import { usePanelHeader } from '@/components/panel/Header';
 import { useEffect } from 'react';
 import { panelRoutes } from '@/routes/route';
 import { useController } from './controller';
-import { ProductsTableSkeleton } from '@/components/skeleton/ProductsTableSkeleton';
 import { PageStatus } from '@/lib/page';
 import { EmptyDisplay } from '@/components/display/EmptyDisplay';
 import { ProductsTable } from './components/ProductsTable';
 import { Button } from '@/components/ui/button';
 import { PlusIcon, MagnifyingGlassIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
-import { isAdmin } from '@/lib/role';
 import { FilterDialog } from '@/app/panel/products/components/FilterDialog';
 import { User } from '@/domain/model/user';
+import { SpinAnimation } from '@/components/animation/SpinAnimation';
 
 export function ProductsPageContainer(user: User) {
   const {
@@ -24,6 +23,7 @@ export function ProductsPageContainer(user: User) {
     products,
     statusFilter,
     categoryFilter,
+    pagination,
     updatePage,
     updateLimit,
     updateSearch,
@@ -79,11 +79,7 @@ export function ProductsPageContainer(user: User) {
         </div>
       </CardHeader>
       <CardContent>
-        {status == PageStatus.LOADING ? (
-          <ProductsTableSkeleton showStatusColumn={isAdmin(user)} />
-        ) : (
-          <ProductsTable products={products} />
-        )}
+        {status == PageStatus.LOADING ? <SpinAnimation /> : <ProductsTable products={products} />}
         {isEmpty && (
           <div className="mt-8 mb-8">
             <EmptyDisplay
@@ -95,11 +91,7 @@ export function ProductsPageContainer(user: User) {
           </div>
         )}
         {!isEmpty && (
-          <Paginated
-            meta={products.meta}
-            onPageChange={(page) => updatePage(page)}
-            onLimitChange={(limit) => updateLimit(limit)}
-          />
+          <Paginated state={pagination} onPageChange={updatePage} onLimitChange={updateLimit} />
         )}
       </CardContent>
     </Card>

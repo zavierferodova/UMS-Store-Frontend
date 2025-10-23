@@ -10,14 +10,13 @@ import {
 } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
-import { Paginated } from '@/components/pagination/Paginated';
+import { Paginated, usePagination } from '@/components/pagination/Paginated';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { usePanelHeader } from '@/components/panel/Header';
 import { useEffect } from 'react';
 import { panelRoutes } from '@/routes/route';
 import { UserIcon } from '@phosphor-icons/react/dist/ssr';
 import { useController } from './controller';
-import { UsersTableSkeleton } from '@/components/skeleton/UsersTableSkeleton';
 import { PageStatus } from '@/lib/page';
 import { localeDateFormat } from '@/lib/utils';
 import Link from 'next/link';
@@ -27,10 +26,11 @@ import { EmptyDisplay } from '@/components/display/EmptyDisplay';
 import { SpinAnimation } from '@/components/animation/SpinAnimation';
 
 export default function UsersPage() {
-  const { search, status, users, updatePage, updateLimit, updateSearch, updateRole } =
+  const { search, status, users, pagination, updatePage, updateLimit, updateSearch, updateRole } =
     useController();
   const { setMenu } = usePanelHeader();
   const isEmpty = status == PageStatus.SUCCESS && users.data.length == 0;
+  const isLoading = status == PageStatus.LOADING;
 
   useEffect(() => {
     setMenu([
@@ -68,7 +68,7 @@ export default function UsersPage() {
         </div>
       </CardHeader>
       <CardContent>
-        {status == PageStatus.LOADING ? (
+        {isLoading ? (
           <SpinAnimation />
         ) : (
           <Table>
@@ -130,9 +130,9 @@ export default function UsersPage() {
             />
           </div>
         )}
-        {!isEmpty && (
+        {!isLoading && !isEmpty && (
           <Paginated
-            meta={users.meta}
+            state={pagination}
             onPageChange={(page) => updatePage(page)}
             onLimitChange={(limit) => updateLimit(limit)}
           />

@@ -1,16 +1,28 @@
+'client';
 import supplierData from '@/data/supplier';
 import { IPaginationResponse } from '@/domain/model/response';
 import { Supplier } from '@/domain/model/supplier';
 import { PageStatus } from '@/lib/page';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
+import { usePagination } from '@/components/pagination/Paginated';
+import { useQueryState, parseAsString, parseAsArrayOf } from 'nuqs';
 
 export const useController = () => {
+  const { pagination, handlePageChange, handleLimitChange, updateTotalItems } = usePagination();
+  const { currentPage, pageSize } = pagination;
   const [status, setStatus] = useState(PageStatus.LOADING);
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState('');
-  const [dataStatus, setDataStatus] = useState<string[]>([]);
+
+  const [search, setSearch] = useQueryState(
+    'search',
+    parseAsString.withDefault('').withOptions({ history: 'push' }),
+  );
+
+  const [statusFilter, setStatusFilter] = useQueryState(
+    'status',
+    parseAsArrayOf(parseAsString).withDefault([]).withOptions({ history: 'push' }),
+  );
+
   const [suppliers, setSuppliers] = useState<IPaginationResponse<Supplier>>({
     data: [],
     meta: {
@@ -30,38 +42,30 @@ export const useController = () => {
       setStatus(PageStatus.LOADING);
       try {
         const response = await supplierData.getSuppliers({
-          page,
-          limit,
+          page: currentPage,
+          limit: pageSize,
           search,
-          status: dataStatus,
+          status: statusFilter,
         });
         setSuppliers({
           data: response.data,
           meta: response.meta,
         });
+        updateTotalItems(response.meta.total);
       } finally {
         setStatus(PageStatus.SUCCESS);
       }
     }
-  }, [user, page, limit, search, dataStatus]);
+  }, [user, currentPage, pageSize, search, statusFilter, updateTotalItems]);
 
-  const updatePage = (page: number) => {
-    setPage(page);
+  const updateSearch = async (searchTerm: string) => {
+    await setSearch(searchTerm);
+    await handlePageChange(1);
   };
 
-  const updateLimit = (limit: number) => {
-    setPage(1);
-    setLimit(limit);
-  };
-
-  const updateSearch = (search: string) => {
-    setPage(1);
-    setSearch(search);
-  };
-
-  const updateIsDeleted = (status: string[]) => {
-    setPage(1);
-    setDataStatus(status);
+  const updateStatusFilter = async (statuses: string[]) => {
+    await setStatusFilter(statuses);
+    await handlePageChange(1);
   };
 
   useEffect(() => {
@@ -71,13 +75,13 @@ export const useController = () => {
   return {
     user,
     search,
-    page,
-    limit,
+    pagination,
     status,
     suppliers,
-    updatePage,
-    updateLimit,
+    statusFilter,
+    updatePage: handlePageChange,
+    updateLimit: handleLimitChange,
     updateSearch,
-    updateIsDeleted,
+    updateStatusFilter,
   };
 };

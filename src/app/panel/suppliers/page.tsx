@@ -31,10 +31,11 @@ export default function SuppliersPage() {
     search,
     status,
     suppliers,
+    pagination,
     updatePage,
     updateLimit,
     updateSearch,
-    updateIsDeleted,
+    updateStatusFilter,
   } = useController();
   const { setMenu } = usePanelHeader();
   const isEmpty = status == PageStatus.SUCCESS && suppliers.data.length == 0;
@@ -70,7 +71,7 @@ export default function SuppliersPage() {
                 className="pl-10 w-full md:w-64"
               />
             </div>
-            {isAdmin(user) && <StatusFilter onFilterChange={updateIsDeleted} />}
+            {isAdmin(user) && <StatusFilter onFilterChange={updateStatusFilter} />}
             <Link href={panelRoutes.supplierAdd} className="w-full md:w-auto">
               <Button className="cursor-pointer w-full">
                 <PlusIcon className="h-4 w-4" /> <span className="ml-1">Tambah</span>
@@ -141,7 +142,7 @@ export default function SuppliersPage() {
         )}
         {!isEmpty && (
           <Paginated
-            meta={suppliers.meta}
+            state={pagination}
             onPageChange={(page) => updatePage(page)}
             onLimitChange={(limit) => updateLimit(limit)}
           />
