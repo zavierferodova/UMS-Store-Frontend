@@ -9,11 +9,9 @@ export const formSchema = z.object({
     .number()
     .min(0, { message: 'Harga tidak boleh negatif' })
     .min(1, { message: 'Harga produk tidak boleh kosong' }),
-  category: z
-    .any()
-    .refine((value) => typeof value === 'string' && value.trim() !== '', {
-      message: 'Kategori produk tidak boleh kosong',
-    }),
+  category: z.any().refine((value) => typeof value === 'string' && value.trim() !== '', {
+    message: 'Kategori produk tidak boleh kosong',
+  }),
   images: z
     .array(z.any())
     .min(1, { message: 'Gambar tidak boleh kosong' })
@@ -23,9 +21,9 @@ export const formSchema = z.object({
     .refine(
       (images) =>
         images.every((image: ImageFile) =>
-          ['image/jpeg', 'image/png'].includes(image.file?.type || ''),
+          ['image/jpeg', 'image/webp', 'image/png'].includes(image.file?.type || ''),
         ),
-      { message: 'Hanya format JPG, PNG yang diizinkan' },
+      { message: 'Hanya format JPG, PNG, WEBP yang diizinkan' },
     ),
   skus: z
     .array(

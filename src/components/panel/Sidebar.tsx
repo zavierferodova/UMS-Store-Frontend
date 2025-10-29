@@ -82,14 +82,16 @@ const menu: MenuGroup[] = [
         title: 'Transaksi',
         href: '#',
         icon: <MoneyIcon />,
+        roles: [role.admin],
       },
       {
         title: 'Purchase Order',
-        href: '#',
+        href: panelRoutes.purchaseOrders,
         icon: <ShoppingCartIcon />,
+        roles: [role.admin, role.procurement],
       },
     ],
-    roles: [role.admin],
+    roles: [role.admin, role.procurement],
   },
   {
     label: 'Manajemen',
@@ -165,16 +167,18 @@ export function PanelSidebar() {
                 <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
                 <SidebarGroupContent>
                   <SidebarMenu>
-                    {visibleItems.map((item) => (
-                      <SidebarMenuItem key={item.title}>
-                        <SidebarMenuButton asChild disabled={item.disabled}>
-                          <a href={item.href}>
-                            {item.icon}
-                            <div className="ml-1">{item.title}</div>
-                          </a>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    ))}
+                    {visibleItems
+                      .filter((item) => hasRoleAccess(item.roles, userRole))
+                      .map((item) => (
+                        <SidebarMenuItem key={item.title}>
+                          <SidebarMenuButton asChild disabled={item.disabled}>
+                            <a href={item.href}>
+                              {item.icon}
+                              <div className="ml-1">{item.title}</div>
+                            </a>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      ))}
                   </SidebarMenu>
                 </SidebarGroupContent>
               </SidebarGroup>

@@ -14,7 +14,6 @@ export const formSchema = addFormSchema.extend({
     .min(1, { message: 'SKU produk minimal 1' })
     .superRefine(async (skus, ctx) => {
       for (const [index, skuObj] of skus.entries()) {
-        // Skip validation if this is an existing record (has an ID)
         if (skuObj.id) continue;
 
         const sku = skuObj.sku.trim();
@@ -55,11 +54,12 @@ export const formSchema = addFormSchema.extend({
     )
     .refine(
       (images: ImageFile[]) => {
-        return images.some((image) =>
-          image.file ? !['image/jpeg', 'image/png'].includes(image.file.type) : true,
+        console.log(images);
+        return images.every((image) =>
+          image.file ? ['image/jpeg', 'image/webp', 'image/png'].includes(image.file.type) : true,
         );
       },
-      { message: 'Hanya format JPG, PNG yang diizinkan' },
+      { message: 'Hanya format JPG, PNG, WEBP yang diizinkan' },
     ),
   active: z.boolean(),
 });

@@ -1,4 +1,4 @@
-import { NotFound } from '@/components/messages/NotFound';
+import { NotFoundDisplay } from '@/components/display/NotFoundDisplay';
 
 export type PanelNotFoundProps = {
   message?: string;
@@ -7,7 +7,7 @@ export type PanelNotFoundProps = {
 export function PanelNotFound({ message }: PanelNotFoundProps) {
   return (
     <div className="h-[80dvh]">
-      <NotFound message={message} />
+      <NotFoundDisplay message={message} />
     </div>
   );
 }

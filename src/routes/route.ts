@@ -8,6 +8,8 @@ export const panelRoutes = {
   supplierAdd: '/panel/suppliers/add',
   products: '/panel/products',
   addProduct: '/panel/products/add',
+  productEdit: (id: string) => `/panel/products/${id}`,
+  purchaseOrders: '/panel/purchase-orders',
   noRole: '/no-role',
 };
 

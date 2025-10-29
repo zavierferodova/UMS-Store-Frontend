@@ -44,7 +44,7 @@ export const useController = () => {
     } finally {
       setStatus(PageStatus.SUCCESS);
     }
-  }, [currentPage, pageSize, search, role]);
+  }, [currentPage, pageSize, search, role, updateTotalItems]);
 
   const updateSearch = (search: string) => {
     handlePageChange(1);

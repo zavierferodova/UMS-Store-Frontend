@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Switch } from '@/components/ui/switch';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,7 +20,14 @@ import { ProductImagesInput, ImageFile } from '@/components/panel/Form/ProductIm
 import { MultiSkuInput } from '@/components/panel/Form/MultiSkuInput';
 import { ProductAdditionalInputs } from '@/components/panel/Form/ProductAdditionalInputs';
 import { useController } from './controller';
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Product } from '@/domain/model/product';
 import { isAdmin } from '@/lib/role';
 
@@ -195,20 +202,25 @@ export function ProductDetailForm({ product }: { product: Product }) {
 
               {isAdmin(user) && (
                 <div>
-                  <FormLabel className="mb-1">Status</FormLabel>
+                  <FormLabel className="mb-1">Status Produk</FormLabel>
+                  <FormDescription className="text-sm text-muted-foreground">
+                    Aktifkan produk untuk menampilkan di katalog penjualan
+                  </FormDescription>
                   <FormField
                     control={form.control}
                     name="active"
                     render={({ field }) => (
                       <FormItem className="flex flex-row items-center justify-start gap-2 h-full">
                         <FormControl>
-                          <Checkbox
-                            className="cursor-pointer"
+                          <Switch
                             checked={field.value}
                             onCheckedChange={field.onChange}
+                            className="data-[state=checked]:bg-primary cursor-pointer"
                           />
                         </FormControl>
-                        <div className="font-normal text-sm">Aktif</div>
+                        <div className="font-normal text-sm">
+                          {field.value ? 'Aktif' : 'Tidak Aktif'}
+                        </div>
                       </FormItem>
                     )}
                   />

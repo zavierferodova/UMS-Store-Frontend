@@ -1,11 +1,11 @@
 'use client';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
-export type NotFoundProps = {
+export type NotFoundDisplayProps = {
   message?: string;
 };
 
-export function NotFound({ message }: NotFoundProps) {
+export function NotFoundDisplay({ message }: NotFoundDisplayProps) {
   return (
     <div className="w-full h-full flex justify-center items-center flex-col">
       <div className="w-4xl">

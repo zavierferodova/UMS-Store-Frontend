@@ -12,6 +12,10 @@ import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { isAdmin } from '@/lib/role';
 import { localeDateFormat } from '@/lib/utils';
+import { panelRoutes } from '@/routes/route';
+import Image from 'next/image';
+import { DialogImagePreview } from '@/components/panel/DialogImagePreview';
+import { useState } from 'react';
 
 interface ProductsTableProps {
   products: IPaginationResponse<Product>;
@@ -20,6 +24,8 @@ interface ProductsTableProps {
 export function ProductsTable({ products }: ProductsTableProps) {
   const { data: session } = useSession();
   const user = session?.user;
+  const [showImageDialog, setShowImageDialog] = useState(false);
+  const [currentImagePreview, setCurrentImagePreview] = useState('');
 
   return (
     <>
@@ -29,6 +35,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
             <TableHead className="w-[60px]">
               <div className="flex justify-center">No</div>
             </TableHead>
+            <TableHead>Gambar</TableHead>
             <TableHead>SKU</TableHead>
             <TableHead>Nama</TableHead>
             <TableHead>Kategori</TableHead>
@@ -46,6 +53,27 @@ export function ProductsTable({ products }: ProductsTableProps) {
                   {(products.meta.page - 1) * products.meta.limit + index + 1}
                 </div>
               </TableCell>
+              <TableCell>
+                <div className="flex justify-center">
+                  <div className="w-15 h-15 relative rounded-sm overflow-hidden">
+                    {product.images.length > 0 ? (
+                      <Image
+                        src={product.images[0]?.image}
+                        alt={product.name}
+                        layout="fill"
+                        objectFit="cover"
+                        className="w-full h-full bg-gray-200 cursor-pointer"
+                        onClick={() => {
+                          setCurrentImagePreview(product.images[0]?.image);
+                          setShowImageDialog(true);
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-200"></div>
+                    )}
+                  </div>
+                </div>
+              </TableCell>
               <TableCell className="font-medium">
                 {product.skus.length > 0
                   ? product.skus
@@ -55,7 +83,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
               </TableCell>
               <TableCell>
                 <Link
-                  href={`/panel/products/${product.id}`}
+                  href={panelRoutes.productEdit(product.id)}
                   className="font-medium hover:underline"
                 >
                   {product.name}
@@ -84,6 +112,13 @@ export function ProductsTable({ products }: ProductsTableProps) {
           ))}
         </TableBody>
       </Table>
+      <DialogImagePreview
+        isOpen={showImageDialog}
+        onOpenChange={(open) => {
+          setShowImageDialog(open);
+        }}
+        src={currentImagePreview}
+      />
     </>
   );
 }

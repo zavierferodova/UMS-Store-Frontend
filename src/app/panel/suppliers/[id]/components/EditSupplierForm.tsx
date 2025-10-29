@@ -16,7 +16,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { toast } from 'sonner';
-import { Separator } from '@/components/ui/separator';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -184,7 +183,7 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                           }}
                           errors={
                             Array.isArray(form.formState.errors.contacts)
-                              ? form.formState.errors.contacts.map((err: any) => ({
+                              ? form.formState.errors.contacts.map((err: { name?: { message?: string }, phone?: { message?: string } }) => ({
                                   name: err?.name?.message,
                                   phone: err?.phone?.message,
                                 }))

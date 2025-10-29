@@ -125,7 +125,7 @@ export const AddSupplierForm = () => {
                           }}
                           errors={
                             Array.isArray(form.formState.errors.contacts)
-                              ? form.formState.errors.contacts.map((err: any) => ({
+                              ? form.formState.errors.contacts.map((err: { name?: { message?: string }, phone?: { message?: string } }) => ({
                                   name: err?.name?.message,
                                   phone: err?.phone?.message,
                                 }))

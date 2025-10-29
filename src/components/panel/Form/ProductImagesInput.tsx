@@ -130,7 +130,7 @@ export function ProductImagesInput({ onImagesChange, images = [] }: ProductImage
               type="file"
               ref={fileInputRef}
               multiple
-              accept="image/jpeg,image/png"
+              accept="image/jpeg,image/png,image/webp"
               className="hidden"
               onChange={handleImageChange}
             />

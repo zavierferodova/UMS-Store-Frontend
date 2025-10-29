@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
-import { Paginated, usePagination } from '@/components/pagination/Paginated';
+import { Paginated } from '@/components/pagination/Paginated';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { usePanelHeader } from '@/components/panel/Header';
 import { useEffect } from 'react';

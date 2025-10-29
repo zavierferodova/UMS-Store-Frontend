@@ -1,9 +1,9 @@
-import { NotFound } from '@/components/messages/NotFound';
+import { NotFoundDisplay } from '@/components/display/NotFoundDisplay';
 
 export default function NotFoundPage() {
   return (
     <div className="w-dvw h-dvh">
-      <NotFound />
+      <NotFoundDisplay />
     </div>
   );
 }

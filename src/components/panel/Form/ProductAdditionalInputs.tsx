@@ -67,32 +67,38 @@ export function ProductAdditionalInputs({
 
         return (
           <div key={index} className="space-y-2">
-            <div className="flex items-start gap-2">
-              <div className="w-1/2 space-y-1">
-                <Input
-                  placeholder="Label"
-                  value={item.label}
-                  maxLength={128}
-                  onChange={(e) => handleAdditionalInfoChange(index, 'label', e.target.value)}
-                  className={cn({
-                    'border-destructive focus-visible:ring-destructive': labelError,
-                  })}
-                  aria-invalid={!!labelError}
-                />
-                {labelError && <p className="text-sm font-medium text-destructive">{labelError}</p>}
-              </div>
-              <div className="w-1/2 space-y-1">
-                <Input
-                  placeholder="Nilai"
-                  value={item.value}
-                  onChange={(e) => handleAdditionalInfoChange(index, 'value', e.target.value)}
-                  maxLength={128}
-                  className={cn({
-                    'border-destructive focus-visible:ring-destructive': valueError,
-                  })}
-                  aria-invalid={!!valueError}
-                />
-                {valueError && <p className="text-sm font-medium text-destructive">{valueError}</p>}
+            <div className="flex items-center lg:items-start gap-2">
+              <div className="grid grid-cols-1 lg:grid-cols-2 w-full gap-2">
+                <div className="w-full space-y-1">
+                  <Input
+                    placeholder="Label"
+                    value={item.label}
+                    maxLength={128}
+                    onChange={(e) => handleAdditionalInfoChange(index, 'label', e.target.value)}
+                    className={cn({
+                      'border-destructive focus-visible:ring-destructive': labelError,
+                    })}
+                    aria-invalid={!!labelError}
+                  />
+                  {labelError && (
+                    <p className="text-sm font-medium text-destructive">{labelError}</p>
+                  )}
+                </div>
+                <div className="w-full space-y-1">
+                  <Input
+                    placeholder="Nilai"
+                    value={item.value}
+                    onChange={(e) => handleAdditionalInfoChange(index, 'value', e.target.value)}
+                    maxLength={128}
+                    className={cn({
+                      'border-destructive focus-visible:ring-destructive': valueError,
+                    })}
+                    aria-invalid={!!valueError}
+                  />
+                  {valueError && (
+                    <p className="text-sm font-medium text-destructive">{valueError}</p>
+                  )}
+                </div>
               </div>
               {additionalInfo.length > 1 && (
                 <Button
