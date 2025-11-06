@@ -1,7 +1,11 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { APP_URL } from '@/config/env';
-import { GetPurchaseOrdersParams, IPurchaseOrderData } from '@/domain/data/purchase-order';
-import { PurchaseOrder } from '@/domain/model/purchase-order';
+import {
+  AddPurchaseOrderParams,
+  GetPurchaseOrdersParams,
+  IPurchaseOrderData,
+} from '@/domain/data/purchase-order';
+import { PurchaseOrder, POPayout } from '@/domain/model/purchase-order';
 import { IPaginationResponse } from '@/domain/model/response';
 import { fetchJSON } from '@/lib/fetch';
 import { getServerSession, Session } from 'next-auth';
@@ -17,6 +21,26 @@ class PurchaseOrderData implements IPurchaseOrderData {
       return getServerSession(authOptions);
     } else {
       return getSession();
+    }
+  }
+
+  async addPurchaseOrder(params: AddPurchaseOrderParams): Promise<PurchaseOrder | null> {
+    try {
+      const session = await this.getAuthSession();
+      const response = await fetchJSON(`${APP_URL}/apis/purchase-orders`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token && { Authorization: `Bearer ${session.access_token}` }),
+        },
+        body: JSON.stringify(params),
+      });
+      if (response) {
+        return response.data;
+      }
+      return null;
+    } catch {
+      return null;
     }
   }
 

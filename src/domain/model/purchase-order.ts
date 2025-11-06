@@ -7,6 +7,7 @@ export interface PurchaseOrder {
   user: User;
   supplier: Supplier;
   payout: POPayout;
+  note?: string | null;
   draft: boolean;
   completed: boolean;
   is_deleted: boolean;

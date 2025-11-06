@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Supplier } from '@/domain/model/supplier';
 import { useController } from './controller';
+import { Switch } from '@/components/ui/switch';
+import { FormDescription } from '@/components/ui/form';
 import {
   Form,
   FormControl,
@@ -143,13 +145,20 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                     name="active"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Status</FormLabel>
-                        <div className="flex flex-row items-center gap-2">
+                        <FormLabel>Status Pemasok</FormLabel>
+                        <FormDescription className="text-sm text-muted-foreground">
+                          Aktifkan pemasok agar dapat digunakan dalam transaksi
+                        </FormDescription>
+                        <div className="flex flex-row items-center gap-2 mt-2">
                           <FormControl>
-                            <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                              className="data-[state=checked]:bg-primary cursor-pointer"
+                            />
                           </FormControl>
-                          <div className="text-sm">
-                            <div>Aktif</div>
+                          <div className="font-normal text-sm">
+                            {field.value ? 'Aktif' : 'Tidak Aktif'}
                           </div>
                         </div>
                       </FormItem>
@@ -183,10 +192,15 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                           }}
                           errors={
                             Array.isArray(form.formState.errors.contacts)
-                              ? form.formState.errors.contacts.map((err: { name?: { message?: string }, phone?: { message?: string } }) => ({
-                                  name: err?.name?.message,
-                                  phone: err?.phone?.message,
-                                }))
+                              ? form.formState.errors.contacts.map(
+                                  (err: {
+                                    name?: { message?: string };
+                                    phone?: { message?: string };
+                                  }) => ({
+                                    name: err?.name?.message,
+                                    phone: err?.phone?.message,
+                                  }),
+                                )
                               : undefined
                           }
                         />

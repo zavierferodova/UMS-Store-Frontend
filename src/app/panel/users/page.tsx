@@ -12,6 +12,8 @@ import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { Paginated } from '@/components/pagination/Paginated';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DialogImagePreview } from '@/components/panel/DialogImagePreview';
+import { useState } from 'react';
 import { usePanelHeader } from '@/components/panel/Header';
 import { useEffect } from 'react';
 import { panelRoutes } from '@/routes/route';
@@ -31,6 +33,10 @@ export default function UsersPage() {
   const { setMenu } = usePanelHeader();
   const isEmpty = status == PageStatus.SUCCESS && users.data.length == 0;
   const isLoading = status == PageStatus.LOADING;
+
+  // For image preview dialog
+  const [showImageDialog, setShowImageDialog] = useState(false);
+  const [currentImagePreview, setCurrentImagePreview] = useState('');
 
   useEffect(() => {
     setMenu([
@@ -95,12 +101,29 @@ export default function UsersPage() {
                   </TableCell>
                   <TableCell className="w-20">
                     <div className="flex justify-center">
-                      <Avatar>
-                        <AvatarImage src={user.profile_image} className="object-cover" />
-                        <AvatarFallback>
-                          <UserIcon />
-                        </AvatarFallback>
-                      </Avatar>
+                      {user.profile_image ? (
+                        <div
+                          className="cursor-pointer"
+                          onClick={() => {
+                            setCurrentImagePreview(user.profile_image);
+                            setShowImageDialog(true);
+                          }}
+                        >
+                          <Avatar>
+                            <AvatarImage src={user.profile_image} className="object-cover" />
+                            <AvatarFallback>
+                              <UserIcon />
+                            </AvatarFallback>
+                          </Avatar>
+                        </div>
+                      ) : (
+                        <Avatar>
+                          <AvatarImage src={user.profile_image} className="object-cover" />
+                          <AvatarFallback>
+                            <UserIcon />
+                          </AvatarFallback>
+                        </Avatar>
+                      )}
                     </div>
                   </TableCell>
                   <TableCell>
@@ -138,6 +161,12 @@ export default function UsersPage() {
           />
         )}
       </CardContent>
+      {/* Image Preview Dialog */}
+      <DialogImagePreview
+        isOpen={showImageDialog}
+        onOpenChange={setShowImageDialog}
+        src={currentImagePreview}
+      />
     </Card>
   );
 }

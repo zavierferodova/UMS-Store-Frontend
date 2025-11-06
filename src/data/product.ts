@@ -4,13 +4,20 @@ import {
   AddProductParams,
   GetCategoriesParams,
   GetProductsParams,
+  GetSKUProductsParams,
   IProductData,
   UpdateImageParams,
   UpdateProductParams,
   UpdateSKUParams,
 } from '@/domain/data/product';
 import { IPaginationResponse } from '@/domain/model/response';
-import { Product, ProductCategory, ProductImage, ProductSKU } from '@/domain/model/product';
+import {
+  Product,
+  ProductCategory,
+  ProductImage,
+  ProductSingleSKU,
+  ProductSKU,
+} from '@/domain/model/product';
 import { fetchJSON } from '@/lib/fetch';
 import { getServerSession, Session } from 'next-auth';
 import { getSession } from 'next-auth/react';
@@ -233,7 +240,7 @@ class ProductData implements IProductData {
 
       const skusResponses = await Promise.all([...editSkuPromises, ...addSkuPromises]);
       if (skusResponses.every((sku) => sku !== null)) {
-        return { ...response.data, skus: skusResponses.filter((sku) => sku) };
+        return { ...response.data, sku: skusResponses.filter((sku) => sku) };
       }
 
       return null;
@@ -292,6 +299,53 @@ class ProductData implements IProductData {
 
       if (!response) {
         throw new Error('Failed to fetch products');
+      }
+
+      return {
+        data: response.data,
+        meta: response.meta,
+      };
+    } catch {
+      return {
+        data: [],
+        meta: {
+          total: 0,
+          page: 1,
+          limit: 10,
+          next: null,
+          previous: null,
+        },
+      };
+    }
+  }
+
+  async getProductsBySKU(
+    params: GetSKUProductsParams,
+  ): Promise<IPaginationResponse<ProductSingleSKU>> {
+    try {
+      const { page = 1, limit = 10, search, status } = params ?? {};
+
+      let query = `?page=${page}&limit=${limit}`;
+
+      if (search) {
+        query += `&search=${encodeURIComponent(search)}`;
+      }
+
+      if (status) {
+        query += `&status=${status.join(',')}`;
+      }
+
+      const session = await this.getAuthSession();
+      const response = await fetchJSON(`${APP_URL}/apis/products/sku${query}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token && { Authorization: `Bearer ${session.access_token}` }),
+        },
+      });
+
+      if (!response) {
+        throw new Error('Failed to fetch products by SKU');
       }
 
       return {

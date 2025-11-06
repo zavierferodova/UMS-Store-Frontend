@@ -37,3 +37,7 @@ export interface Product {
   created_at: string;
   updated_at: string;
 }
+
+export interface ProductSingleSKU extends Omit<Product, 'skus'> {
+  sku: ProductSKU;
+}

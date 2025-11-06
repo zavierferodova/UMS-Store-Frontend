@@ -1,5 +1,11 @@
 import { IPaginationResponse } from '@/domain/model/response';
-import { Product, ProductCategory, ProductImage, ProductSKU } from '@/domain/model/product';
+import {
+  Product,
+  ProductCategory,
+  ProductImage,
+  ProductSingleSKU,
+  ProductSKU,
+} from '@/domain/model/product';
 
 export type GetProductsParams = {
   search?: string;
@@ -7,6 +13,13 @@ export type GetProductsParams = {
   page?: number;
   status?: string[];
   categories?: string[];
+};
+
+export type GetSKUProductsParams = {
+  search?: string;
+  limit?: number;
+  page?: number;
+  status?: string[];
 };
 
 export type GetCategoriesParams = {
@@ -54,6 +67,7 @@ export interface IProductData {
   updateProduct(id: string, product: UpdateProductParams): Promise<Product | null>;
   getProduct(id: string): Promise<Product | null>;
   getProducts(params?: GetProductsParams): Promise<IPaginationResponse<Product>>;
+  getProductsBySKU(params?: GetSKUProductsParams): Promise<IPaginationResponse<ProductSingleSKU>>;
   deleteProduct(id: string): Promise<boolean>;
   createCategory(name: string): Promise<ProductCategory | null>;
   getCategories(params?: GetCategoriesParams): Promise<IPaginationResponse<ProductCategory>>;

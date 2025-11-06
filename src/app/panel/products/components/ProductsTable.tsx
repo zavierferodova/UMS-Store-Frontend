@@ -16,6 +16,7 @@ import { panelRoutes } from '@/routes/route';
 import Image from 'next/image';
 import { DialogImagePreview } from '@/components/panel/DialogImagePreview';
 import { useState } from 'react';
+import { ImageIcon } from '@phosphor-icons/react';
 
 interface ProductsTableProps {
   products: IPaginationResponse<Product>;
@@ -54,7 +55,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
                 </div>
               </TableCell>
               <TableCell>
-                <div className="flex justify-center">
+                <div>
                   <div className="w-15 h-15 relative rounded-sm overflow-hidden">
                     {product.images.length > 0 ? (
                       <Image
@@ -69,7 +70,9 @@ export function ProductsTable({ products }: ProductsTableProps) {
                         }}
                       />
                     ) : (
-                      <div className="w-full h-full bg-gray-200"></div>
+                      <div className="w-full h-full bg-gray-200 flex justify-center items-center">
+                        <ImageIcon size={20} />
+                      </div>
                     )}
                   </div>
                 </div>

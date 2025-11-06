@@ -62,7 +62,7 @@ export default function ProductsPage() {
               />
             </div>
             <FilterDialog state={filterDialogState} />
-            <Link href="#" className="w-full md:w-auto">
+            <Link href={panelRoutes.addPurchaseOrder} className="w-full md:w-auto">
               <Button className="cursor-pointer w-full">
                 <PlusIcon className="h-4 w-4" /> <span className="ml-1">Tambah</span>
               </Button>

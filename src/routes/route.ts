@@ -10,6 +10,7 @@ export const panelRoutes = {
   addProduct: '/panel/products/add',
   productEdit: (id: string) => `/panel/products/${id}`,
   purchaseOrders: '/panel/purchase-orders',
+  addPurchaseOrder: '/panel/purchase-orders/add',
   noRole: '/no-role',
 };
 

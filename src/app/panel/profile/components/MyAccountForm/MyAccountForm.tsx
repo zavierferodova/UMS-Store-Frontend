@@ -57,23 +57,28 @@ export const MyAccountForm = () => {
                   />
                 )}
               />
-              <div className="relative">
+              <div>
                 <FormLabel className="mb-3">Foto Profil</FormLabel>
-                <Avatar className="h-20 w-20 cursor-pointer rounded-md" onClick={handleAvatarClick}>
-                  <AvatarImage
-                    src={imagePreview || ''}
-                    alt="User profile image"
-                    className="object-cover w-full h-full"
-                  />
-                  <AvatarFallback className="rounded-xl">
-                    <UserIcon className="text-accent-foreground/60" />
-                  </AvatarFallback>
-                </Avatar>
-                <div
-                  className="group absolute inset-0 flex h-20 w-20 cursor-pointer items-center justify-center rounded-md bg-opacity-0 transition-all duration-300 hover:bg-black/50"
-                  onClick={handleAvatarClick}
-                >
-                  <CameraIcon className="h-6 w-6 text-white opacity-0 transition-all duration-300 group-hover:opacity-100" />
+                <div className="relative">
+                  <Avatar
+                    className="h-20 w-20 cursor-pointer rounded-md"
+                    onClick={handleAvatarClick}
+                  >
+                    <AvatarImage
+                      src={imagePreview || ''}
+                      alt="User profile image"
+                      className="object-cover w-full h-full"
+                    />
+                    <AvatarFallback className="rounded-xl">
+                      <UserIcon className="text-accent-foreground/60" />
+                    </AvatarFallback>
+                  </Avatar>
+                  <div
+                    className="group absolute inset-0 flex h-20 w-20 cursor-pointer items-center justify-center rounded-md bg-opacity-0 transition-all duration-300 hover:bg-black/50"
+                    onClick={handleAvatarClick}
+                  >
+                    <CameraIcon className="h-6 w-6 text-white opacity-0 transition-all duration-300 group-hover:opacity-100" />
+                  </div>
                 </div>
               </div>
               <div className="flex flex-wrap gap-1">

@@ -54,7 +54,6 @@ export const formSchema = addFormSchema.extend({
     )
     .refine(
       (images: ImageFile[]) => {
-        console.log(images);
         return images.every((image) =>
           image.file ? ['image/jpeg', 'image/webp', 'image/png'].includes(image.file.type) : true,
         );

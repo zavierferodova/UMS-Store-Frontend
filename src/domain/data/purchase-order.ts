@@ -1,5 +1,5 @@
 import { IPaginationResponse } from '../model/response';
-import { PurchaseOrder } from '../model/purchase-order';
+import { POPayout, PurchaseOrder } from '../model/purchase-order';
 
 export interface GetPurchaseOrdersParams {
   search?: string;
@@ -11,6 +11,21 @@ export interface GetPurchaseOrdersParams {
   completed?: string[];
 }
 
+export interface AddPurchaseOrderParams {
+  user_id: string;
+  supplier_id: string;
+  payout: POPayout;
+  note?: string;
+  draft?: boolean;
+  items?: {
+    product_sku: string;
+    price: number;
+    amounts: number;
+    supplier_discount?: number;
+  }[];
+}
+
 export interface IPurchaseOrderData {
   getPurchaseOrders(params?: GetPurchaseOrdersParams): Promise<IPaginationResponse<PurchaseOrder>>;
+  addPurchaseOrder(params: AddPurchaseOrderParams): Promise<PurchaseOrder | null>;
 }
