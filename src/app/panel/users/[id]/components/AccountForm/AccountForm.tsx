@@ -12,7 +12,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { CameraIcon } from 'lucide-react';
 import { UserIcon } from '@phosphor-icons/react/dist/ssr';
 import {
   Select,
@@ -51,9 +50,6 @@ export const AccountForm = ({ user }: AccountFormProps) => {
                 <UserIcon className="text-accent-foreground/60" />
               </AvatarFallback>
             </Avatar>
-            <div className="group absolute inset-0 flex h-20 w-20 cursor-pointer items-center justify-center rounded-md bg-opacity-0 transition-all duration-300 hover:bg-black/50">
-              <CameraIcon className="h-6 w-6 text-white opacity-0 transition-all duration-300 group-hover:opacity-100" />
-            </div>
           </div>
         </div>
         <Form {...form}>

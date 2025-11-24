@@ -28,7 +28,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Checkbox } from '@/components/ui/checkbox';
 import { isAdmin, isProcurement } from '@/lib/role';
 import { SalesContactInput } from '@/components/panel/Form/SalesContactInput';
 
@@ -178,38 +177,46 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="contacts"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Kontak Sales</FormLabel>
-                      <FormControl>
-                        <SalesContactInput
-                          contacts={field.value || []}
-                          onContactsChange={(contacts) => {
-                            field.onChange(contacts);
-                          }}
-                          errors={
-                            Array.isArray(form.formState.errors.contacts)
-                              ? form.formState.errors.contacts.map(
-                                  (err: {
-                                    name?: { message?: string };
-                                    phone?: { message?: string };
-                                  }) => ({
-                                    name: err?.name?.message,
-                                    phone: err?.phone?.message,
-                                  }),
-                                )
-                              : undefined
-                          }
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
               </div>
+            </CardContent>
+          </Card>
+          <Card className="mt-4 h-max">
+            <CardHeader>
+              <CardTitle>Kontak Penjualan</CardTitle>
+              <CardDescription>Informasi kontak penjualan dari pemasok</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <FormField
+                control={form.control}
+                name="contacts"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Kontak Sales</FormLabel>
+                    <FormControl>
+                      <SalesContactInput
+                        contacts={field.value || []}
+                        onContactsChange={(contacts) => {
+                          field.onChange(contacts);
+                        }}
+                        errors={
+                          Array.isArray(form.formState.errors.contacts)
+                            ? form.formState.errors.contacts.map(
+                                (err: {
+                                  name?: { message?: string };
+                                  phone?: { message?: string };
+                                }) => ({
+                                  name: err?.name?.message,
+                                  phone: err?.phone?.message,
+                                }),
+                              )
+                            : undefined
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </CardContent>
           </Card>
           <div className="flex justify-end gap-2 mt-4">

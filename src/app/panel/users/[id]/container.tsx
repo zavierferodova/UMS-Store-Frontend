@@ -5,23 +5,13 @@ import { AccountForm } from './components/AccountForm/AccountForm';
 import { ProfileForm } from './components/ProfileForm/ProfileForm';
 import { panelRoutes } from '@/routes/route';
 import { useEffect } from 'react';
-import { redirect } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 
 export type ProfilePageContainerProps = {
   user: User;
-  pathId: string;
 };
 
-export function ProfilePageContainer({ user, pathId }: ProfilePageContainerProps) {
+export function ProfilePageContainer({ user }: ProfilePageContainerProps) {
   const { setMenu } = usePanelHeader();
-  const { data: session } = useSession();
-
-  useEffect(() => {
-    if (session?.user.id === pathId) {
-      redirect(panelRoutes.profile);
-    }
-  }, [session, pathId]);
 
   useEffect(() => {
     setMenu([

@@ -1,21 +1,40 @@
+import { ProductSingleSKU } from './product';
 import { Supplier } from './supplier';
 import { User } from './user';
+
+export interface PurchaseOrderItem {
+  product: ProductSingleSKU;
+  price: number;
+  amounts: number;
+  supplier_discount?: number;
+}
 
 export interface PurchaseOrder {
   id: string;
   code: string;
-  user: User;
+  requester: User;
+  approver: User | null;
   supplier: Supplier;
-  payout: POPayout;
-  note?: string | null;
-  draft: boolean;
-  completed: boolean;
+  payout: PurchaseOrderPayout;
+  note: string | null;
+  items: PurchaseOrderItem[];
+  status: PurchaseOrderStatus;
+  rejection_message: string | null;
   is_deleted: boolean;
   created_at: string;
   updated_at: string;
 }
 
-export enum POPayout {
+export enum PurchaseOrderStatus {
+  DRAFT = 'draft',
+  WAITING_APPROVAL = 'waiting_approval',
+  CANCELED = 'canceled',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
+  COMPLETED = 'completed',
+}
+
+export enum PurchaseOrderPayout {
   CASH = 'cash',
   PARTNERSHIP = 'partnership',
 }

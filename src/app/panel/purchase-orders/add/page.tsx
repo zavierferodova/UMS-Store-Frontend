@@ -2,6 +2,7 @@
 
 import { useController } from './controller';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Dialog,
   DialogContent,
@@ -21,8 +22,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { SelectSupplierSearch } from '@/components/panel/Form/SelectSupplierSearch';
-import { SearchProductInput } from '@/components/panel/Form/SearchProductInput';
-import { PurchaseOrderProductsList } from '@/app/panel/purchase-orders/add/components/PurchaseOrderProductsList';
+import { SearchProductCommand } from '@/components/panel/Form/SearchProductCommand';
+import { PoProductsList } from '@/app/panel/purchase-orders/add/components/PoProductsList';
 import {
   Form,
   FormControl,
@@ -32,22 +33,26 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { panelRoutes } from '@/routes/route';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { usePanelHeader } from '@/components/panel/Header';
+import { Plus, Search } from 'lucide-react';
 
 export default function AddPurchaseOrderPage() {
   const {
     form,
     showConfirmDialog,
     selectedProducts,
+    searchProductText,
+    filteredProducts,
     setShowConfirmDialog,
     handleProductSelect,
-    handleStockChange,
     handleRemoveProduct,
     handleSaveDraft,
     handleSave,
+    setSearchProductText,
   } = useController();
   const { setMenu } = usePanelHeader();
+  const [showProductSearch, setShowProductSearch] = useState(false);
 
   useEffect(() => {
     setMenu([
@@ -69,113 +74,142 @@ export default function AddPurchaseOrderPage() {
   return (
     <Form {...form}>
       <div className="container">
-        <Card>
-          <CardHeader>
-            <CardTitle>Tambah Purchase Order</CardTitle>
-            <CardDescription>
-              Buat purchase order baru dengan mengisi form di bawah ini.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-6">
-              <FormField
-                control={form.control}
-                name="supplier"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nama Supplier</FormLabel>
-                    <FormControl>
-                      <SelectSupplierSearch
-                        value={field.value ?? null}
-                        onChange={(supplier) => field.onChange(supplier)}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="payout"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Pembayaran</FormLabel>
-                    <Select value={field.value} onValueChange={field.onChange}>
+        <div className="flex flex-col lg:flex-row gap-6">
+          <Card className="lg:w-[30%]">
+            <CardHeader>
+              <CardTitle>Tambah Purchase Order</CardTitle>
+              <CardDescription>
+                Buat purchase order baru dengan mengisi form di bawah ini.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <FormField
+                  control={form.control}
+                  name="supplier"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nama Supplier</FormLabel>
                       <FormControl>
-                        <SelectTrigger className="w-full hover:bg-accent cursor-pointer">
-                          <SelectValue placeholder="Pilih metode pembayaran..." />
-                        </SelectTrigger>
+                        <SelectSupplierSearch
+                          value={field.value ?? null}
+                          onChange={(supplier) => field.onChange(supplier)}
+                        />
                       </FormControl>
-                      <SelectContent>
-                        <SelectItem className="cursor-pointer" value="cash">
-                          Cash
-                        </SelectItem>
-                        <SelectItem className="cursor-pointer" value="partnership">
-                          Partnership
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="note"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Catatan</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Tulis catatan tambahan untuk purchase order..."
-                        rows={3}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </CardContent>
-        </Card>
+                <FormField
+                  control={form.control}
+                  name="payout"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Pembayaran</FormLabel>
+                      <Select value={field.value} onValueChange={field.onChange}>
+                        <FormControl>
+                          <SelectTrigger className="w-full hover:bg-accent cursor-pointer">
+                            <SelectValue placeholder="Pilih metode pembayaran..." />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem className="cursor-pointer" value="cash">
+                            Cash
+                          </SelectItem>
+                          <SelectItem className="cursor-pointer" value="partnership">
+                            Partnership
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-        <Card className="mt-6">
-          <CardHeader>
-            <CardTitle>Produk</CardTitle>
-            <CardDescription>Cari dan tambahkan produk yang akan di-order</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <SearchProductInput
-                  onProductSelect={handleProductSelect}
-                  selectedProducts={selectedProducts.map((p) => p.product)}
+                <FormField
+                  control={form.control}
+                  name="note"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Catatan</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Tulis catatan tambahan untuk purchase order..."
+                          rows={3}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
               </div>
+            </CardContent>
+          </Card>
 
-              <FormField
-                control={form.control}
-                name="items"
-                render={() => (
-                  <FormItem>
-                    <FormControl>
-                      <PurchaseOrderProductsList
-                        products={selectedProducts}
-                        onStockChange={handleStockChange}
-                        onRemove={handleRemoveProduct}
-                        form={form}
+          <Card className="lg:w-[70%]">
+            <CardHeader>
+              <CardTitle>Produk</CardTitle>
+              <CardDescription>Cari dan tambahkan produk yang akan di-order</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <div className="flex flex-col gap-2">
+                  <div className="flex justify-end items-center gap-2">
+                    <div className="relative w-full mr-2">
+                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
+                        <Search className="w-4 h-4" />
+                      </span>
+                      <Input
+                        type="text"
+                        placeholder="Cari produk berdasarkan SKU atau nama..."
+                        className="pl-9 w-full"
+                        value={searchProductText}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          setSearchProductText(e.target.value)
+                        }
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </CardContent>
-        </Card>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="default"
+                      className="cursor-pointer"
+                      onClick={() => setShowProductSearch(true)}
+                    >
+                      <Plus className="w-4 h-4" />
+                      Tambah
+                    </Button>
+                  </div>
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name="items"
+                  render={() => (
+                    <FormItem>
+                      <FormControl>
+                        <PoProductsList
+                          products={filteredProducts}
+                          onRemove={handleRemoveProduct}
+                          form={form}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <SearchProductCommand
+          open={showProductSearch}
+          onOpenChange={setShowProductSearch}
+          onProductSelect={handleProductSelect}
+          selectedProducts={selectedProducts}
+        />
 
         <div className="flex flex-col sm:flex-row gap-2 justify-end mt-8">
           <Button
@@ -204,7 +238,8 @@ export default function AddPurchaseOrderPage() {
               <DialogTitle>Konfirmasi Simpan Purchase Order</DialogTitle>
               <DialogDescription>
                 Apakah Anda yakin ingin menyimpan purchase order ini? Setelah disimpan, purchase
-                order tidak dapat diedit.
+                order tidak dapat diedit. Permintaan purchase order akan ditinjau oleh admin
+                terlebih dahulu.
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>

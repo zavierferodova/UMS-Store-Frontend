@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Paginated } from '@/components/pagination/Paginated';
 import { usePanelHeader } from '@/components/panel/Header';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { panelRoutes } from '@/routes/route';
 import { useController } from './controller';
 import { PageStatus } from '@/lib/page';
@@ -15,7 +15,7 @@ import Link from 'next/link';
 import { FilterDialog } from '@/app/panel/products/components/FilterDialog';
 import { SpinAnimation } from '@/components/animation/SpinAnimation';
 
-export default function ProductsPage() {
+function ProductsPageContent() {
   const {
     search,
     status,
@@ -95,5 +95,13 @@ export default function ProductsPage() {
         )}
       </CardContent>
     </Card>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense>
+      <ProductsPageContent />
+    </Suspense>
   );
 }

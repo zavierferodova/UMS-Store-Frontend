@@ -1,13 +1,13 @@
 import { productDataServer } from '@/data/product';
 import { ProductPageContainer } from './container';
-import { PanelNotFound } from '@/components/panel/PanelNotFound';
+import { notFound } from 'next/navigation';
 
-export default async function ProductDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const product = await productDataServer.getProduct(id);
 
   if (!product) {
-    return <PanelNotFound message="Produk tidak dapat dimuat!" />;
+    notFound();
   }
 
   return <ProductPageContainer product={product} />;

@@ -11,6 +11,7 @@ export const panelRoutes = {
   productEdit: (id: string) => `/panel/products/${id}`,
   purchaseOrders: '/panel/purchase-orders',
   addPurchaseOrder: '/panel/purchase-orders/add',
+  purchaseOrderEdit: (id: string) => `/panel/purchase-orders/${id}`,
   noRole: '/no-role',
 };
 

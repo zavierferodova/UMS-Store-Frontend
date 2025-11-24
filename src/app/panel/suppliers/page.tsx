@@ -12,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Paginated } from '@/components/pagination/Paginated';
 import { usePanelHeader } from '@/components/panel/Header';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { panelRoutes } from '@/routes/route';
 import { useController } from './controller';
 import { PageStatus } from '@/lib/page';
@@ -25,7 +25,7 @@ import { isAdmin } from '@/lib/role';
 import { EmptyDisplay } from '@/components/display/EmptyDisplay';
 import { SpinAnimation } from '@/components/animation/SpinAnimation';
 
-export default function SuppliersPage() {
+function SuppliersPageContent() {
   const {
     user,
     search,
@@ -149,5 +149,13 @@ export default function SuppliersPage() {
         )}
       </CardContent>
     </Card>
+  );
+}
+
+export default function SuppliersPage() {
+  return (
+    <Suspense>
+      <SuppliersPageContent />
+    </Suspense>
   );
 }

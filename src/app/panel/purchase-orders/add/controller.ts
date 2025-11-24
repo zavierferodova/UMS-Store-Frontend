@@ -5,53 +5,53 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { ProductSingleSKU } from '@/domain/model/product';
-import { PurchaseOrderProduct } from '@/app/panel/purchase-orders/add/components/PurchaseOrderProductsList';
 import { formSchema, FormValues } from './validation';
 import purchaseOrderData from '@/data/purchase-order';
-import { POPayout } from '@/domain/model/purchase-order';
+import { PurchaseOrderPayout, PurchaseOrderStatus } from '@/domain/model/purchase-order';
 import { panelRoutes } from '@/routes/route';
 
 export function useController() {
   const router = useRouter();
   const { data: session } = useSession();
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [selectedProducts, setSelectedProducts] = useState<PurchaseOrderProduct[]>([]);
+  const [selectedProducts, setSelectedProducts] = useState<ProductSingleSKU[]>([]);
+  const [searchProductText, setSearchProductText] = useState('');
+
+  const filteredProducts = selectedProducts.filter((p) => {
+    const text = searchProductText.trim().toLowerCase();
+    if (!text) return true;
+    return p.sku.sku.toLowerCase().includes(text) || p.name.toLowerCase().includes(text);
+  });
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       supplier: undefined,
-      payout: '' as POPayout,
+      payout: '' as PurchaseOrderPayout,
       note: '',
       items: [],
     },
   });
 
   const handleProductSelect = (product: ProductSingleSKU) => {
-    const exists = selectedProducts.find((p) => p.product.sku.sku === product.sku.sku);
+    const exists = selectedProducts.find((p) => p.sku.sku === product.sku.sku);
     if (exists) {
       toast.error('Produk telah dipilih!');
       return;
     }
-    setSelectedProducts((prev) => [...prev, { product, stock: 0 }]);
+    setSelectedProducts((prev) => [...prev, { ...product }]);
     toast.success(`${product.name} ditambahkan`);
   };
 
-  const handleStockChange = (productId: string, stock: number) => {
-    setSelectedProducts((prev) =>
-      prev.map((item) => (item.product.id === productId ? { ...item, stock } : item)),
-    );
-  };
-
   const handleRemoveProduct = (productSKU: string) => {
-    const product = selectedProducts.find((p) => p.product.sku.sku === productSKU);
-    setSelectedProducts((prev) => prev.filter((item) => item.product.sku.sku !== productSKU));
+    const product = selectedProducts.find((p) => p.sku.sku === productSKU);
+    setSelectedProducts((prev) => prev.filter((item) => item.sku.sku !== productSKU));
     if (product) {
-      toast.success(`${product.product.name} dihapus`);
+      toast.success(`${product.name} dihapus`);
     }
   };
 
-  const onSubmit = async (data: FormValues, draft: boolean = false) => {
+  const onSubmit = async (data: FormValues, status: PurchaseOrderStatus) => {
     if (!session?.user?.id) {
       toast.error('Sesi tidak ditemukan. Silakan login kembali.');
       return;
@@ -60,12 +60,19 @@ export function useController() {
     const promise = new Promise(async (resolve, reject) => {
       if (data.supplier) {
         const purchaseOrder = await purchaseOrderData.addPurchaseOrder({
-          user_id: session.user.id,
+          requester_id: session.user.id,
           supplier_id: data.supplier.id,
-          payout: data.payout as POPayout,
+          payout: data.payout as PurchaseOrderPayout,
           note: data.note,
-          draft: draft,
+          status: status,
+          items: form.getValues().items.map((item) => ({
+            product_sku: item.product_sku,
+            price: item.price,
+            amounts: item.amounts,
+            supplier_discount: item.supplier_discount,
+          })),
         });
+
         if (purchaseOrder) {
           resolve(purchaseOrder);
         } else {
@@ -74,36 +81,56 @@ export function useController() {
       }
     });
 
-    toast.promise(promise, {
-      loading: draft ? 'Menyimpan draft...' : 'Menyimpan purchase order...',
-      success: () => {
-        setShowConfirmDialog(false);
-        form.reset();
-        setSelectedProducts([]);
-        router.push(panelRoutes.purchaseOrders);
-        return draft ? 'Draft berhasil disimpan' : 'Purchase order berhasil disimpan';
-      },
-      error: draft ? 'Gagal menyimpan draft' : 'Gagal menyimpan purchase order',
-    });
+    const successDispatcher = () => {
+      setShowConfirmDialog(false);
+      form.reset();
+      setSelectedProducts([]);
+      router.push(panelRoutes.purchaseOrders);
+    };
+
+    switch (status) {
+      case PurchaseOrderStatus.WAITING_APPROVAL:
+        toast.promise(promise, {
+          loading: 'Menyimpan purchase order...',
+          success: () => {
+            successDispatcher();
+            return 'Purchase order berhasil disimpan';
+          },
+          error: 'Gagal menyimpan purchase order',
+        });
+        break;
+      case PurchaseOrderStatus.DRAFT:
+        toast.promise(promise, {
+          loading: 'Menyimpan draft...',
+          success: () => {
+            successDispatcher();
+            return 'Draft berhasil disimpan';
+          },
+          error: 'Gagal menyimpan draft',
+        });
+        break;
+    }
   };
 
   const handleSaveDraft = () => {
-    form.handleSubmit((data) => onSubmit(data, true))();
+    form.handleSubmit((data) => onSubmit(data, PurchaseOrderStatus.DRAFT))();
   };
 
   const handleSave = () => {
-    form.handleSubmit((data) => onSubmit(data, false))();
+    form.handleSubmit((data) => onSubmit(data, PurchaseOrderStatus.WAITING_APPROVAL))();
   };
 
   return {
     form,
     showConfirmDialog,
     selectedProducts,
+    searchProductText,
+    filteredProducts,
     setShowConfirmDialog,
     handleProductSelect,
-    handleStockChange,
     handleRemoveProduct,
     handleSaveDraft,
     handleSave,
+    setSearchProductText,
   };
 }

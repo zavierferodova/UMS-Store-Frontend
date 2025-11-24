@@ -21,9 +21,15 @@ export type SelectSupplierSearchProps = {
   value: Supplier | null;
   onChange: (supplier: Supplier | null) => void;
   error?: boolean;
+  disabled?: boolean;
 };
 
-export function SelectSupplierSearch({ value, onChange, error }: SelectSupplierSearchProps) {
+export function SelectSupplierSearch({
+  value,
+  onChange,
+  error,
+  disabled,
+}: SelectSupplierSearchProps) {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [triggerWidth, setTriggerWidth] = useState(0);
   const [open, setOpen] = useState(false);
@@ -74,6 +80,7 @@ export function SelectSupplierSearch({ value, onChange, error }: SelectSupplierS
           variant="outline"
           role="combobox"
           aria-expanded={open}
+          disabled={disabled}
           className={cn(
             'w-full font-normal  justify-between cursor-pointer text-muted-foreground hover:text-muted-foreground hover:bg-accent',
             value && 'text-foreground hover:text-foreground',

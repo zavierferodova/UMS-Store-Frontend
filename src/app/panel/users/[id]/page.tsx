@@ -1,14 +1,14 @@
 import { userDataServer } from '@/data/user';
 import { ProfilePageContainer } from './container';
-import { PanelNotFound } from '@/components/panel/PanelNotFound';
+import { notFound } from 'next/navigation';
 
-export default async function ProfilePage({ params }: { params: { id: string } }) {
+export default async function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const user = await userDataServer.getUser(id);
 
   if (!user) {
-    return <PanelNotFound message="Pengguna tidak dapat dimuat!" />;
+    notFound();
   }
 
-  return <ProfilePageContainer user={user} pathId={id} />;
+  return <ProfilePageContainer user={user} />;
 }

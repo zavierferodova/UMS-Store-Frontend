@@ -13,7 +13,7 @@ import { Search } from 'lucide-react';
 import { Paginated } from '@/components/pagination/Paginated';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DialogImagePreview } from '@/components/panel/DialogImagePreview';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { usePanelHeader } from '@/components/panel/Header';
 import { useEffect } from 'react';
 import { panelRoutes } from '@/routes/route';
@@ -27,7 +27,7 @@ import { roleLabel } from '@/lib/role';
 import { EmptyDisplay } from '@/components/display/EmptyDisplay';
 import { SpinAnimation } from '@/components/animation/SpinAnimation';
 
-export default function UsersPage() {
+function UsersPageContent() {
   const { search, status, users, pagination, updatePage, updateLimit, updateSearch, updateRole } =
     useController();
   const { setMenu } = usePanelHeader();
@@ -168,5 +168,13 @@ export default function UsersPage() {
         src={currentImagePreview}
       />
     </Card>
+  );
+}
+
+export default function UsersPage() {
+  return (
+    <Suspense>
+      <UsersPageContent />
+    </Suspense>
   );
 }

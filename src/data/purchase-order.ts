@@ -1,11 +1,13 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/config/login';
 import { APP_URL } from '@/config/env';
 import {
   AddPurchaseOrderParams,
   GetPurchaseOrdersParams,
   IPurchaseOrderData,
+  ReplacePurchaseOrderItemsParams,
+  UpdatePurchaseOrderParams,
 } from '@/domain/data/purchase-order';
-import { PurchaseOrder, POPayout } from '@/domain/model/purchase-order';
+import { PurchaseOrder } from '@/domain/model/purchase-order';
 import { IPaginationResponse } from '@/domain/model/response';
 import { fetchJSON } from '@/lib/fetch';
 import { getServerSession, Session } from 'next-auth';
@@ -48,31 +50,31 @@ class PurchaseOrderData implements IPurchaseOrderData {
     params?: GetPurchaseOrdersParams,
   ): Promise<IPaginationResponse<PurchaseOrder>> {
     try {
-      const { search, draft, completed, payout, status, page = 1, limit = 10 } = params ?? {};
-      let query = `?page=${page}&limit=${limit}`;
+      const { search, payout, status, po_status, page = 1, limit = 10 } = params ?? {};
+
+      const query = new URLSearchParams();
+
+      query.append('page', page.toString());
+      query.append('limit', limit.toString());
 
       if (search) {
-        query += `&search=${encodeURIComponent(search)}`;
-      }
-
-      if (draft) {
-        query += `&draft=${draft.join(',')}`;
-      }
-
-      if (completed) {
-        query += `&completed=${completed.join(',')}`;
+        query.append('search', search);
       }
 
       if (payout) {
-        query += `&payout=${payout.join(',')}`;
+        query.append('payout', payout.join(','));
       }
 
       if (status) {
-        query += `&status=${status.join(',')}`;
+        query.append('status', status.join(','));
+      }
+
+      if (po_status) {
+        query.append('po_status', po_status.join(','));
       }
 
       const session = await this.getAuthSession();
-      const response = await fetchJSON(`${APP_URL}/apis/purchase-orders${query}`, {
+      const response = await fetchJSON(`${APP_URL}/apis/purchase-orders?${query.toString()}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -99,6 +101,80 @@ class PurchaseOrderData implements IPurchaseOrderData {
           previous: null,
         },
       };
+    }
+  }
+
+  async getPurchaseOrder(id: string): Promise<PurchaseOrder | null> {
+    try {
+      const session = await this.getAuthSession();
+      const response = await fetchJSON(`${APP_URL}/apis/purchase-orders/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token && { Authorization: `Bearer ${session.access_token}` }),
+        },
+      });
+
+      if (response) {
+        return response.data;
+      }
+
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
+  async updatePurchaseOrder(
+    id: string,
+    params: UpdatePurchaseOrderParams,
+  ): Promise<PurchaseOrder | null> {
+    try {
+      const session = await this.getAuthSession();
+      const response = await fetchJSON(`${APP_URL}/apis/purchase-orders/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token && { Authorization: `Bearer ${session.access_token}` }),
+        },
+        body: JSON.stringify(params),
+      });
+
+      if (response) {
+        return response.data;
+      }
+
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
+  async replacePurchaseOrderItems(
+    purchaseOrderId: string,
+    params: ReplacePurchaseOrderItemsParams,
+  ): Promise<PurchaseOrder | null> {
+    try {
+      const session = await this.getAuthSession();
+      const response = await fetchJSON(
+        `${APP_URL}/apis/purchase-orders/${purchaseOrderId}/items/replace`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(session?.access_token && { Authorization: `Bearer ${session.access_token}` }),
+          },
+          body: JSON.stringify(params),
+        },
+      );
+
+      if (response) {
+        return response.data;
+      }
+
+      return null;
+    } catch {
+      return null;
     }
   }
 }

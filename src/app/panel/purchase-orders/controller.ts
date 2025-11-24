@@ -43,9 +43,8 @@ export const useController = () => {
           limit: pageSize,
           page: currentPage,
           status: filterDialogState.status,
-          draft: filterDialogState.draft,
-          completed: filterDialogState.completed,
           payout: filterDialogState.payout,
+          po_status: filterDialogState.purchaseOrderStatus,
         });
         setPurchaseOrders({
           data: response.data,
@@ -61,10 +60,9 @@ export const useController = () => {
     currentPage,
     pageSize,
     search,
-    filterDialogState.draft,
-    filterDialogState.completed,
     filterDialogState.payout,
     filterDialogState.status,
+    filterDialogState.purchaseOrderStatus,
     updateTotalItems,
   ]);
 

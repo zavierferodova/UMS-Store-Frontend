@@ -9,7 +9,7 @@ import { APP_URL } from '@/config/env';
 import { User } from '@/domain/model/user';
 import { getSession } from 'next-auth/react';
 import { getServerSession, Session } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/config/login';
 
 class AuthData implements IAuthData {
   constructor(private readonly serverside: boolean) {

@@ -1,4 +1,4 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/config/login';
 import { APP_URL } from '@/config/env';
 import {
   CreateSupplierParams,
