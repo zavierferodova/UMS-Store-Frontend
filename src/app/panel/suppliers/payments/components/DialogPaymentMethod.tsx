@@ -144,7 +144,7 @@ export function DialogPaymentMethod({
           onSuccess();
         }
       }
-    } catch (error) {
+    } catch {
       toast.error(
         isEditMode
           ? 'Terjadi kesalahan saat memperbarui metode pembayaran'
