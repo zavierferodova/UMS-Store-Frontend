@@ -10,8 +10,12 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarSeparator,
 } from '@/components/ui/sidebar';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   ArrowDownRightIcon,
   ClipboardTextIcon,
@@ -23,6 +27,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import {
   BadgeCheckIcon,
   BellIcon,
+  ChevronRightIcon,
   ChevronsUpDownIcon,
   HomeIcon,
   LogOutIcon,
@@ -52,14 +57,24 @@ import { Role } from '@/domain/model/role';
 export interface MenuItem {
   title: string;
   href: string;
-  icon: React.ReactNode;
   disabled?: boolean;
   roles?: Role[];
 }
 
+export interface Menu {
+  title: string;
+  href?: string;
+  icon: React.ReactNode;
+  disabled?: boolean;
+  roles?: Role[];
+  items?: MenuItem[];
+  collapsible?: boolean;
+  defaultOpen?: boolean;
+}
+
 export interface MenuGroup {
   label: string;
-  items: MenuItem[];
+  items: Menu[];
   roles?: Role[];
 }
 
@@ -104,9 +119,22 @@ const menu: MenuGroup[] = [
       },
       {
         title: 'Pemasok',
-        href: panelRoutes.suppliers,
         icon: <ArrowDownRightIcon />,
         roles: [role.admin, role.procurement],
+        collapsible: true,
+        defaultOpen: false,
+        items: [
+          {
+            title: 'Daftar',
+            href: panelRoutes.suppliers,
+            roles: [role.admin, role.procurement],
+          },
+          {
+            title: 'Metode Pembayaran',
+            href: panelRoutes.supplierPayments,
+            roles: [role.admin, role.procurement],
+          },
+        ],
       },
       {
         title: 'Kupon',
@@ -141,6 +169,63 @@ function hasRoleAccess(itemRoles: Role[] | undefined, userRole: Role | undefined
   return itemRoles.includes(userRole);
 }
 
+function renderMenuItem(item: Menu, userRole: Role | undefined) {
+  const visibleSubItems = item.items?.filter((subItem) => hasRoleAccess(subItem.roles, userRole));
+  const hasVisibleChildren = visibleSubItems && visibleSubItems.length > 0;
+
+  if (item.collapsible && hasVisibleChildren) {
+    return (
+      <Collapsible key={item.title} defaultOpen={item.defaultOpen ?? false}>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild disabled={item.disabled}>
+            <CollapsibleTrigger className="w-full group/item-collapsible cursor-pointer">
+              {item.icon}
+              <div>{item.title}</div>
+              <ChevronRightIcon className="ml-auto size-4 transition-transform group-data-[state=open]/item-collapsible:rotate-90" />
+            </CollapsibleTrigger>
+          </SidebarMenuButton>
+          <CollapsibleContent>
+            <SidebarMenuSub>
+              {visibleSubItems.map((subItem) => (
+                <SidebarMenuSubItem key={subItem.title}>
+                  {subItem.disabled ? (
+                    <SidebarMenuSubButton asChild>
+                      <button
+                        type="button"
+                        disabled
+                        className="w-full text-left opacity-50 cursor-not-allowed"
+                      >
+                        <div>{subItem.title}</div>
+                      </button>
+                    </SidebarMenuSubButton>
+                  ) : (
+                    <SidebarMenuSubButton asChild>
+                      <a href={subItem.href}>
+                        <div>{subItem.title}</div>
+                      </a>
+                    </SidebarMenuSubButton>
+                  )}
+                </SidebarMenuSubItem>
+              ))}
+            </SidebarMenuSub>
+          </CollapsibleContent>
+        </SidebarMenuItem>
+      </Collapsible>
+    );
+  }
+
+  return (
+    <SidebarMenuItem key={item.title}>
+      <SidebarMenuButton asChild disabled={item.disabled}>
+        <a href={item.href}>
+          {item.icon}
+          <div className="ml-1">{item.title}</div>
+        </a>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  );
+}
+
 export function PanelSidebar() {
   const { setTheme, theme } = useTheme();
   const session = useSession();
@@ -169,16 +254,7 @@ export function PanelSidebar() {
                   <SidebarMenu>
                     {visibleItems
                       .filter((item) => hasRoleAccess(item.roles, userRole))
-                      .map((item) => (
-                        <SidebarMenuItem key={item.title}>
-                          <SidebarMenuButton asChild disabled={item.disabled}>
-                            <a href={item.href}>
-                              {item.icon}
-                              <div className="ml-1">{item.title}</div>
-                            </a>
-                          </SidebarMenuButton>
-                        </SidebarMenuItem>
-                      ))}
+                      .map((item) => renderMenuItem(item, userRole))}
                   </SidebarMenu>
                 </SidebarGroupContent>
               </SidebarGroup>

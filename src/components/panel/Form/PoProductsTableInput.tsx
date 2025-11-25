@@ -11,7 +11,7 @@ import { DialogImagePreview } from '@/components/panel/DialogImagePreview';
 import { ImageIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
 import { panelRoutes } from '@/routes/route';
-import { FormValues } from '../validation';
+import { FormValues } from '../../../app/panel/purchase-orders/add/validation';
 import { UseFormReturn } from 'react-hook-form';
 import {
   Table,
@@ -22,7 +22,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-export type PoProductsListProps = {
+export type PoProductsTableInputProps = {
   products: ProductSingleSKU[];
   form?: UseFormReturn<FormValues>;
   disableDelete?: boolean;
@@ -30,7 +30,12 @@ export type PoProductsListProps = {
   onRemove: (productId: string) => void;
 };
 
-export function PoProductsList({ products, form, readonly, onRemove }: PoProductsListProps) {
+export function PoProductsTableInput({
+  products,
+  form,
+  readonly,
+  onRemove,
+}: PoProductsTableInputProps) {
   const supplier = form?.watch ? form.watch('supplier') : undefined;
   const items = form?.watch ? form.watch('items') : [];
   const [showImageDialog, setShowImageDialog] = useState(false);
@@ -220,7 +225,6 @@ export function PoProductsList({ products, form, readonly, onRemove }: PoProduct
                             }
                             onChange={(e) => {
                               let val = e.target.value.replace(/[^0-9.]/g, '');
-                              // Limit to 1 decimal places
                               if (val.includes('.')) {
                                 const [intPart, decPart] = val.split('.');
                                 val = intPart + '.' + decPart.slice(0, 1);
@@ -271,10 +275,10 @@ export function PoProductsList({ products, form, readonly, onRemove }: PoProduct
                 {!readonly && (
                   <TableCell className="text-center">
                     <Button
-                      variant="ghost"
+                      variant="outline"
                       size="icon"
                       onClick={() => onRemove(product.sku.sku)}
-                      className="text-destructive hover:text-destructive hover:bg-destructive/10 cursor-pointer"
+                      className="text-destructive hover:text-destructive cursor-pointer"
                     >
                       <Trash2Icon className="h-4 w-4" />
                     </Button>

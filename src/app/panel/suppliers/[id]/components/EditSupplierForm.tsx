@@ -45,7 +45,7 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4"
       >
-        <Card>
+        <Card style={{ height: 'max-content' }}>
           <CardHeader>
             <CardTitle>Pemasok</CardTitle>
             <CardDescription>Formulir untuk mengubah data pemasok</CardDescription>
@@ -130,6 +130,7 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
             </div>
           </CardContent>
         </Card>
+
         <div>
           <Card className="h-max">
             <CardHeader>
@@ -180,6 +181,7 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
               </div>
             </CardContent>
           </Card>
+
           <Card className="mt-4 h-max">
             <CardHeader>
               <CardTitle>Kontak Penjualan</CardTitle>
@@ -219,6 +221,7 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
               />
             </CardContent>
           </Card>
+
           <div className="flex justify-end gap-2 mt-4">
             <Button className="w-max cursor-pointer" type="submit">
               Simpan
@@ -236,6 +239,7 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
           </div>
         </div>
       </form>
+
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>

@@ -26,7 +26,7 @@ export const AddSupplierForm = () => {
         <Card>
           <CardHeader>
             <CardTitle>Pemasok</CardTitle>
-            <CardDescription>Formulir untuk menambah pemasok baru.</CardDescription>
+            <CardDescription>Formulir untuk menambah pemasok baru</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-4">
@@ -125,10 +125,15 @@ export const AddSupplierForm = () => {
                           }}
                           errors={
                             Array.isArray(form.formState.errors.contacts)
-                              ? form.formState.errors.contacts.map((err: { name?: { message?: string }, phone?: { message?: string } }) => ({
-                                  name: err?.name?.message,
-                                  phone: err?.phone?.message,
-                                }))
+                              ? form.formState.errors.contacts.map(
+                                  (err: {
+                                    name?: { message?: string };
+                                    phone?: { message?: string };
+                                  }) => ({
+                                    name: err?.name?.message,
+                                    phone: err?.phone?.message,
+                                  }),
+                                )
                               : undefined
                           }
                         />
