@@ -19,15 +19,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
 import { SelectSupplierSearch } from '@/components/panel/Form/SelectSupplierSearch';
 import { Supplier } from '@/domain/model/supplier';
 import { PaymentMethod } from '@/domain/model/payment-method';
 import paymentMethodData from '@/data/payment-method';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { isAdmin } from '@/lib/role';
 
 const formSchema = z.object({
   supplier: z.custom<Supplier>().refine((val) => val !== null && val !== undefined, {
@@ -36,6 +39,7 @@ const formSchema = z.object({
   name: z.string().min(1, { message: 'Nama pembayaran harus diisi' }),
   owner: z.string().min(1, { message: 'Pemilik harus diisi' }),
   account_number: z.string().min(1, { message: 'Nomor rekening harus diisi' }),
+  active: z.boolean().optional(),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
@@ -55,6 +59,8 @@ export function DialogPaymentMethod({
 }: DialogPaymentMethodProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isEditMode = !!editData;
+  const { data: session } = useSession();
+  const user = session?.user;
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -63,6 +69,7 @@ export function DialogPaymentMethod({
       name: '',
       owner: '',
       account_number: '',
+      active: true,
     },
   });
 
@@ -73,6 +80,7 @@ export function DialogPaymentMethod({
         name: editData.name,
         owner: editData.owner,
         account_number: editData.account_number,
+        active: !editData.is_deleted,
       });
     } else if (!open) {
       form.reset({
@@ -80,6 +88,7 @@ export function DialogPaymentMethod({
         name: '',
         owner: '',
         account_number: '',
+        active: true,
       });
     }
   }, [editData, open, form]);
@@ -90,11 +99,23 @@ export function DialogPaymentMethod({
       let result;
 
       if (isEditMode && editData) {
-        result = await paymentMethodData.updatePaymentMethod(editData.id, {
+        const updateData: {
+          name: string;
+          owner: string;
+          account_number: string;
+          is_deleted?: boolean;
+        } = {
           name: data.name,
           owner: data.owner,
           account_number: data.account_number,
-        });
+        };
+
+        // Only include active field if user is admin and value is defined
+        if (isAdmin(user) && data.active !== undefined) {
+          updateData.is_deleted = !data.active;
+        }
+
+        result = await paymentMethodData.updatePaymentMethod(editData.id, updateData);
 
         if (result) {
           toast.success('Metode pembayaran berhasil diperbarui');
@@ -209,6 +230,33 @@ export function DialogPaymentMethod({
                 </FormItem>
               )}
             />
+
+            {isAdmin(user) && isEditMode && (
+              <FormField
+                control={form.control}
+                name="active"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Status Metode Pembayaran</FormLabel>
+                    <FormDescription className="text-sm text-muted-foreground">
+                      Aktifkan metode pembayaran agar dapat digunakan dalam transaksi
+                    </FormDescription>
+                    <div className="flex flex-row items-center gap-2 mt-2">
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          className="data-[state=checked]:bg-primary cursor-pointer"
+                        />
+                      </FormControl>
+                      <div className="font-normal text-sm">
+                        {field.value ? 'Aktif' : 'Tidak Aktif'}
+                      </div>
+                    </div>
+                  </FormItem>
+                )}
+              />
+            )}
 
             <DialogFooter>
               <Button

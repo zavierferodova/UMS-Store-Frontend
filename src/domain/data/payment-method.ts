@@ -19,6 +19,7 @@ export interface UpdatePaymentMethodParams {
   name: string;
   owner: string;
   account_number: string;
+  is_deleted?: boolean;
 }
 
 export interface IPaymentMethodData {
