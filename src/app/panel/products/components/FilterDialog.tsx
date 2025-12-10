@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { SlidersHorizontalIcon } from '@phosphor-icons/react';
-import { ProductCategorySelect } from '../../../../components/panel/Form/ProductCategorySelect';
+import { ProductCategorySelect } from '../../../../components/panel/form/ProductCategorySelect';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useSession } from 'next-auth/react';

@@ -16,8 +16,9 @@ export const useController = (user: User | null) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
-      username: '',
+      email: user?.email || '',
+      username: user?.username || '',
+      role: user?.role || '',
     },
   });
 

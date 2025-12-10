@@ -94,10 +94,16 @@ const menu: MenuGroup[] = [
     label: 'Transaksi',
     items: [
       {
+        title: 'Kasir',
+        href: panelRoutes.cashier,
+        icon: <ShoppingCartIcon />,
+        roles: [role.cashier],
+      },
+      {
         title: 'Transaksi',
-        href: '#',
+        href: panelRoutes.transactions,
         icon: <MoneyIcon />,
-        roles: [role.admin],
+        roles: [role.admin, role.cashier],
       },
       {
         title: 'Purchase Order',
@@ -106,7 +112,7 @@ const menu: MenuGroup[] = [
         roles: [role.admin, role.procurement],
       },
     ],
-    roles: [role.admin, role.procurement],
+    roles: [role.admin, role.procurement, role.cashier],
   },
   {
     label: 'Manajemen',

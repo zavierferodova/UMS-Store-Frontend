@@ -24,7 +24,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
-import { SelectSupplierSearch } from '@/components/panel/Form/SelectSupplierSearch';
+import { SelectSupplierSearch } from '@/components/panel/form/SelectSupplierSearch';
 import { Supplier } from '@/domain/model/supplier';
 import { PaymentMethod } from '@/domain/model/payment-method';
 import paymentMethodData from '@/data/payment-method';

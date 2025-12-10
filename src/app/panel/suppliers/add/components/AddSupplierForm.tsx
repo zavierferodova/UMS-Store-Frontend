@@ -12,7 +12,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { SalesContactInput } from '@/components/panel/Form/SalesContactInput';
+import { SalesContactInput } from '@/components/panel/form/SalesContactInput';
 
 export const AddSupplierForm = () => {
   const { form, onSubmit } = useController();

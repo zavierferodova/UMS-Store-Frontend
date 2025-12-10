@@ -1,5 +1,5 @@
 import { formSchema as addFormSchema } from '@/app/panel/products/add/components/validation';
-import { ImageFile } from '@/components/panel/Form/ProductImagesInput';
+import { ImageFile } from '@/components/panel/form/ProductImagesInput';
 import productData from '@/data/product';
 import { z } from 'zod';
 

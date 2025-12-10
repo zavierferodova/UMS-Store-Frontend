@@ -6,20 +6,20 @@ import {
   TableBody,
   TableCell,
 } from '@/components/ui/table';
-import { Product } from '@/domain/model/product';
+import { ProductSingleSKU } from '@/domain/model/product';
 import { IPaginationResponse } from '@/domain/model/response';
-import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { isAdmin } from '@/lib/role';
 import { localeDateFormat } from '@/lib/utils';
 import { panelRoutes } from '@/routes/route';
-import Image from 'next/image';
 import { DialogImagePreview } from '@/components/panel/DialogImagePreview';
 import { useState } from 'react';
 import { ImageIcon } from '@phosphor-icons/react';
+import Link from 'next/link';
+import Image from 'next/image';
 
 interface ProductsTableProps {
-  products: IPaginationResponse<Product>;
+  products: IPaginationResponse<ProductSingleSKU>;
 }
 
 export function ProductsTable({ products }: ProductsTableProps) {
@@ -48,7 +48,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
         </TableHeader>
         <TableBody>
           {products.data.map((product, index) => (
-            <TableRow key={product.id}>
+            <TableRow key={product.sku.sku}>
               <TableCell>
                 <div className="flex justify-center">
                   {(products.meta.page - 1) * products.meta.limit + index + 1}
@@ -77,13 +77,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
                   </div>
                 </div>
               </TableCell>
-              <TableCell className="font-medium">
-                {product.skus.length > 0
-                  ? product.skus
-                      .map((sku) => sku.sku)
-                      .map((sku, index) => <div key={index}>{sku}</div>)
-                  : '-'}
-              </TableCell>
+              <TableCell className="font-medium">{product.sku ? product.sku.sku : '-'}</TableCell>
               <TableCell>
                 <Link
                   href={panelRoutes.productEdit(product.id)}

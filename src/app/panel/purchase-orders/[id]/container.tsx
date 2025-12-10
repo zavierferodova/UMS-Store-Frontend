@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { ConfirmationDialog } from './components/ConfirmationDialog';
 import { RejectionMessageDialog } from './components/RejectionMessageDialog';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { PoProductsTableInput } from '@/components/panel/Form/PoProductsTableInput';
+import { PoProductsTableInput } from '@/components/panel/form/PoProductsTableInput';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { panelRoutes } from '@/routes/route';
 import { useEffect } from 'react';
@@ -16,7 +16,7 @@ import { usePanelHeader } from '@/components/panel/Header';
 import { PurchaseOrder, PurchaseOrderStatus } from '@/domain/model/purchase-order';
 import { Plus, Search } from 'lucide-react';
 import { useState } from 'react';
-import { SearchProductCommand } from '@/components/panel/Form/SearchProductCommand';
+import { SearchProductCommand } from '@/components/panel/form/SearchProductCommand';
 import { CardInputPurchaseOrder } from '../add/components/CardInputPurchaseOrder';
 import { CardDetailPurchaseOrder } from './components/CardDetailPurchaseOrder';
 

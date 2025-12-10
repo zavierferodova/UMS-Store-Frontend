@@ -15,10 +15,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { SelectProductCategory } from '@/components/panel/Form/SelectProductCategory';
-import { ProductImagesInput, ImageFile } from '@/components/panel/Form/ProductImagesInput';
-import { MultiSkuInput } from '@/components/panel/Form/MultiSkuInput';
-import { ProductAdditionalInputs } from '@/components/panel/Form/ProductAdditionalInputs';
+import { SelectProductCategory } from '@/components/panel/form/SelectProductCategory';
+import { ProductImagesInput, ImageFile } from '@/components/panel/form/ProductImagesInput';
+import { MultiSkuInput } from '@/components/panel/form/MultiSkuInput';
+import { ProductAdditionalInputs } from '@/components/panel/form/ProductAdditionalInputs';
 import { useController } from './controller';
 import {
   FormControl,

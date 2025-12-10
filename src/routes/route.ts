@@ -13,6 +13,9 @@ export const panelRoutes = {
   purchaseOrders: '/panel/purchase-orders',
   addPurchaseOrder: '/panel/purchase-orders/add',
   purchaseOrderEdit: (id: string) => `/panel/purchase-orders/${id}`,
+  transactions: '/panel/transactions',
+  transactionDetail: (id: string) => `/panel/transactions/${id}`,
+  cashier: '/panel/cashier',
   noRole: '/no-role',
 };
 

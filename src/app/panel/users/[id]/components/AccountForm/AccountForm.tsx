@@ -89,7 +89,6 @@ export const AccountForm = ({ user }: AccountFormProps) => {
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
-                    defaultValue={field.value}
                     disabled={!isAdmin(session?.user)}
                   >
                     <FormControl>

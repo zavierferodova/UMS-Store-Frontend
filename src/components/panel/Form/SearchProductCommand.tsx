@@ -79,16 +79,17 @@ export function SearchProductCommand({
   };
 
   return (
-    <CommandDialog open={open} onOpenChange={onOpenChange}>
+    <CommandDialog open={open} onOpenChange={onOpenChange} shouldFilter={false}>
       <CommandInput
         placeholder="Cari produk berdasarkan nama atau SKU..."
         value={search}
         onValueChange={setSearch}
       />
       <CommandList className="max-h-[400px]">
-        <CommandEmpty>
-          {isLoading ? 'Memuat produk...' : 'Tidak ada produk ditemukan.'}
-        </CommandEmpty>
+        {!isLoading && products.length === 0 && (
+          <CommandEmpty>Tidak ada produk ditemukan.</CommandEmpty>
+        )}
+        {isLoading && <CommandEmpty>Memuat produk...</CommandEmpty>}
         <CommandGroup>
           {products.map((product) => {
             const isSelected = selectedProducts.some((p) => p.sku.sku === product.sku.sku);

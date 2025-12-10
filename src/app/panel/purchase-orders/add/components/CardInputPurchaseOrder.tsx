@@ -1,6 +1,6 @@
 import { UseFormReturn } from 'react-hook-form';
 import { FormValues } from '../validation';
-import { SelectSupplierSearch } from '@/components/panel/Form/SelectSupplierSearch';
+import { SelectSupplierSearch } from '@/components/panel/form/SelectSupplierSearch';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
@@ -82,10 +82,10 @@ export function CardInputPurchaseOrder({
                   </FormControl>
                   <SelectContent>
                     <SelectItem className="cursor-pointer" value="cash">
-                      Cash
+                      Tunai
                     </SelectItem>
                     <SelectItem className="cursor-pointer" value="partnership">
-                      Partnership
+                      Konsiyasi
                     </SelectItem>
                   </SelectContent>
                 </Select>
