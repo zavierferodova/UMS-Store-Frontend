@@ -12,13 +12,16 @@ import { MiniReceipt } from '@/components/panel/receipt/MiniReceipt';
 import { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 
+import { Store } from '@/domain/model/store';
+
 interface ReceiptDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   transaction: Transaction | null;
+  store: Store;
 }
 
-export function ReceiptDialog({ open, onOpenChange, transaction }: ReceiptDialogProps) {
+export function ReceiptDialog({ open, onOpenChange, transaction, store }: ReceiptDialogProps) {
   const receiptRef = useRef<HTMLDivElement>(null);
 
   const handlePrint = useReactToPrint({
@@ -41,7 +44,7 @@ export function ReceiptDialog({ open, onOpenChange, transaction }: ReceiptDialog
 
         <div className="flex justify-center p-4 bg-gray-100 rounded-lg overflow-hidden max-h-[60vh] overflow-y-auto">
           <div ref={receiptRef}>
-            <MiniReceipt transaction={transaction} />
+            <MiniReceipt transaction={transaction} store={store} />
           </div>
         </div>
 

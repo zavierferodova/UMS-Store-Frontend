@@ -26,12 +26,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Store } from '@/domain/model/store';
 
 export type TransactionDetailContainerProps = {
   transaction: Transaction;
+  store: Store;
 };
 
-export function TransactionDetailContainer({ transaction }: TransactionDetailContainerProps) {
+export function TransactionDetailContainer({
+  transaction,
+  store,
+}: TransactionDetailContainerProps) {
   const { setMenu } = usePanelHeader();
   const miniReceiptRef = useRef<HTMLDivElement>(null);
   const regularReceiptRef = useRef<HTMLDivElement>(null);
@@ -89,10 +94,10 @@ export function TransactionDetailContainer({ transaction }: TransactionDetailCon
 
       <div className="hidden">
         <div ref={miniReceiptRef}>
-          <MiniReceipt transaction={transaction} />
+          <MiniReceipt transaction={transaction} store={store} />
         </div>
         <div ref={regularReceiptRef}>
-          <RegularReceipt transaction={transaction} />
+          <RegularReceipt transaction={transaction} store={store} />
         </div>
       </div>
 

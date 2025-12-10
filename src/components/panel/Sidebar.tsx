@@ -22,6 +22,7 @@ import {
   MoneyIcon,
   ShoppingBagIcon,
   ShoppingCartIcon,
+  StorefrontIcon,
 } from '@phosphor-icons/react/dist/ssr';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import {
@@ -153,6 +154,12 @@ const menu: MenuGroup[] = [
         href: panelRoutes.users,
         icon: <UserIcon />,
         roles: [role.admin],
+      },
+      {
+        title: 'Toko',
+        href: panelRoutes.store,
+        icon: <StorefrontIcon />,
+        roles: [role.admin, role.cashier],
       },
     ],
   },

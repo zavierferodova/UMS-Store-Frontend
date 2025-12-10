@@ -25,13 +25,6 @@ export const useController = () => {
     null,
   );
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(search);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [search]);
-
   const fetchProducts = useCallback(
     async (currentPage: number, currentSearch: string, isReset: boolean) => {
       setLoading(true);
@@ -74,11 +67,6 @@ export const useController = () => {
       setSavedTransactionsLoading(false);
     }
   }, []);
-
-  useEffect(() => {
-    setPage(1);
-    fetchProducts(1, debouncedSearch, true);
-  }, [debouncedSearch, fetchProducts]);
 
   const handleLoadMore = () => {
     const nextPage = page + 1;
@@ -232,6 +220,18 @@ export const useController = () => {
   const clearLastSuccessfulTransaction = () => {
     setLastSuccessfulTransaction(null);
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
+    setPage(1);
+    fetchProducts(1, debouncedSearch, true);
+  }, [debouncedSearch, fetchProducts]);
 
   return {
     session,

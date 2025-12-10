@@ -1,12 +1,14 @@
 import { Transaction } from '@/domain/model/transaction';
 import { formatCurrency } from '@/lib/utils';
 import { format } from 'date-fns';
+import { Store } from '@/domain/model/store';
 
 interface MiniReceiptProps {
   transaction: Transaction;
+  store: Store;
 }
 
-export const MiniReceipt = ({ transaction }: MiniReceiptProps) => {
+export const MiniReceipt = ({ transaction, store }: MiniReceiptProps) => {
   const total = transaction.total;
   const change = (transaction.pay || 0) - total;
 
@@ -23,11 +25,9 @@ export const MiniReceipt = ({ transaction }: MiniReceiptProps) => {
       }}
     >
       <div style={{ textAlign: 'center', marginBottom: '10px' }}>
-        <h1 style={{ fontSize: '16px', fontWeight: 'bold', margin: 0 }}>UMS Store</h1>
-        <p style={{ margin: 0 }}>
-          {' '}
-          Jl. Garuda Mas, Gatak, Pabelan, Kec. Kartasura, Kabupaten Sukoharjo
-        </p>
+        <h1 style={{ fontSize: '16px', fontWeight: 'bold', margin: 0 }}>{store.name}</h1>
+        <p style={{ margin: 0 }}>{store.address}</p>
+        <p style={{ margin: 0 }}>Telp: {store.phone}</p>
       </div>
 
       <div style={{ borderBottom: '1px dashed black', margin: '10px 0' }} />

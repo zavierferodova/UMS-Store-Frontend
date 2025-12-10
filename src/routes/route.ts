@@ -16,6 +16,7 @@ export const panelRoutes = {
   transactions: '/panel/transactions',
   transactionDetail: (id: string) => `/panel/transactions/${id}`,
   cashier: '/panel/cashier',
+  store: '/panel/store',
   noRole: '/no-role',
 };
 
