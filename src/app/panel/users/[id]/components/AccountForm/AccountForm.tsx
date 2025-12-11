@@ -97,9 +97,18 @@ export const AccountForm = ({ user }: AccountFormProps) => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="admin">Admin</SelectItem>
-                      <SelectItem value="procurement">Pengadaan</SelectItem>
-                      <SelectItem value="cashier">Kasir</SelectItem>
+                      <SelectItem className="cursor-pointer" value="admin">
+                        Admin
+                      </SelectItem>
+                      <SelectItem className="cursor-pointer" value="procurement">
+                        Pengadaan
+                      </SelectItem>
+                      <SelectItem className="cursor-pointer" value="cashier">
+                        Kasir
+                      </SelectItem>
+                      <SelectItem className="cursor-pointer" value="checker">
+                        Checker
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

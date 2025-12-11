@@ -63,7 +63,7 @@ export function ProductList({
       <div className="flex items-center space-x-2 bg-background px-4 py-1 rounded-2xl border shrink-0 w-full">
         <SearchIcon className="w-4 h-4 text-muted-foreground" />
         <Input
-          placeholder="Search menu..."
+          placeholder="Cari produk ..."
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
           className="border-none shadow-none focus-visible:ring-0 text-sm"
@@ -74,7 +74,7 @@ export function ProductList({
         {loading && page === 1 ? (
           <SpinAnimation />
         ) : products.length === 0 ? (
-          <EmptyDisplay title="No products found" description="Try searching for something else" />
+          <EmptyDisplay title="Tidak ada produk" description="Coba cari yang lain" />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6 pb-8">
             {products.map((product) => {

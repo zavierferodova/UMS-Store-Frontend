@@ -126,21 +126,39 @@ export function Cart({
 
                     <div className="flex items-center justify-between mt-2">
                       <p className="text-xs text-muted-foreground">{formatCurrency(item.price)}</p>
-                      <div className="flex items-center gap-3 bg-muted/50 p-1 rounded-full">
+                      <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-full">
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-6 w-6 rounded-full hover:bg-white hover:shadow-sm cursor-pointer"
+                          className="h-6 w-6 rounded-full cursor-pointer"
                           onClick={() => onUpdateQuantity(item.sku.id, -1)}
                         >
                           <MinusIcon className="w-3 h-3" />
                         </Button>
-                        <span className="text-sm font-medium w-4 text-center">{item.amount}</span>
+                        <input
+                          type="number"
+                          min="1"
+                          max="999"
+                          value={item.amount}
+                          onChange={(e) => {
+                            const newAmount = Math.max(
+                              1,
+                              Math.min(999, parseInt(e.target.value) || 1),
+                            );
+                            const delta = newAmount - item.amount;
+                            onUpdateQuantity(item.sku.id, delta);
+                          }}
+                          className="text-sm font-medium w-12 text-center bg-transparent border-none outline-none"
+                        />
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-6 w-6 rounded-full hover:bg-white hover:shadow-sm cursor-pointer"
-                          onClick={() => onUpdateQuantity(item.sku.id, 1)}
+                          className="h-6 w-6 rounded-full cursor-pointer"
+                          onClick={() => {
+                            if (item.amount < 999) {
+                              onUpdateQuantity(item.sku.id, 1);
+                            }
+                          }}
                         >
                           <PlusIcon className="w-3 h-3" />
                         </Button>

@@ -1,7 +1,14 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import {
   Form,
@@ -46,6 +53,7 @@ export default function StoreForm({ store }: StoreFormProps) {
         <Card>
           <CardHeader>
             <CardTitle>Pengaturan Toko</CardTitle>
+            <CardDescription>Atur informasi toko Anda di sini</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <FormField
@@ -115,7 +123,7 @@ export default function StoreForm({ store }: StoreFormProps) {
             />
           </CardContent>
           <CardFooter className="flex justify-end">
-            <Button type="submit" disabled={loading}>
+            <Button type="submit" className="cursor-pointer" disabled={loading}>
               {loading && <Loader2 className="animate-spin" />}
               Simpan
             </Button>

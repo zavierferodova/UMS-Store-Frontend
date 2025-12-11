@@ -78,7 +78,7 @@ export function PoProductsTableInput({
             <TableHead className="w-16">Image</TableHead>
             <TableHead className="min-w-[200px]">Product</TableHead>
             <TableHead className="min-w-[150px]">SKU</TableHead>
-            <TableHead className="min-w-[150px]">Harga Dasar (Rp)</TableHead>
+            <TableHead className="min-w-[150px]">Harga Supplier (Rp)</TableHead>
             <TableHead className="min-w-[120px]">Jumlah Pesan</TableHead>
             <TableHead className="min-w-[180px]">Diskon Supplier (%)</TableHead>
             {!readonly && <TableHead className="w-16 text-center">Action</TableHead>}
@@ -163,7 +163,7 @@ export function PoProductsTableInput({
                         maxLength={9}
                         className="w-full"
                         placeholder="Rp 0,-"
-                        value={item.price > 0 ? String(item.price) : ''}
+                        value={item.price > 0 ? Number(item.price).toLocaleString('id-ID') : ''}
                         onChange={(e) => {
                           const val = e.target.value.replace(/[^0-9]/g, '');
                           updateItem('price', val ? Number(val) : 0);

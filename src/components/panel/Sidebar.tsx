@@ -27,7 +27,6 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import {
   BadgeCheckIcon,
-  BellIcon,
   ChevronRightIcon,
   ChevronsUpDownIcon,
   HomeIcon,
@@ -46,6 +45,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { Switch } from '@/components/ui/switch';
 import { signOut, useSession } from 'next-auth/react';
@@ -53,13 +53,13 @@ import { role, roleLabel } from '@/lib/role';
 import Image from 'next/image';
 import Link from 'next/link';
 import { panelRoutes } from '@/routes/route';
-import { Role } from '@/domain/model/role';
+import { UserRole } from '@/domain/model/user';
 
 export interface MenuItem {
   title: string;
   href: string;
   disabled?: boolean;
-  roles?: Role[];
+  roles?: UserRole[];
 }
 
 export interface Menu {
@@ -67,7 +67,7 @@ export interface Menu {
   href?: string;
   icon: React.ReactNode;
   disabled?: boolean;
-  roles?: Role[];
+  roles?: UserRole[];
   items?: MenuItem[];
   collapsible?: boolean;
   defaultOpen?: boolean;
@@ -76,7 +76,7 @@ export interface Menu {
 export interface MenuGroup {
   label: string;
   items: Menu[];
-  roles?: Role[];
+  roles?: UserRole[];
 }
 
 const menu: MenuGroup[] = [
@@ -89,7 +89,7 @@ const menu: MenuGroup[] = [
         icon: <HomeIcon />,
       },
     ],
-    roles: [role.admin, role.procurement],
+    roles: [role.admin, role.procurement, role.cashier, role.checker],
   },
   {
     label: 'Transaksi',
@@ -110,10 +110,10 @@ const menu: MenuGroup[] = [
         title: 'Purchase Order',
         href: panelRoutes.purchaseOrders,
         icon: <ShoppingCartIcon />,
-        roles: [role.admin, role.procurement],
+        roles: [role.admin, role.procurement, role.checker],
       },
     ],
-    roles: [role.admin, role.procurement, role.cashier],
+    roles: [role.admin, role.procurement, role.cashier, role.checker],
   },
   {
     label: 'Manajemen',
@@ -176,19 +176,28 @@ const menu: MenuGroup[] = [
   },
 ];
 
-function hasRoleAccess(itemRoles: Role[] | undefined, userRole: Role | undefined) {
+function hasRoleAccess(itemRoles: UserRole[] | undefined, userRole: UserRole | undefined) {
   if (!itemRoles || itemRoles.length === 0) return true;
   if (!userRole) return false;
   return itemRoles.includes(userRole);
 }
 
-function renderMenuItem(item: Menu, userRole: Role | undefined) {
+function renderMenuItem(item: Menu, userRole: UserRole | undefined, pathname: string) {
   const visibleSubItems = item.items?.filter((subItem) => hasRoleAccess(subItem.roles, userRole));
   const hasVisibleChildren = visibleSubItems && visibleSubItems.length > 0;
+  const isItemActive = !!item.href && pathname === item.href;
+  const activeSubItem = visibleSubItems?.find(
+    (subItem) => !!subItem.href && pathname === subItem.href,
+  );
+  const isActive = isItemActive || !!activeSubItem;
 
   if (item.collapsible && hasVisibleChildren) {
     return (
-      <Collapsible key={item.title} defaultOpen={item.defaultOpen ?? false}>
+      <Collapsible
+        key={`${item.title}-${isActive ? 'open' : 'closed'}`}
+        defaultOpen={item.defaultOpen ?? isActive}
+        open={isActive || undefined}
+      >
         <SidebarMenuItem>
           <SidebarMenuButton asChild disabled={item.disabled}>
             <CollapsibleTrigger className="w-full group/item-collapsible cursor-pointer">
@@ -199,27 +208,31 @@ function renderMenuItem(item: Menu, userRole: Role | undefined) {
           </SidebarMenuButton>
           <CollapsibleContent>
             <SidebarMenuSub>
-              {visibleSubItems.map((subItem) => (
-                <SidebarMenuSubItem key={subItem.title}>
-                  {subItem.disabled ? (
-                    <SidebarMenuSubButton asChild>
-                      <button
-                        type="button"
-                        disabled
-                        className="w-full text-left opacity-50 cursor-not-allowed"
-                      >
-                        <div>{subItem.title}</div>
-                      </button>
-                    </SidebarMenuSubButton>
-                  ) : (
-                    <SidebarMenuSubButton asChild>
-                      <a href={subItem.href}>
-                        <div>{subItem.title}</div>
-                      </a>
-                    </SidebarMenuSubButton>
-                  )}
-                </SidebarMenuSubItem>
-              ))}
+              {visibleSubItems.map((subItem) => {
+                const isSubActive = !!subItem.href && pathname === subItem.href;
+
+                return (
+                  <SidebarMenuSubItem key={subItem.title}>
+                    {subItem.disabled ? (
+                      <SidebarMenuSubButton asChild isActive={isSubActive}>
+                        <button
+                          type="button"
+                          disabled
+                          className="w-full text-left opacity-50 cursor-not-allowed"
+                        >
+                          <div>{subItem.title}</div>
+                        </button>
+                      </SidebarMenuSubButton>
+                    ) : (
+                      <SidebarMenuSubButton asChild isActive={isSubActive}>
+                        <Link href={subItem.href}>
+                          <div>{subItem.title}</div>
+                        </Link>
+                      </SidebarMenuSubButton>
+                    )}
+                  </SidebarMenuSubItem>
+                );
+              })}
             </SidebarMenuSub>
           </CollapsibleContent>
         </SidebarMenuItem>
@@ -229,11 +242,11 @@ function renderMenuItem(item: Menu, userRole: Role | undefined) {
 
   return (
     <SidebarMenuItem key={item.title}>
-      <SidebarMenuButton asChild disabled={item.disabled}>
-        <a href={item.href}>
+      <SidebarMenuButton asChild disabled={item.disabled} isActive={isActive}>
+        <Link href={item.href ?? '#'}>
           {item.icon}
           <div className="ml-1">{item.title}</div>
-        </a>
+        </Link>
       </SidebarMenuButton>
     </SidebarMenuItem>
   );
@@ -243,7 +256,8 @@ export function PanelSidebar() {
   const { setTheme, theme } = useTheme();
   const session = useSession();
   const { user } = session.data || {};
-  const userRole = user?.role as Role | undefined;
+  const userRole = user?.role as UserRole | undefined;
+  const pathname = usePathname();
 
   return (
     <Sidebar>
@@ -267,7 +281,7 @@ export function PanelSidebar() {
                   <SidebarMenu>
                     {visibleItems
                       .filter((item) => hasRoleAccess(item.roles, userRole))
-                      .map((item) => renderMenuItem(item, userRole))}
+                      .map((item) => renderMenuItem(item, userRole, pathname))}
                   </SidebarMenu>
                 </SidebarGroupContent>
               </SidebarGroup>
@@ -326,10 +340,6 @@ export function PanelSidebar() {
                   <BadgeCheckIcon className="size-4" />
                   <span>Profile</span>
                 </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <BellIcon className="size-4" />
-                <span>Notifications</span>
               </DropdownMenuItem>
               <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                 <div className="flex items-center">

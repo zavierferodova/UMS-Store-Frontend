@@ -14,7 +14,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Separator } from '@/components/ui/separator';
-import { User, Calendar, CreditCard, FileText, Printer } from 'lucide-react';
+import { User, Calendar, CreditCard, FileText, Printer, ShieldCheck } from 'lucide-react';
 import { useReactToPrint } from 'react-to-print';
 import { useRef } from 'react';
 import { MiniReceipt } from '@/components/panel/receipt/MiniReceipt';
@@ -115,7 +115,7 @@ export function TransactionDetailContainer({
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Calendar className="h-5 w-5 text-muted-foreground" />
+              <ShieldCheck className="h-5 w-5 text-muted-foreground" />
               <div>
                 <p className="text-sm text-muted-foreground">Status</p>
                 <p className="font-medium capitalize">

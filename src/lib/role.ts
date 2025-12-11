@@ -1,11 +1,12 @@
-import { Role } from '@/domain/model/role';
+import { UserRole } from '@/domain/model/user';
 import { User } from '@/domain/model/user';
 import { User as NextUser } from 'next-auth';
 
 export const role = {
-  admin: 'admin' as Role,
-  procurement: 'procurement' as Role,
-  cashier: 'cashier' as Role,
+  admin: 'admin' as UserRole,
+  procurement: 'procurement' as UserRole,
+  cashier: 'cashier' as UserRole,
+  checker: 'checker' as UserRole,
 };
 
 export function roleLabel(role: string) {
@@ -16,6 +17,8 @@ export function roleLabel(role: string) {
       return 'Pengadaan';
     case 'cashier':
       return 'Kasir';
+    case 'checker':
+      return 'Checker';
     default:
       return 'Unknown';
   }
@@ -31,4 +34,8 @@ export function isCashier(user: User | NextUser | null | undefined) {
 
 export function isProcurement(user: User | NextUser | null | undefined) {
   return user?.role === 'procurement';
+}
+
+export function isChecker(user: User | NextUser | null | undefined) {
+  return user?.role === 'checker';
 }

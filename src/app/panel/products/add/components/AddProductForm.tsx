@@ -104,10 +104,11 @@ export function AddProductForm() {
                         type="number"
                         placeholder="Masukkan harga produk"
                         {...field}
-                        value={field.value || ''}
-                        onChange={(e) =>
-                          field.onChange(e.target.value ? Number(e.target.value) : 0)
-                        }
+                        value={field.value ? field.value.toLocaleString('id-ID') : ''}
+                        onChange={(e) => {
+                          const val = e.target.value.replace(/[^0-9]/g, '');
+                          field.onChange(val ? Number(val) : 0);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />

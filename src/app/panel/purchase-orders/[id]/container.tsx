@@ -2,7 +2,7 @@
 
 import { useController } from './controller';
 import { useSession } from 'next-auth/react';
-import { isAdmin, isProcurement } from '@/lib/role';
+import { isAdmin, isChecker, isProcurement } from '@/lib/role';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ConfirmationDialog } from './components/ConfirmationDialog';
@@ -67,6 +67,14 @@ export default function PurchaseOrderDetailContainer({
     PurchaseOrderStatus.CANCELED,
   ];
 
+  const readonlyCheckerStatuses = [
+    PurchaseOrderStatus.WAITING_APPROVAL,
+    PurchaseOrderStatus.APPROVED,
+    PurchaseOrderStatus.REJECTED,
+    PurchaseOrderStatus.COMPLETED,
+    PurchaseOrderStatus.CANCELED,
+  ];
+
   let readonly = false;
 
   if (isProcurement(user)) {
@@ -75,6 +83,10 @@ export default function PurchaseOrderDetailContainer({
     }
   } else if (isAdmin(user)) {
     if (readonlyAdminStatuses.includes(status)) {
+      readonly = true;
+    }
+  } else if (isChecker(user)) {
+    if (readonlyCheckerStatuses.includes(status)) {
       readonly = true;
     }
   }
@@ -182,7 +194,10 @@ export default function PurchaseOrderDetailContainer({
 
             <div className="flex flex-col sm:flex-row gap-2 justify-end mt-6">
               {(() => {
-                if (isAdmin(user) && status === PurchaseOrderStatus.WAITING_APPROVAL) {
+                if (
+                  (isAdmin(user) || isChecker(user)) &&
+                  status === PurchaseOrderStatus.WAITING_APPROVAL
+                ) {
                   return (
                     <>
                       <Button

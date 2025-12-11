@@ -11,7 +11,6 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
 
 interface RejectionMessageDialogProps {
   open: boolean;
@@ -35,10 +34,8 @@ export function RejectionMessageDialog({
         </DialogHeader>
 
         <Alert>
-          <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            <strong>Alasan Penolakan</strong>
-            <p className="mt-2 whitespace-pre-wrap">{rejectionMessage}</p>
+            <p className="whitespace-pre-wrap">{rejectionMessage}</p>
           </AlertDescription>
         </Alert>
 

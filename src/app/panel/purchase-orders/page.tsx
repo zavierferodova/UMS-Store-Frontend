@@ -14,6 +14,8 @@ import { PlusIcon, MagnifyingGlassIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
 import { SpinAnimation } from '@/components/animation/SpinAnimation';
 import { FilterDialog } from './components/FilterDialog';
+import { useSession } from 'next-auth/react';
+import { isAdmin, isProcurement } from '@/lib/role';
 
 function PurchaseOrdersPageContent() {
   const {
@@ -29,6 +31,8 @@ function PurchaseOrdersPageContent() {
   const { setMenu } = usePanelHeader();
   const isEmpty = status == PageStatus.SUCCESS && purchaseOrders.data.length == 0;
   const isLoading = status == PageStatus.LOADING;
+  const { data: session } = useSession();
+  const { user } = session || {};
 
   useEffect(() => {
     setMenu([
@@ -62,11 +66,13 @@ function PurchaseOrdersPageContent() {
               />
             </div>
             <FilterDialog state={filterDialogState} />
-            <Link href={panelRoutes.addPurchaseOrder} className="w-full md:w-auto">
-              <Button className="cursor-pointer w-full">
-                <PlusIcon className="h-4 w-4" /> <span className="ml-1">Tambah</span>
-              </Button>
-            </Link>
+            {(isAdmin(user) || isProcurement(user)) && (
+              <Link href={panelRoutes.addPurchaseOrder} className="w-full md:w-auto">
+                <Button className="cursor-pointer w-full">
+                  <PlusIcon className="h-4 w-4" /> <span className="ml-1">Tambah</span>
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       </CardHeader>
