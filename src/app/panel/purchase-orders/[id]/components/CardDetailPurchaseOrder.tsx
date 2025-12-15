@@ -69,7 +69,7 @@ export function CardDetailPurchaseOrder({
           <Separator className="my-2 mb-4" />
 
           <div className="space-y-2">
-            <h4 className="font-medium">Informasi Pemohon</h4>
+            <h4 className="font-medium">Informasi Pengentri</h4>
             <div className="grid grid-cols-[120px_10px_1fr] gap-1">
               <div>Nama</div>
               <div>:</div>

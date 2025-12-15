@@ -41,6 +41,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
             <TableHead>Nama</TableHead>
             <TableHead>Kategori</TableHead>
             <TableHead>Harga</TableHead>
+            <TableHead>Stok</TableHead>
             <TableHead>Dibuat</TableHead>
             <TableHead>Diubah</TableHead>
             {isAdmin(user) && <TableHead className="text-center">Status</TableHead>}
@@ -94,6 +95,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
                   maximumFractionDigits: 0,
                 })}
               </TableCell>
+              <TableCell>{product.sku.stock}</TableCell>
               <TableCell>{localeDateFormat(product.created_at)}</TableCell>
               <TableCell>{localeDateFormat(product.updated_at)}</TableCell>
               {isAdmin(user) && (

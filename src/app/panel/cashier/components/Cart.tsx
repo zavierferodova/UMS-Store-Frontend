@@ -17,7 +17,7 @@ interface CartProps {
   total: number;
   savedTransactions: Transaction[];
   savedTransactionsLoading: boolean;
-  currentTransactionId: string | null;
+  currentTransactionCode: string | null;
   onUpdateQuantity: (skuId: string, delta: number) => void;
   onSaveTransaction: () => void;
   onConfirmPayment: (method: TransactionPayment, payAmount: number) => void;
@@ -33,7 +33,7 @@ export function Cart({
   total,
   savedTransactions,
   savedTransactionsLoading,
-  currentTransactionId,
+  currentTransactionCode,
   onUpdateQuantity,
   onSaveTransaction,
   onConfirmPayment,
@@ -55,7 +55,7 @@ export function Cart({
             <p className="text-muted-foreground text-sm mt-1">{cart.length} item dipilih</p>
           </div>
           <div className="flex gap-2">
-            {currentTransactionId && (
+            {currentTransactionCode && (
               <Button
                 variant="outline"
                 size="icon"
@@ -78,11 +78,11 @@ export function Cart({
           </div>
         </div>
 
-        {currentTransactionId && (
+        {currentTransactionCode && (
           <div className="px-6 py-2 bg-blue-50 border-b border-blue-100 text-blue-700 text-sm flex items-center justify-between">
             <span>
-              Restored Transaction:{' '}
-              <span className="font-mono font-bold">{currentTransactionId}</span>
+              Transaksi Tersimpan:{' '}
+              <span className="font-mono font-bold">{currentTransactionCode}</span>
             </span>
           </div>
         )}

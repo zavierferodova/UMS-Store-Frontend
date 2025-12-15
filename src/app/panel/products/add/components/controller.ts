@@ -11,10 +11,9 @@ export const useController = () => {
     defaultValues: {
       name: '',
       description: '',
-      price: 0,
       category: '',
       images: [] as ImageFile[],
-      skus: [{ sku: '' }],
+      skus: [{ sku: '', supplier: null }],
       additionalInfo: [{ label: '', value: '' }],
     },
   });
@@ -24,10 +23,9 @@ export const useController = () => {
       const product = await productData.addProduct({
         name: data.name,
         description: data.description,
-        price: data.price,
         category: data.category,
         images: data.images.map((image) => image.file),
-        skus: data.skus.map((sku) => sku.sku),
+        skus: data.skus.map((sku) => ({ sku: sku.sku, supplier: sku.supplier })),
         additional_info:
           data.additionalInfo?.map((info) => ({ label: info.label, value: info.value })) || [],
       });

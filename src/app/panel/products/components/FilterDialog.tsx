@@ -59,6 +59,16 @@ export function FilterDialog({
         </DialogHeader>
 
         <div className="space-y-6 py-2">
+          <div className="space-y-2">
+            <div className="text-sm font-medium">Kategori</div>
+            <ProductCategorySelect
+              value={categoryFilter}
+              onChange={onCategoryFilterChange}
+              placeholder="Pilih kategori..."
+              className="w-full max-w-[375px]"
+            />
+          </div>
+
           {isAdmin(user) && (
             <div className="space-y-2">
               <div className="text-sm font-medium">Status</div>
@@ -81,16 +91,6 @@ export function FilterDialog({
               </div>
             </div>
           )}
-
-          <div className="space-y-2">
-            <div className="text-sm font-medium">Kategori</div>
-            <ProductCategorySelect
-              value={categoryFilter}
-              onChange={onCategoryFilterChange}
-              placeholder="Pilih kategori..."
-              className="w-full max-w-[375px]"
-            />
-          </div>
         </div>
       </DialogContent>
     </Dialog>

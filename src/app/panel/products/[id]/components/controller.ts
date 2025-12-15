@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 
 export const useController = (product: Product) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState<Product>(product);
   const { data: session } = useSession();
   const router = useRouter();
   const user = session?.user;
@@ -20,10 +21,15 @@ export const useController = (product: Product) => {
     defaultValues: {
       name: product.name,
       description: product.description,
-      price: product.price,
       category: product.category?.id,
       images: product.images.map((image) => ({ id: image.id, src: image.image })),
-      skus: product.skus.map((sku) => ({ id: sku.id, sku: sku.sku })),
+      skus: product.skus.map((sku) => ({
+        id: sku.id,
+        sku: sku.sku,
+        supplier: sku.supplier?.id || null,
+        supplierName: sku.supplier?.name || null,
+        stock: sku.stock,
+      })),
       additionalInfo:
         !product.additional_info || product.additional_info.length === 0
           ? [{ label: '', value: '' }]
@@ -45,19 +51,28 @@ export const useController = (product: Product) => {
 
     toast.promise(promise, {
       loading: 'Memuat data baru...',
-      success: (product) => {
+      success: (newProduct) => {
+        setCurrentProduct(newProduct);
         form.reset({
-          name: product.name,
-          description: product.description,
-          price: product.price,
-          category: product.category?.id,
-          images: product.images.map((image) => ({ id: image.id, src: image.image })),
-          skus: product.skus.map((sku) => ({ id: sku.id, sku: sku.sku })),
+          name: newProduct.name,
+          description: newProduct.description,
+          category: newProduct.category?.id,
+          images: newProduct.images.map((image) => ({ id: image.id, src: image.image })),
+          skus: newProduct.skus.map((sku) => ({
+            id: sku.id,
+            sku: sku.sku,
+            supplier: sku.supplier?.id || null,
+            supplierName: sku.supplier?.name || null,
+            stock: sku.stock,
+          })),
           additionalInfo:
-            !product.additional_info || product.additional_info.length === 0
+            !newProduct.additional_info || newProduct.additional_info.length === 0
               ? [{ label: '', value: '' }]
-              : product.additional_info.map((info) => ({ label: info.label, value: info.value })),
-          active: !product.is_deleted,
+              : newProduct.additional_info.map((info) => ({
+                  label: info.label,
+                  value: info.value,
+                })),
+          active: !newProduct.is_deleted,
         });
         return 'Produk berhasil dimuat';
       },
@@ -94,10 +109,13 @@ export const useController = (product: Product) => {
       const updatedProduct = await productData.updateProduct(product.id, {
         name: data.name,
         description: data.description,
-        price: data.price,
         category: data.category,
         images: data.images.map((img) => ({ id: img.id, file: img.file, src: img.src })),
-        skus: [...oldSkus, ...newSkus],
+        skus: [...oldSkus, ...newSkus].map((s) => ({
+          id: s.id,
+          sku: s.sku,
+          supplier: s.supplier,
+        })),
         additional_info:
           data.additionalInfo?.map((info) => ({ label: info.label, value: info.value })) || [],
         is_deleted: !data.active,
@@ -127,5 +145,6 @@ export const useController = (product: Product) => {
     onSubmit,
     onDelete,
     setDeleteDialogOpen,
+    currentProduct,
   };
 };

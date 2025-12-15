@@ -14,14 +14,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useState } from 'react';
 
-export type ConfirmationType = 'save' | 'cancel' | 'approve' | null;
+export type ConfirmationType = 'save' | 'cancel' | 'reject' | 'approve' | null;
 
 interface ConfirmationDialogProps {
   open: boolean;
-  onOpenChange: (open: boolean) => void;
   type: ConfirmationType;
-  onConfirm: (rejectionReason?: string) => void;
   isLoading?: boolean;
+  onOpenChange: (open: boolean) => void;
+  onConfirm: (rejectionReason?: string) => void;
 }
 
 const dialogConfig = {
@@ -63,17 +63,17 @@ const dialogConfig = {
 
 export function ConfirmationDialog({
   open,
-  onOpenChange,
   type,
-  onConfirm,
   isLoading = false,
+  onOpenChange,
+  onConfirm,
 }: ConfirmationDialogProps) {
   const [rejectionReason, setRejectionReason] = useState('');
 
   if (!type) return null;
 
   const config = dialogConfig[type];
-  const isRejection = type === 'cancel';
+  const isRejection = type === 'reject';
   const isConfirmDisabled = isLoading || (isRejection && rejectionReason.trim().length === 0);
 
   const handleConfirm = () => {
@@ -102,11 +102,11 @@ export function ConfirmationDialog({
         {isRejection && (
           <div className="space-y-2">
             <Label htmlFor="rejection-reason">
-              Alasan Penolakan <span className="text-destructive">*</span>
+              Alasan <span className="text-destructive">*</span>
             </Label>
             <Textarea
               id="rejection-reason"
-              placeholder="Masukkan alasan penolakan..."
+              placeholder="Masukkan alasan..."
               value={rejectionReason}
               onChange={(e) => setRejectionReason(e.target.value.slice(0, 255))}
               maxLength={255}

@@ -28,7 +28,7 @@ export interface PurchaseOrder {
 export enum PurchaseOrderStatus {
   DRAFT = 'draft',
   WAITING_APPROVAL = 'waiting_approval',
-  CANCELED = 'canceled',
+  CANCELLED = 'cancelled',
   APPROVED = 'approved',
   REJECTED = 'rejected',
   COMPLETED = 'completed',

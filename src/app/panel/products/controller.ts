@@ -51,6 +51,7 @@ export const useController = () => {
           page: currentPage,
           search,
           status: statusFilter,
+          categories: categoryFilter,
         });
         setProducts({
           data: response.data,
@@ -61,7 +62,7 @@ export const useController = () => {
         setStatus(PageStatus.SUCCESS);
       }
     }
-  }, [user, currentPage, pageSize, search, statusFilter, updateTotalItems]);
+  }, [user, currentPage, pageSize, search, statusFilter, categoryFilter, updateTotalItems]);
 
   const updateSearch = async (searchTerm: string) => {
     await setSearch(searchTerm);

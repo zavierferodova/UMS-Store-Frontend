@@ -20,6 +20,8 @@ export type GetSKUProductsParams = {
   limit?: number;
   page?: number;
   status?: string[];
+  categories?: string[];
+  supplier_id?: string;
 };
 
 export type GetCategoriesParams = {
@@ -31,20 +33,23 @@ export type GetCategoriesParams = {
 export type AddProductParams = {
   name: string;
   description: string;
-  price: number;
+  price?: number | null;
   category: string;
   images: File[];
-  skus: string[];
+  skus: {
+    sku: string;
+    supplier?: string | null;
+  }[];
   additional_info: { label: string; value: string }[];
 };
 
 export type UpdateProductParams = {
   name: string;
   description: string;
-  price: number;
+  price?: number | null;
   category: string;
   images: { id: string; file?: File; src: string }[];
-  skus: { id?: string; sku: string }[];
+  skus: { id?: string; sku: string; supplier?: string | null }[];
   is_deleted?: boolean;
   additional_info: { label: string; value: string }[];
 };
@@ -52,6 +57,7 @@ export type UpdateProductParams = {
 export type UpdateSKUParams = {
   sku?: string;
   stock?: number;
+  supplier?: string | null;
 };
 
 export type UpdateImageParams = {
@@ -73,7 +79,7 @@ export interface IProductData {
   getCategories(params?: GetCategoriesParams): Promise<IPaginationResponse<ProductCategory>>;
   updateCategory(category_id: string, name: string): Promise<ProductCategory | null>;
   deleteCategory(category_id: string): Promise<boolean>;
-  addSKU(product_id: string, sku: string): Promise<ProductSKU | null>;
+  addSKU(product_id: string, sku: string, supplier_id?: string | null): Promise<ProductSKU | null>;
   updateSKU(sku: string, params: UpdateSKUParams): Promise<ProductSKU | null>;
   checkSKU(sku: string): Promise<boolean>;
 }

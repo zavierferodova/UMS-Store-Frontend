@@ -31,7 +31,7 @@ export default function CashierContainer({ store }: CashierContainerProps) {
     savedTransactions,
     savedTransactionsLoading,
     lastSuccessfulTransaction,
-    currentTransactionId,
+    currentTransaction,
     setSearch,
     handleLoadMore,
     addToCart,
@@ -91,7 +91,7 @@ export default function CashierContainer({ store }: CashierContainerProps) {
           savedTransactionsLoading={savedTransactionsLoading}
           onRestoreTransaction={restoreTransaction}
           onFetchSavedTransactions={fetchSavedTransactions}
-          currentTransactionId={currentTransactionId}
+          currentTransactionCode={currentTransaction?.code || null}
           onClearTransaction={clearTransactionState}
         />
       </div>
@@ -125,7 +125,7 @@ export default function CashierContainer({ store }: CashierContainerProps) {
                 savedTransactionsLoading={savedTransactionsLoading}
                 onRestoreTransaction={restoreTransaction}
                 onFetchSavedTransactions={fetchSavedTransactions}
-                currentTransactionId={currentTransactionId}
+                currentTransactionCode={currentTransaction?.code || null}
                 onClearTransaction={clearTransactionState}
               />
             </div>

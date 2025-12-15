@@ -5,16 +5,11 @@ import productData from '@/data/product';
 export const formSchema = z.object({
   name: z.string().min(1, { message: 'Nama produk tidak boleh kosong' }),
   description: z.string().min(1, { message: 'Deskripsi produk tidak boleh kosong' }),
-  price: z
-    .number()
-    .min(0, { message: 'Harga tidak boleh negatif' })
-    .min(1, { message: 'Harga produk tidak boleh kosong' }),
   category: z.any().refine((value) => typeof value === 'string' && value.trim() !== '', {
     message: 'Kategori produk tidak boleh kosong',
   }),
   images: z
     .array(z.any())
-    .min(1, { message: 'Gambar tidak boleh kosong' })
     .refine((images) => images.every((image: ImageFile) => image.file?.size || 0 <= 8 * 1024), {
       message: 'Ukuran gambar maksimal 8KB',
     })
@@ -40,6 +35,7 @@ export const formSchema = z.object({
             },
             { message: 'SKU sudah ada' },
           ),
+        supplier: z.string().nullable().optional(),
       }),
     )
     .min(1, { message: 'SKU produk minimal 1' })

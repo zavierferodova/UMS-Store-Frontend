@@ -7,7 +7,7 @@ export const userProfileMiddleware: AuthMiddleware = (req: NextRequest, token: J
   const { pathname } = req.nextUrl;
 
   if (pathname.startsWith(panelRoutes.users)) {
-    const pathId = pathname.split(panelRoutes.users)[1].split('/')[0];
+    const pathId = pathname.split(panelRoutes.users)[1].split('/')[1];
     if (token?.user?.id === pathId) {
       return NextResponse.redirect(new URL(panelRoutes.profile, req.url));
     }

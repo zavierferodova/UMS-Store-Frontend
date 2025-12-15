@@ -9,6 +9,8 @@ export const formSchema = addFormSchema.extend({
       z.object({
         id: z.string().optional(),
         sku: z.string().min(1, { message: 'SKU tidak boleh kosong' }),
+        supplier: z.string().nullable().optional(),
+        supplierName: z.string().optional().nullable(),
       }),
     )
     .min(1, { message: 'SKU produk minimal 1' })
@@ -45,10 +47,9 @@ export const formSchema = addFormSchema.extend({
     ),
   images: z
     .array(z.any())
-    .min(1, { message: 'Gambar tidak boleh kosong' })
     .refine(
       (images: ImageFile[]) => {
-        return images.some((image) => (image.file?.size ? !(image.file.size <= 8 * 1024) : true));
+        return images.every((image) => (image.file?.size ? image.file.size <= 8 * 1024 : true));
       },
       { message: 'Ukuran gambar maksimal 8KB' },
     )

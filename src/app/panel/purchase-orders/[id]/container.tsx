@@ -56,7 +56,7 @@ export default function PurchaseOrderDetailContainer({
     PurchaseOrderStatus.WAITING_APPROVAL,
     PurchaseOrderStatus.APPROVED,
     PurchaseOrderStatus.COMPLETED,
-    PurchaseOrderStatus.CANCELED,
+    PurchaseOrderStatus.CANCELLED,
   ];
 
   const readonlyAdminStatuses = [
@@ -64,7 +64,7 @@ export default function PurchaseOrderDetailContainer({
     PurchaseOrderStatus.APPROVED,
     PurchaseOrderStatus.REJECTED,
     PurchaseOrderStatus.COMPLETED,
-    PurchaseOrderStatus.CANCELED,
+    PurchaseOrderStatus.CANCELLED,
   ];
 
   const readonlyCheckerStatuses = [
@@ -72,7 +72,7 @@ export default function PurchaseOrderDetailContainer({
     PurchaseOrderStatus.APPROVED,
     PurchaseOrderStatus.REJECTED,
     PurchaseOrderStatus.COMPLETED,
-    PurchaseOrderStatus.CANCELED,
+    PurchaseOrderStatus.CANCELLED,
   ];
 
   let readonly = false;
@@ -213,7 +213,7 @@ export default function PurchaseOrderDetailContainer({
                         type="button"
                         variant="destructive"
                         className="cursor-pointer"
-                        onClick={() => openConfirmDialog('cancel')}
+                        onClick={() => openConfirmDialog('reject')}
                         disabled={form.formState.isSubmitting}
                       >
                         Tolak

@@ -32,7 +32,7 @@ export function PurchaseOrdersTable({ purchaseOrders }: PurchaseOrdersTableProps
             </TableHead>
             <TableHead>Kode PO</TableHead>
             <TableHead>Supplier</TableHead>
-            <TableHead>Requester</TableHead>
+            <TableHead>Pengentri</TableHead>
             <TableHead>Approver</TableHead>
             <TableHead>Pembayaran</TableHead>
             <TableHead>Dibuat</TableHead>

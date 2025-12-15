@@ -230,12 +230,14 @@ class ProductData implements IProductData {
       if (skus?.length) {
         editSkuPromises = editedSkus.map((sku) => {
           const found = response.data.skus.find((s: ProductSKU) => s.id === sku.id);
-          return found ? this.updateSKU(found.sku, { sku: sku.sku }) : Promise.resolve(null);
+          return found
+            ? this.updateSKU(found.sku, { sku: sku.sku, supplier: sku.supplier })
+            : Promise.resolve(null);
         });
       }
 
       if (addedSkus?.length) {
-        addSkuPromises = addedSkus.map((sku) => this.addSKU(id, sku.sku));
+        addSkuPromises = addedSkus.map((sku) => this.addSKU(id, sku.sku, sku.supplier));
       }
 
       const skusResponses = await Promise.all([...editSkuPromises, ...addSkuPromises]);
@@ -323,7 +325,7 @@ class ProductData implements IProductData {
     params: GetSKUProductsParams,
   ): Promise<IPaginationResponse<ProductSingleSKU>> {
     try {
-      const { page = 1, limit = 10, search, status } = params ?? {};
+      const { page = 1, limit = 10, search, status, supplier_id, categories } = params ?? {};
 
       let query = `?page=${page}&limit=${limit}`;
 
@@ -333,6 +335,14 @@ class ProductData implements IProductData {
 
       if (status) {
         query += `&status=${status.join(',')}`;
+      }
+
+      if (supplier_id) {
+        query += `&supplier_id=${supplier_id}`;
+      }
+
+      if (categories) {
+        query += `&categories=${categories.join(',')}`;
       }
 
       const session = await this.getAuthSession();
@@ -502,7 +512,11 @@ class ProductData implements IProductData {
     }
   }
 
-  async addSKU(product_id: string, sku: string): Promise<ProductSKU | null> {
+  async addSKU(
+    product_id: string,
+    sku: string,
+    supplier?: string | null,
+  ): Promise<ProductSKU | null> {
     try {
       const session = await this.getAuthSession();
       const response = await fetchJSON(`${APP_URL}/apis/products/sku`, {
@@ -511,7 +525,7 @@ class ProductData implements IProductData {
           'Content-Type': 'application/json',
           ...(session?.access_token && { Authorization: `Bearer ${session.access_token}` }),
         },
-        body: JSON.stringify({ product_id, sku }),
+        body: JSON.stringify({ product_id, sku, supplier }),
       });
 
       if (response) {

@@ -62,7 +62,7 @@ export function SavedTransactionsDialog({
             </div>
           ) : transactions.length === 0 ? (
             <div className="text-center text-muted-foreground py-10">
-              No saved transactions found.
+              Tidak ada transaksi tersimpan.
             </div>
           ) : (
             <Accordion type="single" collapsible className="w-full space-y-2 px-1 pb-4">

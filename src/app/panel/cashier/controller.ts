@@ -9,21 +9,13 @@ import { ProductSingleSKU } from '@/domain/model/product';
 import { Transaction, TransactionPayment } from '@/domain/model/transaction';
 import { CartItem } from './types';
 
-export const useController = () => {
-  const { data: session, status } = useSession();
+export const useProductController = () => {
   const [products, setProducts] = useState<ProductSingleSKU[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
   const [debouncedSearch, setDebouncedSearch] = useState('');
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [savedTransactions, setSavedTransactions] = useState<Transaction[]>([]);
-  const [savedTransactionsLoading, setSavedTransactionsLoading] = useState(false);
-  const [currentTransactionId, setCurrentTransactionId] = useState<string | null>(null);
-  const [lastSuccessfulTransaction, setLastSuccessfulTransaction] = useState<Transaction | null>(
-    null,
-  );
 
   const fetchProducts = useCallback(
     async (currentPage: number, currentSearch: string, isReset: boolean) => {
@@ -52,6 +44,45 @@ export const useController = () => {
     [],
   );
 
+  const handleLoadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchProducts(nextPage, debouncedSearch, false);
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
+    setPage(1);
+    fetchProducts(1, debouncedSearch, true);
+  }, [debouncedSearch, fetchProducts]);
+
+  return {
+    products,
+    loading,
+    search,
+    page,
+    hasMore,
+    setSearch,
+    handleLoadMore,
+  };
+};
+
+export const useCartController = () => {
+  const { data: session } = useSession();
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [savedTransactions, setSavedTransactions] = useState<Transaction[]>([]);
+  const [savedTransactionsLoading, setSavedTransactionsLoading] = useState(false);
+  const [currentTransaction, setCurrentTransaction] = useState<Transaction | null>(null);
+  const [lastSuccessfulTransaction, setLastSuccessfulTransaction] = useState<Transaction | null>(
+    null,
+  );
+
   const fetchSavedTransactions = useCallback(async () => {
     setSavedTransactionsLoading(true);
     try {
@@ -68,14 +99,7 @@ export const useController = () => {
     }
   }, []);
 
-  const handleLoadMore = () => {
-    const nextPage = page + 1;
-    setPage(nextPage);
-    fetchProducts(nextPage, debouncedSearch, false);
-  };
-
   const addToCart = (product: ProductSingleSKU) => {
-    setCurrentTransactionId(null);
     setCart((prev) => {
       const existing = prev.find((item) => item.sku.id === product.sku.id);
       if (existing) {
@@ -88,7 +112,6 @@ export const useController = () => {
   };
 
   const updateQuantity = (skuId: string, delta: number) => {
-    setCurrentTransactionId(null);
     setCart((prev) => {
       return prev
         .map((item) => {
@@ -116,8 +139,8 @@ export const useController = () => {
     try {
       let res: Transaction | null = null;
 
-      if (currentTransactionId) {
-        res = await transactionData.updateTransaction(currentTransactionId, {
+      if (currentTransaction) {
+        res = await transactionData.updateTransaction(currentTransaction.id, {
           pay: payAmount,
           is_saved: false,
         });
@@ -138,7 +161,7 @@ export const useController = () => {
       if (res) {
         toast.success('Transaction successful!', { id: loadingToast });
         setCart([]);
-        setCurrentTransactionId(null);
+        setCurrentTransaction(null);
         setLastSuccessfulTransaction(res);
       } else {
         toast.error('Transaction failed', { id: loadingToast });
@@ -168,7 +191,7 @@ export const useController = () => {
 
       if (res) {
         toast.success('Transaction saved!', { id: loadingToast });
-        setCart([]);
+        clearTransactionState();
       } else {
         toast.error('Failed to save transaction', { id: loadingToast });
       }
@@ -202,7 +225,7 @@ export const useController = () => {
 
       if (newCart.length > 0) {
         setCart(newCart);
-        setCurrentTransactionId(transaction.id);
+        setCurrentTransaction(transaction);
         toast.success('Transaction restored!', { id: loadingToast });
       } else {
         toast.error('Could not restore items (products not found)', { id: loadingToast });
@@ -214,42 +237,20 @@ export const useController = () => {
 
   const clearTransactionState = () => {
     setCart([]);
-    setCurrentTransactionId(null);
+    setCurrentTransaction(null);
   };
-
   const clearLastSuccessfulTransaction = () => {
     setLastSuccessfulTransaction(null);
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(search);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [search]);
-
-  useEffect(() => {
-    setPage(1);
-    fetchProducts(1, debouncedSearch, true);
-  }, [debouncedSearch, fetchProducts]);
-
   return {
-    session,
-    status,
-    products,
-    loading,
-    search,
-    page,
-    hasMore,
     cart,
     subTotal,
     total,
     savedTransactions,
     savedTransactionsLoading,
-    currentTransactionId,
+    currentTransaction,
     lastSuccessfulTransaction,
-    setSearch,
-    handleLoadMore,
     addToCart,
     updateQuantity,
     handleConfirmPayment,
@@ -258,5 +259,18 @@ export const useController = () => {
     restoreTransaction,
     clearTransactionState,
     clearLastSuccessfulTransaction,
+  };
+};
+
+export const useController = () => {
+  const { data: session, status } = useSession();
+  const productController = useProductController();
+  const cartController = useCartController();
+
+  return {
+    session,
+    status,
+    ...productController,
+    ...cartController,
   };
 };

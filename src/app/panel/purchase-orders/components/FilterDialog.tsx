@@ -38,7 +38,7 @@ const payoutOptions: FilterOption[] = [
 const purchaseOrderStatusOptions: FilterOption[] = [
   { value: PurchaseOrderStatus.DRAFT, label: 'Draft' },
   { value: PurchaseOrderStatus.WAITING_APPROVAL, label: 'Waiting Approval' },
-  { value: PurchaseOrderStatus.CANCELED, label: 'Canceled' },
+  { value: PurchaseOrderStatus.CANCELLED, label: 'Cancelled' },
   { value: PurchaseOrderStatus.APPROVED, label: 'Approved' },
   { value: PurchaseOrderStatus.REJECTED, label: 'Rejected' },
   { value: PurchaseOrderStatus.COMPLETED, label: 'Completed' },

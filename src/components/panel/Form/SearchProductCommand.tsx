@@ -22,6 +22,7 @@ export type SearchProductCommandProps = {
   selectedProducts?: ProductSingleSKU[];
   onOpenChange: (open: boolean) => void;
   onProductSelect: (product: ProductSingleSKU) => void;
+  supplierId?: string;
 };
 
 export function SearchProductCommand({
@@ -29,6 +30,7 @@ export function SearchProductCommand({
   onOpenChange,
   onProductSelect,
   selectedProducts = [],
+  supplierId,
 }: SearchProductCommandProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [search, setSearch] = useState('');
@@ -45,6 +47,7 @@ export function SearchProductCommand({
         search,
         page: newPage,
         limit: 10,
+        supplier_id: supplierId,
       });
       setIsLoading(false);
       if (response) {
@@ -56,7 +59,7 @@ export function SearchProductCommand({
         setPagination(response.meta);
       }
     },
-    [search],
+    [search, supplierId],
   );
 
   useEffect(() => {

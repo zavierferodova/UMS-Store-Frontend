@@ -6,13 +6,15 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Input } from '@/components/ui/input';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { UserIcon } from '@phosphor-icons/react/dist/ssr';
-import { ShieldIcon } from 'lucide-react';
+import { ShieldIcon, EyeIcon, EyeOffIcon } from 'lucide-react';
 import Image from 'next/image';
+import { useState } from 'react';
 import { useController } from './controller';
 import { signIn } from 'next-auth/react';
 
 export default function LoginPage() {
   const { form, onSubmit } = useController();
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 min-h-dvh">
@@ -65,11 +67,24 @@ export default function LoginPage() {
                         />
                       </div>
                       <Input
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         placeholder="Password"
                         {...field}
                         className="pl-13 py-6 rounded-lg"
                       />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent cursor-pointer"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <EyeOffIcon className="h-4 w-4" />
+                        ) : (
+                          <EyeIcon className="h-4 w-4" />
+                        )}
+                      </Button>
                     </div>
                   </FormControl>
                   <FormMessage />

@@ -1,3 +1,5 @@
+import { Supplier } from './supplier';
+
 export interface ProductCategory {
   id: string;
   name: string;
@@ -21,6 +23,7 @@ export interface ProductAdditionalInfo {
 export interface ProductSKU {
   id: string;
   sku: string;
+  supplier: Supplier | null;
   stock: number;
 }
 

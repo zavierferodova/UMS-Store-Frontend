@@ -18,10 +18,14 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { useState } from 'react';
 import { useController } from './controller';
 
 export const UpdatePasswordForm = () => {
   const { form, onSubmit } = useController();
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
     <Form {...form}>
@@ -39,12 +43,27 @@ export const UpdatePasswordForm = () => {
                 <FormItem>
                   <FormLabel>Password Baru</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="Masukkan password baru"
-                      maxLength={100}
-                      {...field}
-                    />
+                    <div className="relative">
+                      <Input
+                        type={showNewPassword ? 'text' : 'password'}
+                        placeholder="Masukkan password baru"
+                        maxLength={100}
+                        {...field}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent cursor-pointer"
+                        onClick={() => setShowNewPassword(!showNewPassword)}
+                      >
+                        {showNewPassword ? (
+                          <EyeOffIcon className="h-4 w-4" />
+                        ) : (
+                          <EyeIcon className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -57,12 +76,27 @@ export const UpdatePasswordForm = () => {
                 <FormItem>
                   <FormLabel>Konfirmasi Password</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="Konfirmasi password baru"
-                      maxLength={100}
-                      {...field}
-                    />
+                    <div className="relative">
+                      <Input
+                        type={showConfirmPassword ? 'text' : 'password'}
+                        placeholder="Konfirmasi password baru"
+                        maxLength={100}
+                        {...field}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent cursor-pointer"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      >
+                        {showConfirmPassword ? (
+                          <EyeOffIcon className="h-4 w-4" />
+                        ) : (
+                          <EyeIcon className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -146,6 +146,7 @@ export default function AddPurchaseOrderPage() {
           onOpenChange={setShowProductSearch}
           onProductSelect={handleProductSelect}
           selectedProducts={selectedProducts}
+          supplierId={form.watch('supplier')?.id}
         />
 
         <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>

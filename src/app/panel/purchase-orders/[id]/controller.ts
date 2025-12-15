@@ -144,6 +144,16 @@ export function useController(purchaseOrder: PurchaseOrder) {
           },
           error: 'Gagal menyimpan draft',
         });
+      case PurchaseOrderStatus.CANCELLED:
+        toast.promise(promise, {
+          loading: 'Membatalkan purchase order...',
+          success: () => {
+            successDispatcher();
+            return 'Purchase order berhasil dibatalkan';
+          },
+          error: 'Gagal membatalkan purchase order',
+        });
+        break;
       case PurchaseOrderStatus.WAITING_APPROVAL:
         toast.promise(promise, {
           loading: 'Menyimpan purchase order...',
@@ -194,7 +204,7 @@ export function useController(purchaseOrder: PurchaseOrder) {
   };
 
   const handleCancel = () => {
-    form.handleSubmit((data) => onSubmit(data, PurchaseOrderStatus.REJECTED))();
+    form.handleSubmit((data) => onSubmit(data, PurchaseOrderStatus.CANCELLED))();
   };
 
   const openConfirmDialog = (type: ConfirmationType) => {
@@ -208,6 +218,10 @@ export function useController(purchaseOrder: PurchaseOrder) {
         handleSave();
         break;
       case 'cancel':
+        console.log('cancel');
+        handleCancel();
+        break;
+      case 'reject':
         if (rejectionReason) {
           handleReject(rejectionReason);
         }
@@ -234,9 +248,5 @@ export function useController(purchaseOrder: PurchaseOrder) {
     handleProductSelect,
     handleRemoveProduct,
     handleSaveDraft,
-    handleSave,
-    handleApprove,
-    handleReject,
-    handleCancel,
   };
 }
