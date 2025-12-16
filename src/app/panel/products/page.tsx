@@ -20,7 +20,7 @@ function ProductsPageContent() {
     search,
     status,
     products,
-    statusFilter,
+    deletionFilter,
     categoryFilter,
     pagination,
     updatePage,
@@ -65,7 +65,7 @@ function ProductsPageContent() {
               />
             </div>
             <FilterDialog
-              statusFilter={statusFilter}
+              statusFilter={deletionFilter}
               onStatusFilterChange={onStatusFilterChange}
               categoryFilter={categoryFilter}
               onCategoryFilterChange={onCategoryFilterChange}

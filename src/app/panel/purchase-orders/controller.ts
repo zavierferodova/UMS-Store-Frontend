@@ -42,7 +42,6 @@ export const useController = () => {
           search,
           limit: pageSize,
           page: currentPage,
-          status: filterDialogState.status,
           payout: filterDialogState.payout,
           po_status: filterDialogState.purchaseOrderStatus,
         });
@@ -61,7 +60,6 @@ export const useController = () => {
     pageSize,
     search,
     filterDialogState.payout,
-    filterDialogState.status,
     filterDialogState.purchaseOrderStatus,
     updateTotalItems,
   ]);

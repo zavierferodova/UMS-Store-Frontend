@@ -5,7 +5,7 @@ export interface GetPurchaseOrdersParams {
   search?: string;
   limit?: number;
   page?: number;
-  status?: string[];
+  deletion?: string[];
   payout?: string[];
   po_status?: string[];
 }

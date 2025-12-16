@@ -27,11 +27,11 @@ class SupplierData implements ISupplierData {
 
   async getSuppliers(params?: GetSuppliersParams): Promise<IPaginationResponse<Supplier>> {
     try {
-      const { page, limit, search, status } = params ?? {
+      const { page, limit, search, deletion } = params ?? {
         page: 1,
         limit: 10,
         search: undefined,
-        status: undefined,
+        deletion: undefined,
       };
 
       let query = `?page=${page}&limit=${limit}`;
@@ -40,8 +40,8 @@ class SupplierData implements ISupplierData {
         query += `&search=${search}`;
       }
 
-      if (status) {
-        query += `&status=${status.join(',')}`;
+      if (deletion) {
+        query += `&deletion=${deletion.join(',')}`;
       }
 
       const session = await this.getAuthSession();

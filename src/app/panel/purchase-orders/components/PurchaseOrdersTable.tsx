@@ -37,8 +37,7 @@ export function PurchaseOrdersTable({ purchaseOrders }: PurchaseOrdersTableProps
             <TableHead>Pembayaran</TableHead>
             <TableHead>Dibuat</TableHead>
             <TableHead>Diubah</TableHead>
-            <TableHead>Po Status</TableHead>
-            {isAdmin(user) && <TableHead>Status</TableHead>}
+            <TableHead>Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -109,7 +108,6 @@ export function PurchaseOrdersTable({ purchaseOrders }: PurchaseOrdersTableProps
               <TableCell>{localeDateFormat(po.created_at)}</TableCell>
               <TableCell>{localeDateFormat(po.updated_at)}</TableCell>
               <TableCell className="capitalize">{po.status.replace('_', ' ')}</TableCell>
-              {isAdmin(user) && <TableCell>{po.is_deleted ? 'Dihapus' : 'Aktif'}</TableCell>}
             </TableRow>
           ))}
         </TableBody>

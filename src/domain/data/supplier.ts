@@ -5,7 +5,7 @@ export type GetSuppliersParams = {
   search?: string;
   limit?: number;
   page?: number;
-  status?: string[];
+  deletion?: string[];
 };
 
 export type UpdateSupplierParams = {

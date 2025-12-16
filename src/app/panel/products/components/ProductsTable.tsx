@@ -44,7 +44,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
             <TableHead>Stok</TableHead>
             <TableHead>Dibuat</TableHead>
             <TableHead>Diubah</TableHead>
-            {isAdmin(user) && <TableHead className="text-center">Status</TableHead>}
+            {isAdmin(user) && <TableHead className="text-center">Penghapusan</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>

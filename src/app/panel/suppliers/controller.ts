@@ -18,8 +18,8 @@ export const useController = () => {
     parseAsString.withDefault('').withOptions({ history: 'push' }),
   );
 
-  const [statusFilter, setStatusFilter] = useQueryState(
-    'status',
+  const [deletionFilter, setDeletionFilter] = useQueryState(
+    'deletion',
     parseAsArrayOf(parseAsString).withDefault([]).withOptions({ history: 'push' }),
   );
 
@@ -45,7 +45,7 @@ export const useController = () => {
           page: currentPage,
           limit: pageSize,
           search,
-          status: statusFilter,
+          deletion: deletionFilter,
         });
         setSuppliers({
           data: response.data,
@@ -56,7 +56,7 @@ export const useController = () => {
         setStatus(PageStatus.SUCCESS);
       }
     }
-  }, [user, currentPage, pageSize, search, statusFilter, updateTotalItems]);
+  }, [user, currentPage, pageSize, search, deletionFilter, updateTotalItems]);
 
   const updateSearch = async (searchTerm: string) => {
     await setSearch(searchTerm);
@@ -64,7 +64,7 @@ export const useController = () => {
   };
 
   const updateStatusFilter = async (statuses: string[]) => {
-    await setStatusFilter(statuses);
+    await setDeletionFilter(statuses);
     await handlePageChange(1);
   };
 
@@ -78,7 +78,7 @@ export const useController = () => {
     pagination,
     status,
     suppliers,
-    statusFilter,
+    deletionFilter,
     updatePage: handlePageChange,
     updateLimit: handleLimitChange,
     updateSearch,

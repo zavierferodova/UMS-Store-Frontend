@@ -20,7 +20,7 @@ import { localeDateFormat } from '@/lib/utils';
 import Link from 'next/link';
 import { Search } from 'lucide-react';
 import { PlusIcon } from '@phosphor-icons/react/dist/ssr';
-import { StatusFilter } from '../../../components/filter/StatusFilter';
+import { DeletionFilter } from '../../../components/filter/DeletionFilter';
 import { isAdmin } from '@/lib/role';
 import { EmptyDisplay } from '@/components/display/EmptyDisplay';
 import { SpinAnimation } from '@/components/animation/SpinAnimation';
@@ -71,7 +71,7 @@ function SuppliersPageContent() {
                 className="pl-10 w-full md:w-64"
               />
             </div>
-            {isAdmin(user) && <StatusFilter onFilterChange={updateStatusFilter} />}
+            {isAdmin(user) && <DeletionFilter onFilterChangeAction={updateStatusFilter} />}
             <Link href={panelRoutes.supplierAdd} className="w-full md:w-auto">
               <Button className="cursor-pointer w-full">
                 <PlusIcon className="h-4 w-4" /> <span className="ml-1">Tambah</span>
@@ -96,7 +96,7 @@ function SuppliersPageContent() {
                 <TableHead>Email</TableHead>
                 <TableHead>Dibuat</TableHead>
                 <TableHead>Diubah</TableHead>
-                {isAdmin(user) && <TableHead>Status</TableHead>}
+                {isAdmin(user) && <TableHead>Penghapusan</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>

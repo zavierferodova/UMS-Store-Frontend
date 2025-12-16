@@ -5,7 +5,7 @@ export interface IPaymentMethodParams {
   page: number;
   limit: number;
   search?: string;
-  status?: string[];
+  deletion?: string[];
 }
 
 export interface CreatePaymentMethodParams {

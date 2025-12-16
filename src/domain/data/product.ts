@@ -7,19 +7,11 @@ import {
   ProductSKU,
 } from '@/domain/model/product';
 
-export type GetProductsParams = {
-  search?: string;
-  limit?: number;
-  page?: number;
-  status?: string[];
-  categories?: string[];
-};
-
 export type GetSKUProductsParams = {
   search?: string;
   limit?: number;
   page?: number;
-  status?: string[];
+  deletion?: string[];
   categories?: string[];
   supplier_id?: string;
 };
@@ -72,7 +64,6 @@ export interface IProductData {
   addProduct(product: AddProductParams): Promise<Product | null>;
   updateProduct(id: string, product: UpdateProductParams): Promise<Product | null>;
   getProduct(id: string): Promise<Product | null>;
-  getProducts(params?: GetProductsParams): Promise<IPaginationResponse<Product>>;
   getProductsBySKU(params?: GetSKUProductsParams): Promise<IPaginationResponse<ProductSingleSKU>>;
   deleteProduct(id: string): Promise<boolean>;
   createCategory(name: string): Promise<ProductCategory | null>;

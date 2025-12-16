@@ -18,7 +18,7 @@ import { useController } from './controller';
 import { PageStatus } from '@/lib/page';
 import { Search, Pencil, Trash2 } from 'lucide-react';
 import { PlusIcon } from '@phosphor-icons/react/dist/ssr';
-import { StatusFilter } from '../../../../components/filter/StatusFilter';
+import { DeletionFilter } from '../../../../components/filter/DeletionFilter';
 import { isAdmin } from '@/lib/role';
 import { EmptyDisplay } from '@/components/display/EmptyDisplay';
 import { SpinAnimation } from '@/components/animation/SpinAnimation';
@@ -133,7 +133,7 @@ function PaymentMethodsPageContent() {
                   className="pl-10 w-full md:w-64"
                 />
               </div>
-              {isAdmin(user) && <StatusFilter onFilterChange={updateStatusFilter} />}
+              {isAdmin(user) && <DeletionFilter onFilterChangeAction={updateStatusFilter} />}
               <Button
                 onClick={() => setPaymentDialogOpen(true)}
                 className="cursor-pointer w-full md:w-auto"
@@ -160,7 +160,7 @@ function PaymentMethodsPageContent() {
                   <TableHead>Nomor Rekening</TableHead>
                   <TableHead>Dibuat</TableHead>
                   <TableHead>Diubah</TableHead>
-                  {isAdmin(user) && <TableHead>Status</TableHead>}
+                  {isAdmin(user) && <TableHead>Penghapusan</TableHead>}
                   <TableHead>
                     <div className="flex justify-center">Aksi</div>
                   </TableHead>

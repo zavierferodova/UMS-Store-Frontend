@@ -10,7 +10,6 @@ import { SlidersHorizontalIcon } from '@phosphor-icons/react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useSession } from 'next-auth/react';
-import { isAdmin } from '@/lib/role';
 import { useQueryState, parseAsArrayOf, parseAsString } from 'nuqs';
 import { PurchaseOrderStatus } from '@/domain/model/purchase-order';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -44,18 +43,11 @@ const purchaseOrderStatusOptions: FilterOption[] = [
   { value: PurchaseOrderStatus.COMPLETED, label: 'Completed' },
 ];
 
-const statusOptions: FilterOption[] = [
-  { value: 'active', label: 'Aktif' },
-  { value: 'deleted', label: 'Dihapus' },
-];
-
 type FilterDialogState = {
   payout: string[];
   setPayout: (value: string[]) => void;
   purchaseOrderStatus: string[];
   setPurchaseOrderStatus: (value: string[]) => void;
-  status: string[];
-  setStatus: (value: string[]) => void;
 };
 
 type FilterDialogProps = {
@@ -73,18 +65,11 @@ export const useFilterDialog = () => {
     parseAsArrayOf(parseAsString).withDefault([]).withOptions({ history: 'push' }),
   );
 
-  const [status, setStatus] = useQueryState(
-    'status',
-    parseAsArrayOf(parseAsString).withDefault([]).withOptions({ history: 'push' }),
-  );
-
   const state = {
     payout,
     purchaseOrderStatus,
-    status,
     setPayout,
     setPurchaseOrderStatus,
-    setStatus,
   };
 
   return {
@@ -93,10 +78,7 @@ export const useFilterDialog = () => {
 };
 
 export function FilterDialog({ state }: FilterDialogProps) {
-  const { payout, setPayout, purchaseOrderStatus, setPurchaseOrderStatus, status, setStatus } =
-    state;
-  const { data: session } = useSession();
-  const user = session?.user;
+  const { payout, setPayout, purchaseOrderStatus, setPurchaseOrderStatus } = state;
   const [openStatusSelect, setOpenStatusSelect] = useState(false);
 
   const handleStatusToggle = (statusValue: string) => {
@@ -214,32 +196,6 @@ export function FilterDialog({ state }: FilterDialogProps) {
               ))}
             </div>
           </div>
-
-          {isAdmin(user) && (
-            <div className="space-y-2">
-              <div className="text-sm font-medium">Status</div>
-              <div className="space-y-2">
-                {statusOptions.map((option) => (
-                  <div key={option.value} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={`status-${option.value}`}
-                      checked={status.includes(option.value)}
-                      className="cursor-pointer"
-                      onCheckedChange={(checked) => {
-                        const newStatus = checked
-                          ? [...status, option.value]
-                          : status.filter((item) => item !== option.value);
-                        setStatus(newStatus);
-                      }}
-                    />
-                    <Label htmlFor={`status-${option.value}`} className="cursor-pointer">
-                      {option.label}
-                    </Label>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </DialogContent>
     </Dialog>

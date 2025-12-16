@@ -3,7 +3,6 @@ import { APP_URL } from '@/config/env';
 import {
   AddProductParams,
   GetCategoriesParams,
-  GetProductsParams,
   GetSKUProductsParams,
   IProductData,
   UpdateImageParams,
@@ -272,60 +271,11 @@ class ProductData implements IProductData {
     }
   }
 
-  async getProducts(params?: GetProductsParams): Promise<IPaginationResponse<Product>> {
-    try {
-      const { page = 1, limit = 10, search, status, categories } = params ?? {};
-
-      let query = `?page=${page}&limit=${limit}`;
-
-      if (search) {
-        query += `&search=${encodeURIComponent(search)}`;
-      }
-
-      if (status) {
-        query += `&status=${status.join(',')}`;
-      }
-
-      if (categories) {
-        query += `&categories=${categories.join(',')}`;
-      }
-
-      const session = await this.getAuthSession();
-      const response = await fetchJSON(`${APP_URL}/apis/products${query}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(session?.access_token && { Authorization: `Bearer ${session.access_token}` }),
-        },
-      });
-
-      if (!response) {
-        throw new Error('Failed to fetch products');
-      }
-
-      return {
-        data: response.data,
-        meta: response.meta,
-      };
-    } catch {
-      return {
-        data: [],
-        meta: {
-          total: 0,
-          page: 1,
-          limit: 10,
-          next: null,
-          previous: null,
-        },
-      };
-    }
-  }
-
   async getProductsBySKU(
     params: GetSKUProductsParams,
   ): Promise<IPaginationResponse<ProductSingleSKU>> {
     try {
-      const { page = 1, limit = 10, search, status, supplier_id, categories } = params ?? {};
+      const { page = 1, limit = 10, search, deletion, supplier_id, categories } = params ?? {};
 
       let query = `?page=${page}&limit=${limit}`;
 
@@ -333,8 +283,8 @@ class ProductData implements IProductData {
         query += `&search=${encodeURIComponent(search)}`;
       }
 
-      if (status) {
-        query += `&status=${status.join(',')}`;
+      if (deletion) {
+        query += `&deletion=${deletion.join(',')}`;
       }
 
       if (supplier_id) {

@@ -71,7 +71,7 @@ export function FilterDialog({
 
           {isAdmin(user) && (
             <div className="space-y-2">
-              <div className="text-sm font-medium">Status</div>
+              <div className="text-sm font-medium">Penghapusan</div>
               <div className="space-y-2">
                 {statusOptions.map((option) => (
                   <div key={option.value} className="flex items-center space-x-2">

@@ -50,7 +50,7 @@ class PurchaseOrderData implements IPurchaseOrderData {
     params?: GetPurchaseOrdersParams,
   ): Promise<IPaginationResponse<PurchaseOrder>> {
     try {
-      const { search, payout, status, po_status, page = 1, limit = 10 } = params ?? {};
+      const { search, payout, deletion, po_status, page = 1, limit = 10 } = params ?? {};
 
       const query = new URLSearchParams();
 
@@ -65,8 +65,8 @@ class PurchaseOrderData implements IPurchaseOrderData {
         query.append('payout', payout.join(','));
       }
 
-      if (status) {
-        query.append('status', status.join(','));
+      if (deletion) {
+        query.append('deletion', deletion.join(','));
       }
 
       if (po_status) {
