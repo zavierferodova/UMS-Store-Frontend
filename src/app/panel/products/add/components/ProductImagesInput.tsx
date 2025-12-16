@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import { Reorder } from 'motion/react';
 import { Button } from '@/components/ui/button';
 import { ImageIcon, EyeIcon, TrashIcon } from '@phosphor-icons/react';
-import { DialogImagePreview } from '../DialogImagePreview';
+import { DialogImagePreview } from '../../../../../components/panel/DialogImagePreview';
 import Image from 'next/image';
 import { toast } from 'sonner';
 

@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { ConfirmationDialog } from './components/ConfirmationDialog';
 import { RejectionMessageDialog } from './components/RejectionMessageDialog';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { PoProductsTableInput } from '@/components/panel/form/PoProductsTableInput';
+import { PoProductsTableInput } from '@/app/panel/purchase-orders/add/components/PoProductsTableInput';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { panelRoutes } from '@/routes/route';
 import { useEffect } from 'react';

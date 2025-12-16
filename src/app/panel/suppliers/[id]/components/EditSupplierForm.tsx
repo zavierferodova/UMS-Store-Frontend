@@ -29,7 +29,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { isAdmin, isProcurement } from '@/lib/role';
-import { SalesContactInput } from '@/components/panel/form/SalesContactInput';
+import { SalesContactInput } from '@/app/panel/suppliers/add/components/SalesContactInput';
 
 export interface EditSupplierFormProps {
   supplier: Supplier;

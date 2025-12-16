@@ -78,6 +78,7 @@ class TransactionData implements ITransactionData {
         end_date,
         transaction_status,
         payment,
+        cashier_id,
       } = params;
       let query = `?page=${page}&limit=${limit}`;
 
@@ -99,6 +100,10 @@ class TransactionData implements ITransactionData {
 
       if (payment && payment.length > 0) {
         query += `&payment=${payment.join(',')}`;
+      }
+
+      if (cashier_id) {
+        query += `&cashier_id=${cashier_id}`;
       }
 
       const session = await this.getAuthSession();

@@ -133,7 +133,7 @@ export function FilterDialog({ state }: FilterDialogProps) {
                   variant="outline"
                   role="combobox"
                   aria-expanded={openStatusSelect}
-                  className="w-full justify-between font-normal cursor-pointer h-auto min-h-9"
+                  className="w-full justify-between font-normal cursor-pointer h-auto min-h-9 hover:bg-white"
                 >
                   <div className="flex flex-wrap gap-1 flex-1 min-w-0 max-h-20 overflow-y-auto py-1">
                     {purchaseOrderStatus.length === 0 ? (
@@ -167,7 +167,7 @@ export function FilterDialog({ state }: FilterDialogProps) {
               <PopoverContent className="w-full p-0" align="start">
                 <Command>
                   <CommandList>
-                    <CommandEmpty>No status found.</CommandEmpty>
+                    <CommandEmpty>Status tidak ditemukan.</CommandEmpty>
                     <CommandGroup>
                       {purchaseOrderStatusOptions.map((option) => (
                         <CommandItem

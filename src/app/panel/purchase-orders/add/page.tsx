@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dialog';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { SearchProductCommand } from '@/components/panel/form/SearchProductCommand';
-import { PoProductsTableInput } from '@/components/panel/form/PoProductsTableInput';
+import { PoProductsTableInput } from '@/app/panel/purchase-orders/add/components/PoProductsTableInput';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { panelRoutes } from '@/routes/route';
 import { useEffect, useState } from 'react';

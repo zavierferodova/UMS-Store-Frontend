@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ImageFile } from '@/components/panel/form/ProductImagesInput';
+import { ImageFile } from '@/app/panel/products/add/components/ProductImagesInput';
 import productData from '@/data/product';
 
 export const formSchema = z.object({

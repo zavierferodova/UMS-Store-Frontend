@@ -16,9 +16,12 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { SelectProductCategory } from '@/components/panel/form/SelectProductCategory';
-import { ProductImagesInput, ImageFile } from '@/components/panel/form/ProductImagesInput';
+import {
+  ProductImagesInput,
+  ImageFile,
+} from '@/app/panel/products/add/components/ProductImagesInput';
 import { ProductSKUInput } from '@/app/panel/purchase-orders/add/components/ProductSKUInput';
-import { ProductAdditionalInputs } from '@/components/panel/form/ProductAdditionalInputs';
+import { ProductAdditionalInputs } from '@/app/panel/products/add/components/ProductAdditionalInputs';
 import { useController } from './controller';
 import {
   FormControl,

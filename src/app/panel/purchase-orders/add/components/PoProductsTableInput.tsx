@@ -11,7 +11,7 @@ import { DialogImagePreview } from '@/components/panel/DialogImagePreview';
 import { ImageIcon } from '@phosphor-icons/react';
 import Link from 'next/link';
 import { panelRoutes } from '@/routes/route';
-import { FormValues } from '../../../app/panel/purchase-orders/add/validation';
+import { FormValues } from '../validation';
 import { UseFormReturn } from 'react-hook-form';
 import {
   Table,

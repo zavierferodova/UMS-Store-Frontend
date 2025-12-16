@@ -11,6 +11,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useQueryState, parseAsArrayOf, parseAsString } from 'nuqs';
 import { Input } from '@/components/ui/input';
+import { SelectUserSearch } from '@/components/panel/form/SelectUserSearch';
+import { User, UserRole } from '@/domain/model/user';
+import userData from '@/data/user';
+import { useState, useEffect } from 'react';
 
 type FilterOption = {
   value: string;
@@ -36,6 +40,8 @@ type FilterDialogState = {
   setTransactionStatus: (value: string[]) => void;
   paymentMethod: string[];
   setPaymentMethod: (value: string[]) => void;
+  cashierId: string | null;
+  setCashierId: (value: string | null) => void;
 };
 
 type FilterDialogProps = {
@@ -63,15 +69,22 @@ export const useFilterDialog = () => {
     parseAsArrayOf(parseAsString).withDefault([]).withOptions({ history: 'push' }),
   );
 
+  const [cashierId, setCashierId] = useQueryState(
+    'cashier_id',
+    parseAsString.withDefault('').withOptions({ history: 'push' }),
+  );
+
   const state = {
     startDate: startDate || null,
     endDate: endDate || null,
     transactionStatus,
     paymentMethod,
+    cashierId: cashierId || null,
     setStartDate: (val: string | null) => setStartDate(val || null),
     setEndDate: (val: string | null) => setEndDate(val || null),
     setTransactionStatus,
     setPaymentMethod,
+    setCashierId: (val: string | null) => setCashierId(val || null),
   };
 
   return {
@@ -89,7 +102,23 @@ export function FilterDialog({ state }: FilterDialogProps) {
     setTransactionStatus,
     paymentMethod,
     setPaymentMethod,
+    cashierId,
+    setCashierId,
   } = state;
+
+  const [selectedCashier, setSelectedCashier] = useState<User | null>(null);
+
+  useEffect(() => {
+    const fetchCashier = async () => {
+      if (cashierId) {
+        const user = await userData.getUser(cashierId);
+        setSelectedCashier(user);
+      } else {
+        setSelectedCashier(null);
+      }
+    };
+    fetchCashier();
+  }, [cashierId]);
 
   return (
     <Dialog>
@@ -108,7 +137,7 @@ export function FilterDialog({ state }: FilterDialogProps) {
           <div className="space-y-2">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
-                <div className="text-sm font-medium">Tanggal Minimum</div>
+                <div className="text-sm font-medium">Tanggal Awal</div>
                 <Input
                   id="start-date"
                   type="date"
@@ -118,7 +147,7 @@ export function FilterDialog({ state }: FilterDialogProps) {
                 />
               </div>
               <div className="space-y-1">
-                <div className="text-sm font-medium">Tanggal Maksimum</div>
+                <div className="text-sm font-medium">Tanggal Akhir</div>
                 <Input
                   id="end-date"
                   type="date"
@@ -128,6 +157,16 @@ export function FilterDialog({ state }: FilterDialogProps) {
                 />
               </div>
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <div className="text-sm font-medium">Kasir</div>
+            <SelectUserSearch
+              value={selectedCashier}
+              onChange={(user) => setCashierId(user?.id || null)}
+              roles={[UserRole.CASHIER]}
+              placeholder="Pilih kasir..."
+            />
           </div>
 
           <div className="space-y-2">

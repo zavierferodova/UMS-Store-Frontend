@@ -151,7 +151,7 @@ export function ProductCategorySelect({
                   <div className="flex items-center">
                     <div
                       className={cn(
-                        'mr-2 flex h-4 w-4 items-center justify-center rounded-[0.2rem] border border-primary',
+                        'mr-2 flex h-4 w-4 items-center justify-center rounded-[0.2rem] border border-gray-300',
                         value.includes(category.value)
                           ? 'bg-primary text-white'
                           : 'opacity-50 [&_svg]:invisible',

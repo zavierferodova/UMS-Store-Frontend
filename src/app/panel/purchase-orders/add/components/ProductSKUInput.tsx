@@ -20,10 +20,15 @@ export type SKUItem = {
   stock?: number;
 };
 
+export type SKUError = {
+  sku?: { message?: string };
+  supplier?: { message?: string };
+};
+
 export type ProductSKUInputProps = {
   skus: SKUItem[];
   onSkusChange: (skus: SKUItem[]) => void;
-  errors?: any[];
+  errors?: SKUError[];
   isEditMode?: boolean;
   originalSkus?: SKUItem[];
 };

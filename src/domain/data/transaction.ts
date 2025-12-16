@@ -22,6 +22,7 @@ export type GetTransactionsParams = {
   end_date?: string;
   transaction_status?: string[];
   payment?: TransactionPayment[];
+  cashier_id?: string;
 };
 
 export type UpdateTransactionParams = {

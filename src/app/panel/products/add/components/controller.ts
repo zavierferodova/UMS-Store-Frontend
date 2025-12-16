@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { formSchema, FormValues } from './validation';
-import { ImageFile } from '@/components/panel/form/ProductImagesInput';
+import { ImageFile } from '@/app/panel/products/add/components/ProductImagesInput';
 import productData from '@/data/product';
 import { toast } from 'sonner';
 

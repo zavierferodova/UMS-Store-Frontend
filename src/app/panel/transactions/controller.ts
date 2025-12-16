@@ -46,6 +46,7 @@ export const useController = () => {
           end_date: filterDialogState.endDate || undefined,
           transaction_status: filterDialogState.transactionStatus,
           payment: filterDialogState.paymentMethod as TransactionPayment[],
+          cashier_id: filterDialogState.cashierId || undefined,
         });
         setTransactions({
           data: response.data,
@@ -65,6 +66,7 @@ export const useController = () => {
     filterDialogState.endDate,
     filterDialogState.transactionStatus,
     filterDialogState.paymentMethod,
+    filterDialogState.cashierId,
     updateTotalItems,
   ]);
 
