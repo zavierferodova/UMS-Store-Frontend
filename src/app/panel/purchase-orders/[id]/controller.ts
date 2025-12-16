@@ -218,7 +218,6 @@ export function useController(purchaseOrder: PurchaseOrder) {
         handleSave();
         break;
       case 'cancel':
-        console.log('cancel');
         handleCancel();
         break;
       case 'reject':

@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import { SlidersHorizontalIcon } from '@phosphor-icons/react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { useSession } from 'next-auth/react';
 import { useQueryState, parseAsArrayOf, parseAsString } from 'nuqs';
 import { PurchaseOrderStatus } from '@/domain/model/purchase-order';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';

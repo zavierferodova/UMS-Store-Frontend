@@ -25,7 +25,7 @@ export const useProductController = () => {
           page: currentPage,
           limit: 20,
           search: currentSearch,
-          status: ['active'],
+          deletion: ['active'],
         });
 
         if (isReset) {
@@ -209,7 +209,7 @@ export const useCartController = () => {
           page: 1,
           limit: 1,
           search: item.sku_code,
-          status: ['active'],
+          deletion: ['active'],
         });
 
         if (res.data.length > 0) {
