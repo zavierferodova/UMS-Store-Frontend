@@ -82,7 +82,7 @@ export function ProductList({
                 <div key={`${product.id}-${product.sku.id}`} className="flex flex-col gap-2 group">
                   <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-muted cursor-pointer">
                     <div className="absolute bg-white top-2 right-2 z-50 px-3 py-1 rounded-2xl text-sm max-w-[140px] truncate border">
-                      {product.category?.name || 'Uncategorized'}
+                      {product.sku.sku}
                     </div>
                     {product.images && product.images.length > 0 ? (
                       <Image
@@ -103,8 +103,11 @@ export function ProductList({
                     <h3 className="font-bold text-lg leading-tight line-clamp-2 text-gray-800">
                       {product.name}
                     </h3>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <span>{product.sku.sku}</span>
+                    <div className="text-sm text-muted-foreground">
+                      <div className="font-medium line-clamp-1">
+                        {product.category?.name || 'Tidak ada kategori'}
+                      </div>
+                      <div>Stok: {product.sku.stock}</div>
                     </div>
                   </div>
 
@@ -127,8 +130,12 @@ export function ProductList({
 
         {hasMore && !loading && (
           <div className="flex justify-center py-8">
-            <Button variant="outline" onClick={onLoadMore} className="rounded-full px-8">
-              Load More
+            <Button
+              variant="outline"
+              onClick={onLoadMore}
+              className="rounded-full px-8 cursor-pointer"
+            >
+              Lebih banyak
             </Button>
           </div>
         )}

@@ -155,7 +155,7 @@ export function ProductDetailForm({ product }: { product: Product }) {
                   <div className="mb-10">
                     <FormLabel className="mb-1">Status Produk</FormLabel>
                     <FormDescription className="text-sm text-muted-foreground">
-                      Aktifkan produk untuk menampilkan di katalog penjualan
+                      Aktifkan kembali produk yang telah dihapus
                     </FormDescription>
                     <FormField
                       control={form.control}
@@ -225,14 +225,16 @@ export function ProductDetailForm({ product }: { product: Product }) {
               <Button type="submit" className="cursor-pointer">
                 Simpan
               </Button>
-              <Button
-                type="button"
-                variant="destructive"
-                className="cursor-pointer"
-                onClick={() => setDeleteDialogOpen(true)}
-              >
-                Hapus
-              </Button>
+              {!isAdmin(user) && (
+                <Button
+                  type="button"
+                  variant="destructive"
+                  className="cursor-pointer"
+                  onClick={() => setDeleteDialogOpen(true)}
+                >
+                  Hapus
+                </Button>
+              )}
             </div>
           </div>
         </div>

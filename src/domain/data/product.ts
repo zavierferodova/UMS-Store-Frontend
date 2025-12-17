@@ -64,6 +64,9 @@ export interface IProductData {
   addProduct(product: AddProductParams): Promise<Product | null>;
   updateProduct(id: string, product: UpdateProductParams): Promise<Product | null>;
   getProduct(id: string): Promise<Product | null>;
+  getProductsCatalogue(
+    params?: GetSKUProductsParams,
+  ): Promise<IPaginationResponse<ProductSingleSKU>>;
   getProductsBySKU(params?: GetSKUProductsParams): Promise<IPaginationResponse<ProductSingleSKU>>;
   deleteProduct(id: string): Promise<boolean>;
   createCategory(name: string): Promise<ProductCategory | null>;

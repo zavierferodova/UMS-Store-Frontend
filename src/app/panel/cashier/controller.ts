@@ -21,7 +21,7 @@ export const useProductController = () => {
     async (currentPage: number, currentSearch: string, isReset: boolean) => {
       setLoading(true);
       try {
-        const res = await productData.getProductsBySKU({
+        const res = await productData.getProductsCatalogue({
           page: currentPage,
           limit: 20,
           search: currentSearch,
@@ -62,6 +62,11 @@ export const useProductController = () => {
     fetchProducts(1, debouncedSearch, true);
   }, [debouncedSearch, fetchProducts]);
 
+  const refreshProducts = useCallback(() => {
+    setPage(1);
+    fetchProducts(1, debouncedSearch, true);
+  }, [debouncedSearch, fetchProducts]);
+
   return {
     products,
     loading,
@@ -70,10 +75,15 @@ export const useProductController = () => {
     hasMore,
     setSearch,
     handleLoadMore,
+    refreshProducts,
   };
 };
 
-export const useCartController = () => {
+export const useCartController = ({
+  onTransactionSuccessAction,
+}: {
+  onTransactionSuccessAction?: () => void;
+} = {}) => {
   const { data: session } = useSession();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [savedTransactions, setSavedTransactions] = useState<Transaction[]>([]);
@@ -93,7 +103,7 @@ export const useCartController = () => {
       });
       setSavedTransactions(res.data);
     } catch {
-      toast.error('Failed to fetch saved transactions');
+      toast.error('Gagal mengambil transaksi tersimpan');
     } finally {
       setSavedTransactionsLoading(false);
     }
@@ -103,20 +113,41 @@ export const useCartController = () => {
     setCart((prev) => {
       const existing = prev.find((item) => item.sku.id === product.sku.id);
       if (existing) {
+        if (existing.amount + 1 > product.sku.stock) {
+          toast.error('Stok tidak mencukupi', { id: 'stock-error' });
+          return prev;
+        }
         return prev.map((item) =>
           item.sku.id === product.sku.id ? { ...item, amount: item.amount + 1 } : item,
         );
       }
+
+      if (1 > product.sku.stock) {
+        toast.error('Stok tidak mencukupi', { id: 'stock-error' });
+        return prev;
+      }
+
       return [...prev, { ...product, amount: 1 }];
     });
   };
 
   const updateQuantity = (skuId: string, delta: number) => {
     setCart((prev) => {
+      const item = prev.find((i) => i.sku.id === skuId);
+      if (!item) return prev;
+
+      const newAmount = item.amount + delta;
+
+      console.log(delta);
+
+      if (delta > 0 && newAmount > item.sku.stock) {
+        toast.error('Stok tidak mencukupi', { id: 'stock-error' });
+        return prev;
+      }
+
       return prev
         .map((item) => {
           if (item.sku.id === skuId) {
-            const newAmount = item.amount + delta;
             return { ...item, amount: newAmount };
           }
           return item;
@@ -134,7 +165,7 @@ export const useCartController = () => {
   const handleConfirmPayment = async (method: TransactionPayment, payAmount: number) => {
     if (!session?.user?.id) return;
 
-    const loadingToast = toast.loading('Processing transaction...');
+    const loadingToast = toast.loading('Memproses transaksi...');
 
     try {
       let res: Transaction | null = null;
@@ -159,22 +190,23 @@ export const useCartController = () => {
       }
 
       if (res) {
-        toast.success('Transaction successful!', { id: loadingToast });
+        toast.success('Transaksi berhasil!', { id: loadingToast });
         setCart([]);
         setCurrentTransaction(null);
         setLastSuccessfulTransaction(res);
+        onTransactionSuccessAction?.();
       } else {
-        toast.error('Transaction failed', { id: loadingToast });
+        toast.error('Transaksi gagal', { id: loadingToast });
       }
     } catch {
-      toast.error('An error occurred', { id: loadingToast });
+      toast.error('Terjadi kesalahan', { id: loadingToast });
     }
   };
 
   const handleSaveTransaction = async () => {
     if (!session?.user?.id) return;
 
-    const loadingToast = toast.loading('Saving transaction...');
+    const loadingToast = toast.loading('Menyimpan transaksi...');
 
     try {
       const res = await transactionData.createTransaction({
@@ -190,22 +222,24 @@ export const useCartController = () => {
       });
 
       if (res) {
-        toast.success('Transaction saved!', { id: loadingToast });
+        toast.success('Transaksi disimpan!', { id: loadingToast });
         clearTransactionState();
       } else {
-        toast.error('Failed to save transaction', { id: loadingToast });
+        toast.error('Gagal menyimpan transaksi', { id: loadingToast });
       }
     } catch {
-      toast.error('An error occurred', { id: loadingToast });
+      toast.error('Terjadi kesalahan', { id: loadingToast });
     }
   };
 
   const restoreTransaction = async (transaction: Transaction) => {
-    const loadingToast = toast.loading('Restoring transaction...');
+    const loadingToast = toast.loading('Memulihkan transaksi...');
     try {
       const newCart: CartItem[] = [];
+      let stockIssue = false;
+
       for (const item of transaction.items) {
-        const res = await productData.getProductsBySKU({
+        const res = await productData.getProductsCatalogue({
           page: 1,
           limit: 1,
           search: item.sku_code,
@@ -215,10 +249,20 @@ export const useCartController = () => {
         if (res.data.length > 0) {
           const product = res.data[0];
           if (product.sku.sku === item.sku_code) {
-            newCart.push({
-              ...product,
-              amount: item.amount,
-            });
+            if (item.amount > product.sku.stock) {
+              stockIssue = true;
+              if (product.sku.stock > 0) {
+                newCart.push({
+                  ...product,
+                  amount: product.sku.stock,
+                });
+              }
+            } else {
+              newCart.push({
+                ...product,
+                amount: item.amount,
+              });
+            }
           }
         }
       }
@@ -226,12 +270,17 @@ export const useCartController = () => {
       if (newCart.length > 0) {
         setCart(newCart);
         setCurrentTransaction(transaction);
-        toast.success('Transaction restored!', { id: loadingToast });
+        toast.success('Transaksi dipulihkan!', { id: loadingToast });
+        if (stockIssue) {
+          toast.warning('Beberapa item disesuaikan dengan stok yang tersedia.');
+        }
       } else {
-        toast.error('Could not restore items (products not found)', { id: loadingToast });
+        toast.error('Tidak dapat memulihkan item (produk tidak ditemukan atau stok habis)', {
+          id: loadingToast,
+        });
       }
     } catch {
-      toast.error('Failed to restore transaction', { id: loadingToast });
+      toast.error('Gagal memulihkan transaksi', { id: loadingToast });
     }
   };
 
@@ -265,7 +314,9 @@ export const useCartController = () => {
 export const useController = () => {
   const { data: session, status } = useSession();
   const productController = useProductController();
-  const cartController = useCartController();
+  const cartController = useCartController({
+    onTransactionSuccessAction: productController.refreshProducts,
+  });
 
   return {
     session,

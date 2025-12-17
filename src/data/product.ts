@@ -326,6 +326,61 @@ class ProductData implements IProductData {
     }
   }
 
+  async getProductsCatalogue(
+    params: GetSKUProductsParams,
+  ): Promise<IPaginationResponse<ProductSingleSKU>> {
+    try {
+      const { page = 1, limit = 10, search, deletion, supplier_id, categories } = params ?? {};
+
+      let query = `?page=${page}&limit=${limit}`;
+
+      if (search) {
+        query += `&search=${encodeURIComponent(search)}`;
+      }
+
+      if (deletion) {
+        query += `&deletion=${deletion.join(',')}`;
+      }
+
+      if (supplier_id) {
+        query += `&supplier_id=${supplier_id}`;
+      }
+
+      if (categories) {
+        query += `&categories=${categories.join(',')}`;
+      }
+
+      const session = await this.getAuthSession();
+      const response = await fetchJSON(`${APP_URL}/apis/products/catalogue${query}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token && { Authorization: `Bearer ${session.access_token}` }),
+        },
+      });
+
+      if (!response) {
+        throw new Error('Failed to fetch products by SKU');
+      }
+
+      return {
+        data: response.data,
+        meta: response.meta,
+      };
+    } catch {
+      return {
+        data: [],
+        meta: {
+          total: 0,
+          page: 1,
+          limit: 10,
+          next: null,
+          previous: null,
+        },
+      };
+    }
+  }
+
   async deleteProduct(id: string): Promise<boolean> {
     try {
       const session = await this.getAuthSession();

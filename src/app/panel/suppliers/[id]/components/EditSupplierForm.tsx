@@ -147,7 +147,7 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                       <FormItem>
                         <FormLabel>Status Pemasok</FormLabel>
                         <FormDescription className="text-sm text-muted-foreground">
-                          Aktifkan pemasok agar dapat digunakan dalam transaksi
+                          Aktifkan pemasok yang telah dihapus agar dapat digunakan kembali
                         </FormDescription>
                         <div className="flex flex-row items-center gap-2 mt-2">
                           <FormControl>
