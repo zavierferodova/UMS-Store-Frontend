@@ -153,9 +153,9 @@ export function ProductDetailForm({ product }: { product: Product }) {
 
                 {isAdmin(user) && (
                   <div className="mb-10">
-                    <FormLabel className="mb-1">Status Produk</FormLabel>
+                    <FormLabel className="mb-1">Status Penghapusan</FormLabel>
                     <FormDescription className="text-sm text-muted-foreground">
-                      Aktifkan kembali produk yang telah dihapus
+                      Aktifkan atau hapus produk produk dari katalog
                     </FormDescription>
                     <FormField
                       control={form.control}
@@ -170,7 +170,7 @@ export function ProductDetailForm({ product }: { product: Product }) {
                             />
                           </FormControl>
                           <div className="font-normal text-sm">
-                            {field.value ? 'Aktif' : 'Tidak Aktif'}
+                            {field.value ? 'Aktif' : 'Dihapus'}
                           </div>
                         </FormItem>
                       )}

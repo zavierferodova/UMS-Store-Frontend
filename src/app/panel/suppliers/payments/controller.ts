@@ -1,7 +1,9 @@
 'use client';
 import paymentMethodData from '@/data/payment-method';
+import supplierData from '@/data/supplier';
 import { IPaginationResponse } from '@/domain/model/response';
 import { PaymentMethod } from '@/domain/model/payment-method';
+import { Supplier } from '@/domain/model/supplier';
 import { PageStatus } from '@/lib/page';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
@@ -22,6 +24,25 @@ export const useController = () => {
     'deletion',
     parseAsArrayOf(parseAsString).withDefault([]).withOptions({ history: 'push' }),
   );
+
+  const [supplierFilter, setSupplierFilter] = useQueryState(
+    'supplier_id',
+    parseAsString.withDefault('').withOptions({ history: 'push' }),
+  );
+
+  const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
+
+  useEffect(() => {
+    const fetchSupplier = async () => {
+      if (supplierFilter) {
+        const supplier = await supplierData.getSupplier(supplierFilter);
+        setSelectedSupplier(supplier);
+      } else {
+        setSelectedSupplier(null);
+      }
+    };
+    fetchSupplier();
+  }, [supplierFilter]);
 
   const [paymentMethods, setPaymentMethods] = useState<IPaginationResponse<PaymentMethod>>({
     data: [],
@@ -46,6 +67,7 @@ export const useController = () => {
           limit: pageSize,
           search,
           deletion: deletionFilter,
+          supplier_id: supplierFilter,
         });
         setPaymentMethods({
           data: response.data,
@@ -56,7 +78,7 @@ export const useController = () => {
         setStatus(PageStatus.SUCCESS);
       }
     }
-  }, [user, currentPage, pageSize, search, deletionFilter, updateTotalItems]);
+  }, [user, currentPage, pageSize, search, deletionFilter, supplierFilter, updateTotalItems]);
 
   const updateSearch = async (searchTerm: string) => {
     await setSearch(searchTerm);
@@ -65,6 +87,11 @@ export const useController = () => {
 
   const updateStatusFilter = async (statuses: string[]) => {
     await setDeletionFilter(statuses);
+    await handlePageChange(1);
+  };
+
+  const updateSupplierFilter = async (supplierId: string) => {
+    await setSupplierFilter(supplierId);
     await handlePageChange(1);
   };
 
@@ -87,10 +114,13 @@ export const useController = () => {
     status,
     paymentMethods,
     deletionFilter,
+    supplierFilter,
+    selectedSupplier,
     updatePage: handlePageChange,
     updateLimit: handleLimitChange,
     updateSearch,
     updateStatusFilter,
+    updateSupplierFilter,
     handleDelete,
     refetch: fetchPaymentMethodData,
   };

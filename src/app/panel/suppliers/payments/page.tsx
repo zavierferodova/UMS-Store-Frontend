@@ -18,7 +18,7 @@ import { useController } from './controller';
 import { PageStatus } from '@/lib/page';
 import { Search, Pencil, Trash2 } from 'lucide-react';
 import { PlusIcon } from '@phosphor-icons/react/dist/ssr';
-import { DeletionFilter } from '../../../../components/filter/DeletionFilter';
+import { FilterDialog } from './components/FilterDialog';
 import { isAdmin } from '@/lib/role';
 import { EmptyDisplay } from '@/components/display/EmptyDisplay';
 import { SpinAnimation } from '@/components/animation/SpinAnimation';
@@ -45,10 +45,13 @@ function PaymentMethodsPageContent() {
     status,
     paymentMethods,
     pagination,
+    deletionFilter,
+    selectedSupplier,
     updatePage,
     updateLimit,
     updateSearch,
     updateStatusFilter,
+    updateSupplierFilter,
     handleDelete,
     refetch,
   } = useController();
@@ -133,7 +136,12 @@ function PaymentMethodsPageContent() {
                   className="pl-10 w-full md:w-64"
                 />
               </div>
-              {isAdmin(user) && <DeletionFilter onFilterChangeAction={updateStatusFilter} />}
+              <FilterDialog
+                statusFilter={deletionFilter}
+                onStatusFilterChange={updateStatusFilter}
+                selectedSupplier={selectedSupplier}
+                onSupplierFilterChange={updateSupplierFilter}
+              />
               <Button
                 onClick={() => setPaymentDialogOpen(true)}
                 className="cursor-pointer w-full md:w-auto"
@@ -201,14 +209,16 @@ function PaymentMethodsPageContent() {
                         >
                           <Pencil className="h-4 w-4" />
                         </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => onDeleteClick(paymentMethod.id.toString())}
-                          className="cursor-pointer"
-                        >
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
+                        {!isAdmin(user) && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => onDeleteClick(paymentMethod.id.toString())}
+                            className="cursor-pointer"
+                          >
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>

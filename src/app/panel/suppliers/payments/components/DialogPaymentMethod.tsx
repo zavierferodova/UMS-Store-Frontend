@@ -73,26 +73,6 @@ export function DialogPaymentMethod({
     },
   });
 
-  useEffect(() => {
-    if (editData && open) {
-      form.reset({
-        supplier: { id: editData.supplier.id } as Supplier,
-        name: editData.name,
-        owner: editData.owner,
-        account_number: editData.account_number,
-        active: !editData.is_deleted,
-      });
-    } else if (!open) {
-      form.reset({
-        supplier: null as unknown as Supplier,
-        name: '',
-        owner: '',
-        account_number: '',
-        active: true,
-      });
-    }
-  }, [editData, open, form]);
-
   const onSubmit = async (data: FormSchema) => {
     setIsSubmitting(true);
     try {
@@ -154,6 +134,26 @@ export function DialogPaymentMethod({
       setIsSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    if (editData && open) {
+      form.reset({
+        supplier: { id: editData.supplier.id } as Supplier,
+        name: editData.name,
+        owner: editData.owner,
+        account_number: editData.account_number,
+        active: !editData.is_deleted,
+      });
+    } else if (!open) {
+      form.reset({
+        supplier: null as unknown as Supplier,
+        name: '',
+        owner: '',
+        account_number: '',
+        active: true,
+      });
+    }
+  }, [editData, open, form]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -237,9 +237,10 @@ export function DialogPaymentMethod({
                 name="active"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Status Metode Pembayaran</FormLabel>
+                    <FormLabel>Status Penghapusan</FormLabel>
                     <FormDescription className="text-sm text-muted-foreground">
-                      Aktifkan metode pembayaran agar dapat digunakan dalam transaksi
+                      Aktifkan atau hapus metode pembayaran agar tidak dapat digunakan pada
+                      transaksi baru
                     </FormDescription>
                     <div className="flex flex-row items-center gap-2 mt-2">
                       <FormControl>
@@ -249,9 +250,7 @@ export function DialogPaymentMethod({
                           className="data-[state=checked]:bg-primary cursor-pointer"
                         />
                       </FormControl>
-                      <div className="font-normal text-sm">
-                        {field.value ? 'Aktif' : 'Tidak Aktif'}
-                      </div>
+                      <div className="font-normal text-sm">{field.value ? 'Aktif' : 'Dihapus'}</div>
                     </div>
                   </FormItem>
                 )}

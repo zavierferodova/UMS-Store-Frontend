@@ -6,6 +6,7 @@ export interface IPaymentMethodParams {
   limit: number;
   search?: string;
   deletion?: string[];
+  supplier_id?: string;
 }
 
 export interface CreatePaymentMethodParams {

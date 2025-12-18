@@ -139,32 +139,6 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
             </CardHeader>
             <CardContent>
               <div className="flex flex-col gap-4">
-                {isAdmin(user) && (
-                  <FormField
-                    control={form.control}
-                    name="active"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Status Pemasok</FormLabel>
-                        <FormDescription className="text-sm text-muted-foreground">
-                          Aktifkan pemasok yang telah dihapus agar dapat digunakan kembali
-                        </FormDescription>
-                        <div className="flex flex-row items-center gap-2 mt-2">
-                          <FormControl>
-                            <Switch
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                              className="data-[state=checked]:bg-primary cursor-pointer"
-                            />
-                          </FormControl>
-                          <div className="font-normal text-sm">
-                            {field.value ? 'Aktif' : 'Tidak Aktif'}
-                          </div>
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                )}
                 <FormField
                   control={form.control}
                   name="discount"
@@ -178,6 +152,32 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                     </FormItem>
                   )}
                 />
+                {isAdmin(user) && (
+                  <FormField
+                    control={form.control}
+                    name="active"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Status Penghapusan</FormLabel>
+                        <FormDescription className="text-sm text-muted-foreground">
+                          Aktifkan atau hapus pemasok agar tidak dapat digunakan pada transaksi baru
+                        </FormDescription>
+                        <div className="flex flex-row items-center gap-2 mt-2">
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                              className="data-[state=checked]:bg-primary cursor-pointer"
+                            />
+                          </FormControl>
+                          <div className="font-normal text-sm">
+                            {field.value ? 'Aktif' : 'Dihapus'}
+                          </div>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                )}
               </div>
             </CardContent>
           </Card>

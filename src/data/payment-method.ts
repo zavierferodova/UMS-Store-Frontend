@@ -29,11 +29,12 @@ class PaymentMethodData implements IPaymentMethodData {
     params?: IPaymentMethodParams,
   ): Promise<IPaginationResponse<PaymentMethod>> {
     try {
-      const { page, limit, search, deletion } = params ?? {
+      const { page, limit, search, deletion, supplier_id } = params ?? {
         page: 1,
         limit: 10,
         search: undefined,
         deletion: undefined,
+        supplier_id: undefined,
       };
 
       let query = `?page=${page}&limit=${limit}`;
@@ -44,6 +45,10 @@ class PaymentMethodData implements IPaymentMethodData {
 
       if (deletion) {
         query += `&deletion=${deletion.join(',')}`;
+      }
+
+      if (supplier_id) {
+        query += `&supplier_id=${supplier_id}`;
       }
 
       const session = await this.getAuthSession();
