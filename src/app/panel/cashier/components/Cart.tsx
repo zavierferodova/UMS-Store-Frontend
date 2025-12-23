@@ -20,7 +20,7 @@ interface CartProps {
   currentTransactionCode: string | null;
   onUpdateQuantity: (skuId: string, delta: number) => void;
   onSaveTransaction: () => void;
-  onConfirmPayment: (method: TransactionPayment, payAmount: number) => void;
+  onConfirmPayment: (method: TransactionPayment, payAmount: number, note: string) => void;
   onRestoreTransaction: (transaction: Transaction) => void;
   onFetchSavedTransactions: () => void;
   onClearTransaction: () => void;
@@ -210,8 +210,8 @@ export function Cart({
         open={isPaymentDialogOpen}
         onOpenChange={setIsPaymentDialogOpen}
         total={total}
-        onConfirm={(method, amount) => {
-          onConfirmPayment(method, amount);
+        onConfirm={(method, amount, note) => {
+          onConfirmPayment(method, amount, note);
           setIsPaymentDialogOpen(false);
         }}
       />

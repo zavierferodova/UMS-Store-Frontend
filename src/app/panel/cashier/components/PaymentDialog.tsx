@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TransactionPayment } from '@/domain/model/transaction';
 import { formatCurrency } from '@/lib/utils';
@@ -11,18 +12,20 @@ interface PaymentDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   total: number;
-  onConfirm: (method: TransactionPayment, payAmount: number) => void;
+  onConfirm: (method: TransactionPayment, payAmount: number, note: string) => void;
 }
 
 export function PaymentDialog({ open, onOpenChange, total, onConfirm }: PaymentDialogProps) {
   const [paymentMethod, setPaymentMethod] = useState<TransactionPayment>(TransactionPayment.CASH);
   const [payAmount, setPayAmount] = useState<number>(total);
   const [customAmount, setCustomAmount] = useState<string>('');
+  const [note, setNote] = useState<string>('');
 
   useEffect(() => {
     if (open) {
       setPayAmount(total);
       setCustomAmount('');
+      setNote('');
       setPaymentMethod(TransactionPayment.CASH);
     }
   }, [open, total]);
@@ -92,12 +95,12 @@ export function PaymentDialog({ open, onOpenChange, total, onConfirm }: PaymentD
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden gap-0">
-        <DialogHeader className="p-6 pb-4 border-b">
+      <DialogContent className="sm:max-w-[600px] p-0 gap-0 max-h-[90vh] flex flex-col">
+        <DialogHeader className="p-6 pb-4 border-b shrink-0">
           <DialogTitle className="text-2xl font-bold">Pembayaran</DialogTitle>
         </DialogHeader>
 
-        <div className="p-6 space-y-8">
+        <div className="p-6 space-y-8 overflow-y-auto flex-1">
           <div className="space-y-3">
             <label className="text-sm font-medium text-muted-foreground">Tipe Pembayaran</label>
             <Tabs
@@ -159,7 +162,18 @@ export function PaymentDialog({ open, onOpenChange, total, onConfirm }: PaymentD
           </div>
 
           <div className="space-y-2 pt-4 border-t">
-            <div className="flex justify-between items-end">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted-foreground">
+                Catatan (Opsional)
+              </label>
+              <Textarea
+                placeholder="Tambahkan catatan transaksi..."
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                className="resize-none mt-2"
+              />
+            </div>
+            <div className="flex justify-between items-end pt-2">
               <span className="font-bold text-lg">TOTAL</span>
               <span className="font-bold text-3xl text-primary">{formatCurrency(total)}</span>
             </div>
@@ -177,11 +191,11 @@ export function PaymentDialog({ open, onOpenChange, total, onConfirm }: PaymentD
           </div>
         </div>
 
-        <div className="p-6 bg-muted/30 border-t">
+        <div className="p-6 bg-muted/30 border-t shrink-0">
           <Button
             className="w-full h-14 text-xl font-bold rounded-xl shadow-lg shadow-primary/20 cursor-pointer"
             size="lg"
-            onClick={() => onConfirm(paymentMethod, payAmount)}
+            onClick={() => onConfirm(paymentMethod, payAmount, note)}
             disabled={payAmount < total}
           >
             Bayar Sekarang

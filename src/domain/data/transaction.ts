@@ -27,7 +27,14 @@ export type GetTransactionsParams = {
 
 export type UpdateTransactionParams = {
   pay?: number;
+  payment?: TransactionPayment | null;
+  note?: string;
   is_saved?: boolean;
+  items: {
+    product_sku: string;
+    unit_price: number;
+    amount: number;
+  }[];
 };
 
 export interface ITransactionData {

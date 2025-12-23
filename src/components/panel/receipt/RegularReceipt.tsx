@@ -83,8 +83,16 @@ export const RegularReceipt = ({ transaction, store }: RegularReceiptProps) => {
         </tbody>
       </table>
 
-      {/* Totals */}
-      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+      {/* Totals & Note */}
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ flex: 1, paddingRight: '40px' }}>
+          {transaction.note && (
+            <div style={{ backgroundColor: '#f9f9f9', padding: '15px', borderRadius: '4px' }}>
+              <strong style={{ display: 'block', marginBottom: '5px' }}>Catatan:</strong>
+              <p style={{ margin: 0, whiteSpace: 'pre-wrap', color: '#444' }}>{transaction.note}</p>
+            </div>
+          )}
+        </div>
         <div style={{ width: '300px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
             <span>Subtotal</span>

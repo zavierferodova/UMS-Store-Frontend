@@ -75,6 +75,16 @@ export const MiniReceipt = ({ transaction, store }: MiniReceiptProps) => {
 
       <div style={{ borderBottom: '1px dashed black', margin: '10px 0' }} />
 
+      {transaction.note && (
+        <>
+          <div style={{ marginBottom: '5px' }}>
+            <span style={{ fontWeight: 'bold' }}>Catatan:</span>
+            <p style={{ margin: 0 }}>{transaction.note}</p>
+          </div>
+          <div style={{ borderBottom: '1px dashed black', margin: '10px 0' }} />
+        </>
+      )}
+
       <div style={{ textAlign: 'center', marginTop: '10px' }}>
         <p style={{ margin: 0 }}>Terima Kasih</p>
         <p style={{ margin: 0 }}>Selamat Belanja Kembali</p>

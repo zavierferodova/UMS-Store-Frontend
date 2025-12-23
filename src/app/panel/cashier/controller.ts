@@ -138,8 +138,6 @@ export const useCartController = ({
 
       const newAmount = item.amount + delta;
 
-      console.log(delta);
-
       if (delta > 0 && newAmount > item.sku.stock) {
         toast.error('Stok tidak mencukupi', { id: 'stock-error' });
         return prev;
@@ -162,7 +160,11 @@ export const useCartController = ({
     return { subTotal, total };
   }, [cart]);
 
-  const handleConfirmPayment = async (method: TransactionPayment, payAmount: number) => {
+  const handleConfirmPayment = async (
+    method: TransactionPayment,
+    payAmount: number,
+    note: string,
+  ) => {
     if (!session?.user?.id) return;
 
     const loadingToast = toast.loading('Memproses transaksi...');
@@ -174,6 +176,13 @@ export const useCartController = ({
         res = await transactionData.updateTransaction(currentTransaction.id, {
           pay: payAmount,
           is_saved: false,
+          payment: method,
+          note,
+          items: cart.map((item) => ({
+            product_sku: item.sku.sku,
+            unit_price: item.price,
+            amount: item.amount,
+          })),
         });
       } else {
         res = await transactionData.createTransaction({
@@ -181,6 +190,7 @@ export const useCartController = ({
           payment: method,
           pay: payAmount,
           is_saved: false,
+          note,
           items: cart.map((item) => ({
             product_sku: item.sku.sku,
             unit_price: item.price,
@@ -224,6 +234,8 @@ export const useCartController = ({
       if (res) {
         toast.success('Transaksi disimpan!', { id: loadingToast });
         clearTransactionState();
+        onTransactionSuccessAction?.();
+        fetchSavedTransactions();
       } else {
         toast.error('Gagal menyimpan transaksi', { id: loadingToast });
       }

@@ -44,9 +44,15 @@ export type SelectProductCategoryProps = {
   value: string;
   onChange: (value: string) => void;
   error?: boolean;
+  defaultLabel?: string;
 };
 
-export function SelectProductCategory({ value, onChange, error }: SelectProductCategoryProps) {
+export function SelectProductCategory({
+  value,
+  onChange,
+  error,
+  defaultLabel,
+}: SelectProductCategoryProps) {
   const { data: session } = useSession();
   const isEditable = session?.user.role?.includes('admin') || session?.user.role?.includes('staff');
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -188,7 +194,7 @@ export function SelectProductCategory({ value, onChange, error }: SelectProductC
             )}
           >
             {value
-              ? categories.find((category) => category.value === value)?.label
+              ? categories.find((category) => category.value === value)?.label || defaultLabel
               : 'Pilih kategori...'}
             <CaretUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>

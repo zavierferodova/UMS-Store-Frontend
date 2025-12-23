@@ -98,6 +98,11 @@ export function ProductDetailForm({ product }: { product: Product }) {
                           value={field.value}
                           onChange={(value) => field.onChange(value)}
                           error={!!error}
+                          defaultLabel={
+                            field.value === product.category?.id
+                              ? product.category?.name
+                              : undefined
+                          }
                         />
                       </FormControl>
                       <FormMessage />
