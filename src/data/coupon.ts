@@ -1,0 +1,134 @@
+import { authOptions } from '@/config/login';
+import { APP_URL } from '@/config/env';
+import {
+  CreateCouponParams,
+  GetCouponsParams,
+  ICouponData,
+  UpdateCouponParams,
+} from '@/domain/data/coupon';
+import { Coupon } from '@/domain/model/coupon';
+import { IPaginationResponse } from '@/domain/model/response';
+import { fetchJSON } from '@/lib/fetch';
+import { getServerSession, Session } from 'next-auth';
+import { getSession } from 'next-auth/react';
+
+class CouponData implements ICouponData {
+  constructor(private readonly serverside: boolean) {
+    // pass
+  }
+
+  private getAuthSession(): Promise<Session | null> {
+    if (this.serverside) {
+      return getServerSession(authOptions);
+    } else {
+      return getSession();
+    }
+  }
+
+  async createCoupon(params: CreateCouponParams): Promise<Coupon | null> {
+    try {
+      const session = await this.getAuthSession();
+      const response = await fetchJSON(`${APP_URL}/apis/coupons`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token && { Authorization: `Bearer ${session.access_token}` }),
+        },
+        body: JSON.stringify(params),
+      });
+
+      if (response && response.data) {
+        return response.data as Coupon;
+      }
+    } catch {}
+    return null;
+  }
+
+  async updateCoupon(id: string, params: UpdateCouponParams): Promise<Coupon | null> {
+    try {
+      const session = await this.getAuthSession();
+      const response = await fetchJSON(`${APP_URL}/apis/coupons/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token && { Authorization: `Bearer ${session.access_token}` }),
+        },
+        body: JSON.stringify(params),
+      });
+
+      if (response && response.data) {
+        return response.data as Coupon;
+      }
+    } catch {}
+    return null;
+  }
+
+  async getCoupons(params?: GetCouponsParams): Promise<IPaginationResponse<Coupon>> {
+    try {
+      const session = await this.getAuthSession();
+      const searchParams = new URLSearchParams();
+
+      if (params) {
+        if (params.page) searchParams.append('page', params.page.toString());
+        if (params.limit) searchParams.append('limit', params.limit.toString());
+        if (params.search) searchParams.append('search', params.search);
+        if (params.start_time) searchParams.append('start_time', params.start_time);
+        if (params.end_time) searchParams.append('end_time', params.end_time);
+        if (params.type) {
+          params.type.forEach((t) => searchParams.append('type', t));
+        }
+        if (params.disabled) {
+          params.disabled.forEach((d) => searchParams.append('disabled', d));
+        }
+      }
+
+      const queryString = searchParams.toString();
+      const url = `${APP_URL}/apis/coupons${queryString ? `?${queryString}` : ''}`;
+
+      const response = await fetchJSON(url, {
+        method: 'GET',
+        headers: {
+          ...(session?.access_token && { Authorization: `Bearer ${session.access_token}` }),
+        },
+      });
+
+      if (response && response.data) {
+        return {
+          data: response.data as Coupon[],
+          meta: response.meta as IPaginationResponse<Coupon>['meta'],
+        };
+      }
+    } catch {}
+    return {
+      data: [],
+      meta: {
+        total: 0,
+        page: 0,
+        limit: 0,
+        next: null,
+        previous: null,
+      },
+    };
+  }
+
+  async getCoupon(id: string): Promise<Coupon | null> {
+    try {
+      const session = await this.getAuthSession();
+      const response = await fetchJSON(`${APP_URL}/apis/coupons/${id}`, {
+        method: 'GET',
+        headers: {
+          ...(session?.access_token && { Authorization: `Bearer ${session.access_token}` }),
+        },
+      });
+
+      if (response && response.data) {
+        return response.data as Coupon;
+      }
+    } catch {}
+    return null;
+  }
+}
+
+export const couponData: ICouponData = new CouponData(false);
+export const couponDataServer: ICouponData = new CouponData(true);
+export default couponData;

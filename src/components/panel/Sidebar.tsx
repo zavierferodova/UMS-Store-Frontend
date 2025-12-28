@@ -107,6 +107,12 @@ const menu: MenuGroup[] = [
         roles: [role.admin, role.cashier],
       },
       {
+        title: 'Kupon',
+        href: panelRoutes.coupons,
+        icon: <TagIcon />,
+        roles: [role.admin, role.cashier],
+      },
+      {
         title: 'Purchase Order',
         href: panelRoutes.purchaseOrders,
         icon: <ShoppingCartIcon />,
@@ -142,12 +148,6 @@ const menu: MenuGroup[] = [
             roles: [role.admin, role.procurement],
           },
         ],
-      },
-      {
-        title: 'Kupon',
-        href: '#',
-        icon: <TagIcon />,
-        roles: [role.admin, role.procurement],
       },
       {
         title: 'Pengguna',

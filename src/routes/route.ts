@@ -17,6 +17,9 @@ export const panelRoutes = {
   transactionDetail: (id: string) => `/panel/transactions/${id}`,
   cashier: '/panel/cashier',
   store: '/panel/store',
+  coupons: '/panel/coupons',
+  addCoupon: '/panel/coupons/add',
+  editCoupon: (id: string) => `/panel/coupons/${id}`,
   noRole: '/no-role',
 };
 
