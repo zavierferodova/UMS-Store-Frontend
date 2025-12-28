@@ -69,6 +69,7 @@ export function EditCouponForm({ coupon }: EditCouponFormProps) {
                     <FormControl>
                       <Input
                         type="datetime-local"
+                        className="block"
                         value={field.value ? format(field.value, "yyyy-MM-dd'T'HH:mm") : ''}
                         onChange={(e) => {
                           const date = new Date(e.target.value);
@@ -92,6 +93,7 @@ export function EditCouponForm({ coupon }: EditCouponFormProps) {
                     <FormControl>
                       <Input
                         type="datetime-local"
+                        className="block"
                         value={field.value ? format(field.value, "yyyy-MM-dd'T'HH:mm") : ''}
                         onChange={(e) => {
                           const date = new Date(e.target.value);
@@ -119,7 +121,11 @@ export function EditCouponForm({ coupon }: EditCouponFormProps) {
                     </CardDescription>
                   </div>
                   <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    <Switch
+                      className="cursor-pointer"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -127,7 +133,7 @@ export function EditCouponForm({ coupon }: EditCouponFormProps) {
             />
           </CardContent>
         </Card>
-        <div className="flex justify-end">
+        <div className="flex justify-end mt-3">
           <Button className="cursor-pointer" type="submit">
             Update
           </Button>

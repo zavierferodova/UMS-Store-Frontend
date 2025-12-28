@@ -73,7 +73,7 @@ function CouponsPageContent() {
             </div>
             <FilterDialog state={filterDialogState} />
             <Link href={panelRoutes.addCoupon}>
-              <Button>
+              <Button className="cursor-pointer">
                 <Plus className="h-4 w-4" /> Tambah
               </Button>
             </Link>

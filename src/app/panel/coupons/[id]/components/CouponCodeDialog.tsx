@@ -27,6 +27,7 @@ import {
   UpdateCodeFormValues,
 } from './codes-validation';
 import { CouponCode } from '@/domain/model/coupon';
+import couponData from '@/data/coupon';
 
 interface CouponCodeDialogProps {
   open: boolean;
@@ -70,6 +71,17 @@ export function CouponCodeDialog({
   }, [open, mode, initialData, form]);
 
   const handleSubmit = async (values: any) => {
+    if (mode === 'create') {
+      const availability = await couponData.checkCouponCode(values.code);
+      if (availability && !availability.is_available) {
+        form.setError('code', {
+          type: 'manual',
+          message: 'Kode kupon sudah digunakan',
+        });
+        return;
+      }
+    }
+
     const success = await onSubmit(values);
     if (success) {
       onOpenChange(false);
@@ -115,7 +127,10 @@ export function CouponCodeDialog({
                       type="number"
                       placeholder="0"
                       {...field}
-                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                      onChange={(e) => {
+                        const value = e.target.value === '' ? '' : e.target.valueAsNumber;
+                        field.onChange(value);
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -132,14 +147,20 @@ export function CouponCodeDialog({
                       <FormLabel className="text-base">Nonaktifkan</FormLabel>
                     </div>
                     <FormControl>
-                      <Switch checked={field.value as boolean} onCheckedChange={field.onChange} />
+                      <Switch
+                        className="cursor-pointer"
+                        checked={field.value as boolean}
+                        onCheckedChange={field.onChange}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
               />
             )}
             <DialogFooter>
-              <Button type="submit">Simpan</Button>
+              <Button type="submit" className="w-full sm:w-auto cursor-pointer">
+                Simpan
+              </Button>
             </DialogFooter>
           </form>
         </Form>

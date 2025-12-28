@@ -22,7 +22,7 @@ export function AddCouponForm() {
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="mb-6 max-w-2xl mx-auto">
-        <Card className="mb-6">
+        <Card className="mb-3">
           <CardHeader>
             <CardTitle>Detail Kupon</CardTitle>
             <CardDescription>Informasi dasar tentang kupon</CardDescription>
@@ -50,7 +50,7 @@ export function AddCouponForm() {
                   <FormLabel>Tipe Kupon</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Pilih tipe kupon" />
                       </SelectTrigger>
                     </FormControl>
@@ -119,6 +119,7 @@ export function AddCouponForm() {
                     <FormLabel>Waktu Mulai</FormLabel>
                     <FormControl>
                       <Input
+                        className="block"
                         type="datetime-local"
                         value={field.value ? format(field.value, "yyyy-MM-dd'T'HH:mm") : ''}
                         onChange={(e) => {
@@ -142,6 +143,7 @@ export function AddCouponForm() {
                     <FormLabel>Waktu Selesai</FormLabel>
                     <FormControl>
                       <Input
+                        className="block"
                         type="datetime-local"
                         value={field.value ? format(field.value, "yyyy-MM-dd'T'HH:mm") : ''}
                         onChange={(e) => {

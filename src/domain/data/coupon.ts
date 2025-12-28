@@ -49,16 +49,20 @@ export type CouponCodeAvailabilityResponse = {
   is_available: boolean;
 };
 
+export type CheckCouponCodeUsageResponse = {
+  code: string;
+  stock: number;
+  can_use: boolean;
+};
+
 export interface ICouponData {
   createCoupon(params: CreateCouponParams): Promise<Coupon | null>;
   updateCoupon(id: string, params: UpdateCouponParams): Promise<Coupon | null>;
   getCoupons(params?: GetCouponsParams): Promise<IPaginationResponse<Coupon>>;
   getCoupon(id: string): Promise<Coupon | null>;
   createCouponCode(couponId: string, params: CreateCouponCodeParams): Promise<CouponCode | null>;
-  updateCouponCode(
-    couponId: string,
-    code: string,
-    params: UpdateCouponCodeParams,
-  ): Promise<CouponCode | null>;
+  updateCouponCode(code: string, params: UpdateCouponCodeParams): Promise<CouponCode | null>;
   getCouponCodes(couponId: string, params: GetCouponCodesParams): Promise<CouponCode[]>;
+  checkCouponCode(code: string): Promise<CouponCodeAvailabilityResponse | null>;
+  checkCouponCodeUsage(code: string): Promise<CheckCouponCodeUsageResponse | null>;
 }

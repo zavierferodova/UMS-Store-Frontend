@@ -1,6 +1,7 @@
 import { authOptions } from '@/config/login';
 import { APP_URL } from '@/config/env';
 import {
+  CouponCodeAvailabilityResponse,
   CreateCouponCodeParams,
   CreateCouponParams,
   GetCouponCodesParams,
@@ -153,14 +154,10 @@ class CouponData implements ICouponData {
     return null;
   }
 
-  async updateCouponCode(
-    couponId: string,
-    code: string,
-    params: UpdateCouponCodeParams,
-  ): Promise<CouponCode | null> {
+  async updateCouponCode(code: string, params: UpdateCouponCodeParams): Promise<CouponCode | null> {
     try {
       const session = await this.getAuthSession();
-      const response = await fetchJSON(`${APP_URL}/apis/coupons/${couponId}/codes/${code}`, {
+      const response = await fetchJSON(`${APP_URL}/apis/coupons/codes/${code}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -205,6 +202,23 @@ class CouponData implements ICouponData {
       }
     } catch {}
     return [];
+  }
+
+  async checkCouponCode(code: string): Promise<CouponCodeAvailabilityResponse | null> {
+    try {
+      const session = await this.getAuthSession();
+      const response = await fetchJSON(`${APP_URL}/apis/coupons/codes/${code}/check`, {
+        method: 'GET',
+        headers: {
+          ...(session?.access_token && { Authorization: `Bearer ${session.access_token}` }),
+        },
+      });
+
+      if (response && response.data) {
+        return response.data as CouponCodeAvailabilityResponse;
+      }
+    } catch {}
+    return null;
   }
 }
 

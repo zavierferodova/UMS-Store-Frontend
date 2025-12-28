@@ -40,7 +40,7 @@ export function useCouponCodesController(couponId: string) {
   };
 
   const updateCode = async (code: string, values: UpdateCodeFormValues) => {
-    const response = await couponData.updateCouponCode(couponId, code, values);
+    const response = await couponData.updateCouponCode(code, values);
     if (response) {
       toast.success('Kode kupon berhasil diperbarui');
       fetchCodes();

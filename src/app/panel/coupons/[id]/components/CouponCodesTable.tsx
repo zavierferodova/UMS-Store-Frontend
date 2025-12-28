@@ -14,7 +14,7 @@ import { useCouponCodesController } from './codes-controller';
 import { CouponCodeDialog } from './CouponCodeDialog';
 import { useState } from 'react';
 import { CouponCode } from '@/domain/model/coupon';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 interface CouponCodesTableProps {
   couponId: string;
@@ -52,25 +52,26 @@ export function CouponCodesTable({ couponId }: CouponCodesTableProps) {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-xl font-bold">Daftar Kode Kupon</CardTitle>
-        <Button onClick={handleCreate} size="sm">
-          <Plus className="mr-2 h-4 w-4" /> Tambah Kode
-        </Button>
+      <CardHeader>
+        <CardTitle>Daftar Kode Kupon</CardTitle>
+        <CardDescription>Kelola kode kupon anda di sini</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center py-4">
-          <div className="relative w-full max-w-sm">
+        <div className="flex items-center mb-4">
+          <div className="relative w-full mr-2">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Cari kode..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-8"
+              className="pl-8 w-full"
             />
           </div>
+          <Button onClick={handleCreate} size="sm" className="cursor-pointer">
+            <Plus className="h-4 w-4" /> Tambah
+          </Button>
         </div>
-        <div className="rounded-md border">
+        <div>
           <Table>
             <TableHeader>
               <TableRow>
@@ -106,7 +107,12 @@ export function CouponCodesTable({ couponId }: CouponCodesTableProps) {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button variant="ghost" size="icon" onClick={() => handleEdit(code)}>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleEdit(code)}
+                        className="cursor-pointer"
+                      >
                         <Pencil className="h-4 w-4" />
                       </Button>
                     </TableCell>
