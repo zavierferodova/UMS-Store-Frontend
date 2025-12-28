@@ -1,12 +1,15 @@
 import { authOptions } from '@/config/login';
 import { APP_URL } from '@/config/env';
 import {
+  CreateCouponCodeParams,
   CreateCouponParams,
+  GetCouponCodesParams,
   GetCouponsParams,
   ICouponData,
+  UpdateCouponCodeParams,
   UpdateCouponParams,
 } from '@/domain/data/coupon';
-import { Coupon } from '@/domain/model/coupon';
+import { Coupon, CouponCode } from '@/domain/model/coupon';
 import { IPaginationResponse } from '@/domain/model/response';
 import { fetchJSON } from '@/lib/fetch';
 import { getServerSession, Session } from 'next-auth';
@@ -126,6 +129,82 @@ class CouponData implements ICouponData {
       }
     } catch {}
     return null;
+  }
+
+  async createCouponCode(
+    couponId: string,
+    params: CreateCouponCodeParams,
+  ): Promise<CouponCode | null> {
+    try {
+      const session = await this.getAuthSession();
+      const response = await fetchJSON(`${APP_URL}/apis/coupons/${couponId}/codes`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token && { Authorization: `Bearer ${session.access_token}` }),
+        },
+        body: JSON.stringify(params),
+      });
+
+      if (response && response.data) {
+        return response.data as CouponCode;
+      }
+    } catch {}
+    return null;
+  }
+
+  async updateCouponCode(
+    couponId: string,
+    code: string,
+    params: UpdateCouponCodeParams,
+  ): Promise<CouponCode | null> {
+    try {
+      const session = await this.getAuthSession();
+      const response = await fetchJSON(`${APP_URL}/apis/coupons/${couponId}/codes/${code}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token && { Authorization: `Bearer ${session.access_token}` }),
+        },
+        body: JSON.stringify(params),
+      });
+
+      if (response && response.data) {
+        return response.data as CouponCode;
+      }
+    } catch {}
+    return null;
+  }
+
+  async getCouponCodes(couponId: string, params: GetCouponCodesParams): Promise<CouponCode[]> {
+    try {
+      const session = await this.getAuthSession();
+      const searchParams = new URLSearchParams();
+
+      if (params) {
+        if (params.page) searchParams.append('page', params.page.toString());
+        if (params.limit) searchParams.append('limit', params.limit.toString());
+        if (params.search) searchParams.append('search', params.search);
+        if (params.disabled) {
+          params.disabled.forEach((d) => searchParams.append('disabled', d));
+        }
+      }
+
+      const queryString = searchParams.toString();
+      const url = `${APP_URL}/apis/coupons/${couponId}/codes${queryString ? `?${queryString}` : ''}`;
+
+      const response = await fetchJSON(url, {
+        method: 'GET',
+        headers: {
+          ...(session?.access_token && { Authorization: `Bearer ${session.access_token}` }),
+        },
+      });
+
+      if (response && response.data) {
+        return response.data as CouponCode[];
+      }
+    } catch {}
+    return [];
   }
 }
 

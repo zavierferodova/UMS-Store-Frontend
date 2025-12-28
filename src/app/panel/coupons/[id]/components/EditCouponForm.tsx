@@ -19,8 +19,8 @@ export function EditCouponForm({ coupon }: EditCouponFormProps) {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mb-6 max-w-2xl mx-auto">
-        <Card className="mb-6">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <Card>
           <CardHeader>
             <CardTitle>Edit Kupon</CardTitle>
             <CardDescription>Perbarui informasi kupon</CardDescription>

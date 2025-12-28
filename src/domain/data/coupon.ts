@@ -1,4 +1,4 @@
-import { Coupon, CouponType } from '../model/coupon';
+import { Coupon, CouponCode, CouponType } from '../model/coupon';
 import { IPaginationResponse } from '../model/response';
 
 export type CreateCouponParams = {
@@ -27,9 +27,38 @@ export type UpdateCouponParams = {
   end_time?: string;
 };
 
+export type CreateCouponCodeParams = {
+  code: string;
+  stock: number;
+};
+
+export type UpdateCouponCodeParams = {
+  stock?: number;
+  disabled?: boolean;
+};
+
+export type GetCouponCodesParams = {
+  page?: number;
+  limit?: number;
+  search?: string;
+  disabled?: string[];
+};
+
+export type CouponCodeAvailabilityResponse = {
+  code: string;
+  is_available: boolean;
+};
+
 export interface ICouponData {
   createCoupon(params: CreateCouponParams): Promise<Coupon | null>;
   updateCoupon(id: string, params: UpdateCouponParams): Promise<Coupon | null>;
   getCoupons(params?: GetCouponsParams): Promise<IPaginationResponse<Coupon>>;
   getCoupon(id: string): Promise<Coupon | null>;
+  createCouponCode(couponId: string, params: CreateCouponCodeParams): Promise<CouponCode | null>;
+  updateCouponCode(
+    couponId: string,
+    code: string,
+    params: UpdateCouponCodeParams,
+  ): Promise<CouponCode | null>;
+  getCouponCodes(couponId: string, params: GetCouponCodesParams): Promise<CouponCode[]>;
 }

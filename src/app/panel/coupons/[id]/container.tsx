@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { panelRoutes } from '@/routes/route';
 import { EditCouponForm } from './components/EditCouponForm';
 import { Coupon } from '@/domain/model/coupon';
+import { CouponCodesTable } from './components/CouponCodesTable';
 
 interface CouponPageContainerProps {
   coupon: Coupon;
@@ -28,5 +29,10 @@ export function CouponPageContainer({ coupon }: CouponPageContainerProps) {
     ]);
   }, [setMenu, coupon.id]);
 
-  return <EditCouponForm coupon={coupon} />;
+  return (
+    <div className="grid gap-6 lg:grid-cols-2 items-start">
+      <EditCouponForm coupon={coupon} />
+      <CouponCodesTable couponId={coupon.id} />
+    </div>
+  );
 }
