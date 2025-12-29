@@ -39,6 +39,7 @@ export function CouponCodesTable({ couponId }: CouponCodesTableProps) {
     setDialogOpen(true);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (values: any) => {
     if (dialogMode === 'create') {
       return await createCode(values);

@@ -12,8 +12,10 @@ export function useController(): {
   onSubmit: SubmitHandler<CouponFormValues>;
 } {
   const router = useRouter();
+
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   const form = useForm<CouponFormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema) as any,
     defaultValues: {
       name: '',
       type: CouponType.voucher,

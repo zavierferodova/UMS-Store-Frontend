@@ -16,7 +16,7 @@ export function useCouponCodesController(couponId: string) {
         search: search || undefined,
       });
       setCodes(data);
-    } catch (error) {
+    } catch {
       toast.error('Gagal memuat kode kupon');
     } finally {
       setLoading(false);

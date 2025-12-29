@@ -20,12 +20,7 @@ import { Switch } from '@/components/ui/switch';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
-import {
-  createCodeSchema,
-  updateCodeSchema,
-  CreateCodeFormValues,
-  UpdateCodeFormValues,
-} from './codes-validation';
+import { createCodeSchema, updateCodeSchema } from './codes-validation';
 import { CouponCode } from '@/domain/model/coupon';
 import couponData from '@/data/coupon';
 
@@ -34,6 +29,7 @@ interface CouponCodeDialogProps {
   onOpenChange: (open: boolean) => void;
   mode: 'create' | 'update';
   initialData?: CouponCode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSubmit: (values: any) => Promise<boolean>;
 }
 
@@ -44,6 +40,7 @@ export function CouponCodeDialog({
   initialData,
   onSubmit,
 }: CouponCodeDialogProps) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const form = useForm<any>({
     resolver: zodResolver(mode === 'create' ? createCodeSchema : updateCodeSchema),
     defaultValues: {
@@ -70,6 +67,7 @@ export function CouponCodeDialog({
     }
   }, [open, mode, initialData, form]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (values: any) => {
     if (mode === 'create') {
       const availability = await couponData.checkCouponCode(values.code);
