@@ -1,3 +1,4 @@
+import { Coupon, CouponCode } from './coupon';
 import { User } from './user';
 
 export interface Transaction {
@@ -15,6 +16,11 @@ export interface Transaction {
   created_at: string;
   updated_at: string;
   items: TransactionItem[];
+  coupons: TransactionCoupon[];
+}
+
+export interface TransactionCoupon extends Coupon {
+  code: CouponCode;
 }
 
 export interface TransactionItem {

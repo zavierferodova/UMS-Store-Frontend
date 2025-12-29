@@ -28,10 +28,13 @@ export default function CashierContainer({ store }: CashierContainerProps) {
     cart,
     subTotal,
     total,
+    discountTotal,
     savedTransactions,
     savedTransactionsLoading,
     lastSuccessfulTransaction,
     currentTransaction,
+    coupons,
+    couponLoading,
     setSearch,
     handleLoadMore,
     addToCart,
@@ -42,6 +45,8 @@ export default function CashierContainer({ store }: CashierContainerProps) {
     restoreTransaction,
     clearTransactionState,
     clearLastSuccessfulTransaction,
+    checkCoupon,
+    removeCoupon,
   } = useController();
   const { setMenu } = usePanelHeader();
 
@@ -84,6 +89,11 @@ export default function CashierContainer({ store }: CashierContainerProps) {
           cart={cart}
           subTotal={subTotal}
           total={total}
+          discountTotal={discountTotal}
+          coupons={coupons}
+          couponLoading={couponLoading}
+          checkCoupon={checkCoupon}
+          removeCoupon={removeCoupon}
           onUpdateQuantity={updateQuantity}
           onSaveTransaction={handleSaveTransaction}
           onConfirmPayment={handleConfirmPayment}
@@ -118,6 +128,11 @@ export default function CashierContainer({ store }: CashierContainerProps) {
                 cart={cart}
                 subTotal={subTotal}
                 total={total}
+                discountTotal={discountTotal}
+                coupons={coupons}
+                couponLoading={couponLoading}
+                checkCoupon={checkCoupon}
+                removeCoupon={removeCoupon}
                 onUpdateQuantity={updateQuantity}
                 onSaveTransaction={handleSaveTransaction}
                 onConfirmPayment={handleConfirmPayment}

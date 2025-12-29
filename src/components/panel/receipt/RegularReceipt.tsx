@@ -96,8 +96,28 @@ export const RegularReceipt = ({ transaction, store }: RegularReceiptProps) => {
         <div style={{ width: '300px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
             <span>Subtotal</span>
-            <span>{formatCurrency(total)}</span>
+            <span>{formatCurrency(transaction.sub_total)}</span>
           </div>
+          {transaction.coupons && transaction.coupons.length > 0 && (
+            <>
+              {transaction.coupons.map((coupon, index) => (
+                <div
+                  key={index}
+                  style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}
+                >
+                  <span>Voucher ({coupon.code.code})</span>
+                  <span>
+                    -
+                    {formatCurrency(
+                      coupon.type === 'voucher'
+                        ? coupon.voucher_value || 0
+                        : (transaction.sub_total * (coupon.discount_percentage || 0)) / 100,
+                    )}
+                  </span>
+                </div>
+              ))}
+            </>
+          )}
           <div
             style={{
               display: 'flex',

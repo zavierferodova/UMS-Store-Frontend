@@ -49,10 +49,10 @@ export type CouponCodeAvailabilityResponse = {
   is_available: boolean;
 };
 
-export type CheckCouponCodeUsageResponse = {
-  code: string;
-  stock: number;
-  can_use: boolean;
+export type CheckCouponCodeUsageResponse = Coupon & {
+  code: CouponCode & {
+    can_use: boolean;
+  };
 };
 
 export interface ICouponData {

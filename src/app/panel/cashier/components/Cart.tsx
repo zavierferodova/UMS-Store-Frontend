@@ -1,11 +1,22 @@
 import { CartItem } from '../types';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import Image from 'next/image';
-import { MinusIcon, PlusIcon, BanknoteIcon, SaveIcon, FolderOpen, XIcon } from 'lucide-react';
+import {
+  MinusIcon,
+  PlusIcon,
+  BanknoteIcon,
+  SaveIcon,
+  FolderOpen,
+  XIcon,
+  Loader2,
+  TicketIcon,
+} from 'lucide-react';
 import { cn, formatCurrency } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Transaction, TransactionPayment } from '@/domain/model/transaction';
+import { CheckCouponCodeUsageResponse } from '@/domain/data/coupon';
 import { useState } from 'react';
 import { PaymentDialog } from './PaymentDialog';
 import { SavedTransactionsDialog } from './SavedTransactionsDialog';
@@ -15,15 +26,20 @@ interface CartProps {
   cart: CartItem[];
   subTotal: number;
   total: number;
+  discountTotal: number;
   savedTransactions: Transaction[];
   savedTransactionsLoading: boolean;
   currentTransactionCode: string | null;
+  coupons: CheckCouponCodeUsageResponse[];
+  couponLoading: boolean;
   onUpdateQuantity: (skuId: string, delta: number) => void;
   onSaveTransaction: () => void;
   onConfirmPayment: (method: TransactionPayment, payAmount: number, note: string) => void;
   onRestoreTransaction: (transaction: Transaction) => void;
   onFetchSavedTransactions: () => void;
   onClearTransaction: () => void;
+  checkCoupon: (code: string) => void;
+  removeCoupon: (code: string) => void;
 }
 
 export function Cart({
@@ -31,18 +47,24 @@ export function Cart({
   cart,
   subTotal,
   total,
+  discountTotal,
   savedTransactions,
   savedTransactionsLoading,
   currentTransactionCode,
+  coupons,
+  couponLoading,
   onUpdateQuantity,
   onSaveTransaction,
   onConfirmPayment,
   onRestoreTransaction,
   onFetchSavedTransactions,
   onClearTransaction,
+  checkCoupon,
+  removeCoupon,
 }: CartProps) {
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const [isSavedTransactionsDialogOpen, setIsSavedTransactionsDialogOpen] = useState(false);
+  const [couponCode, setCouponCode] = useState('');
 
   return (
     <>
@@ -172,11 +194,74 @@ export function Cart({
         </ScrollArea>
 
         <div className="p-6 bg-muted/30 space-y-6 border-t">
+          <div className="space-y-2">
+            <div className="flex gap-2">
+              <Input
+                placeholder="Kode Kupon"
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value)}
+                disabled={couponLoading}
+                className="bg-background"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && couponCode && !couponLoading) {
+                    checkCoupon(couponCode);
+                    setCouponCode('');
+                  }
+                }}
+              />
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  checkCoupon(couponCode);
+                  setCouponCode('');
+                }}
+                disabled={!couponCode || couponLoading}
+              >
+                {couponLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <TicketIcon className="w-4 h-4" />
+                )}
+              </Button>
+            </div>
+            {coupons.length > 0 && (
+              <div className="space-y-1">
+                {coupons.map((coupon) => (
+                  <div
+                    key={coupon.code.code}
+                    className="text-xs text-green-600 font-medium flex items-center justify-between bg-green-50 p-2 rounded-md border border-green-100"
+                  >
+                    <div className="flex items-center gap-1">
+                      <TicketIcon className="w-3 h-3" />
+                      <span>
+                        {coupon.name} ({coupon.code.code})
+                      </span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-5 w-5 text-green-700 hover:text-green-800 hover:bg-green-100"
+                      onClick={() => removeCoupon(coupon.code.code)}
+                    >
+                      <XIcon className="w-3 h-3" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           <div className="space-y-3">
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Subtotal</span>
               <span className="font-medium">{formatCurrency(subTotal)}</span>
             </div>
+            {discountTotal > 0 && (
+              <div className="flex justify-between text-sm text-green-600">
+                <span>Diskon</span>
+                <span className="font-medium">-{formatCurrency(discountTotal)}</span>
+              </div>
+            )}
             <Separator className="my-2" />
             <div className="flex justify-between items-end">
               <span className="font-bold text-lg">Total</span>

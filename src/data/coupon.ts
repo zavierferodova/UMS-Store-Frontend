@@ -1,6 +1,7 @@
 import { authOptions } from '@/config/login';
 import { APP_URL } from '@/config/env';
 import {
+  CheckCouponCodeUsageResponse,
   CouponCodeAvailabilityResponse,
   CreateCouponCodeParams,
   CreateCouponParams,
@@ -216,6 +217,23 @@ class CouponData implements ICouponData {
 
       if (response && response.data) {
         return response.data as CouponCodeAvailabilityResponse;
+      }
+    } catch {}
+    return null;
+  }
+
+  async checkCouponCodeUsage(code: string): Promise<CheckCouponCodeUsageResponse | null> {
+    try {
+      const session = await this.getAuthSession();
+      const response = await fetchJSON(`${APP_URL}/apis/coupons/codes/${code}/usage`, {
+        method: 'GET',
+        headers: {
+          ...(session?.access_token && { Authorization: `Bearer ${session.access_token}` }),
+        },
+      });
+
+      if (response && response.data) {
+        return response.data as CheckCouponCodeUsageResponse;
       }
     } catch {}
     return null;

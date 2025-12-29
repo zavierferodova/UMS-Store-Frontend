@@ -12,6 +12,10 @@ export type CreateTransactionParams = {
     unit_price: number;
     amount: number;
   }[];
+  coupons: {
+    code: string;
+    amounts: number;
+  }[];
 };
 
 export type GetTransactionsParams = {
@@ -34,6 +38,10 @@ export type UpdateTransactionParams = {
     product_sku: string;
     unit_price: number;
     amount: number;
+  }[];
+  coupons: {
+    code: string;
+    amounts: number;
   }[];
 };
 

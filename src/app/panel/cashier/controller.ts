@@ -5,8 +5,10 @@ import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
 import { productData } from '@/data/product';
 import { transactionData } from '@/data/transaction';
+import { couponData } from '@/data/coupon';
 import { ProductSingleSKU } from '@/domain/model/product';
 import { Transaction, TransactionPayment } from '@/domain/model/transaction';
+import { CheckCouponCodeUsageResponse } from '@/domain/data/coupon';
 import { CartItem } from './types';
 
 export const useProductController = () => {
@@ -92,6 +94,44 @@ export const useCartController = ({
   const [lastSuccessfulTransaction, setLastSuccessfulTransaction] = useState<Transaction | null>(
     null,
   );
+  const [coupons, setCoupons] = useState<CheckCouponCodeUsageResponse[]>([]);
+  const [couponLoading, setCouponLoading] = useState(false);
+
+  const checkCoupon = async (code: string) => {
+    setCouponLoading(true);
+    try {
+      // Check if coupon already applied
+      if (coupons.some((c) => c.code.code === code)) {
+        toast.error('Kupon sudah digunakan');
+        return;
+      }
+
+      const res = await couponData.checkCouponCodeUsage(code);
+      if (res && res.code.can_use) {
+        // Rule: Only one discount/percentage coupon allowed
+        if (res.type === 'discount') {
+          const hasDiscountCoupon = coupons.some((c) => c.type === 'discount');
+          if (hasDiscountCoupon) {
+            toast.error('Hanya satu kupon diskon (%) yang dapat digunakan');
+            return;
+          }
+        }
+
+        setCoupons((prev) => [...prev, res]);
+        toast.success('Kupon berhasil dipasang');
+      } else {
+        toast.error('Kupon tidak valid atau tidak dapat digunakan');
+      }
+    } catch {
+      toast.error('Gagal mengecek kupon');
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const removeCoupon = (code: string) => {
+    setCoupons((prev) => prev.filter((c) => c.code.code !== code));
+  };
 
   const fetchSavedTransactions = useCallback(async () => {
     setSavedTransactionsLoading(true);
@@ -154,11 +194,30 @@ export const useCartController = ({
     });
   };
 
-  const { subTotal, total } = useMemo(() => {
+  const { subTotal, total, discountTotal } = useMemo(() => {
     const subTotal = cart.reduce((acc, item) => acc + item.price * item.amount, 0);
-    const total = subTotal;
-    return { subTotal, total };
-  }, [cart]);
+    let voucherTotal = 0;
+    let percentageDiscount = 0;
+
+    coupons.forEach((coupon) => {
+      if (coupon.type === 'voucher') {
+        voucherTotal += coupon.voucher_value || 0;
+      } else if (coupon.type === 'discount') {
+        percentageDiscount = coupon.discount_percentage || 0;
+      }
+    });
+
+    const percentageDiscountAmount = (subTotal * percentageDiscount) / 100;
+
+    let discountTotal = voucherTotal + percentageDiscountAmount;
+
+    if (discountTotal > subTotal) {
+      discountTotal = subTotal;
+    }
+
+    const total = subTotal - discountTotal;
+    return { subTotal, total, discountTotal };
+  }, [cart, coupons]);
 
   const handleConfirmPayment = async (
     method: TransactionPayment,
@@ -183,6 +242,7 @@ export const useCartController = ({
             unit_price: item.price,
             amount: item.amount,
           })),
+          coupons: coupons.map((c) => ({ code: c.code.code, amounts: 1 })),
         });
       } else {
         res = await transactionData.createTransaction({
@@ -196,12 +256,14 @@ export const useCartController = ({
             unit_price: item.price,
             amount: item.amount,
           })),
+          coupons: coupons.map((c) => ({ code: c.code.code, amounts: 1 })),
         });
       }
 
       if (res) {
         toast.success('Transaksi berhasil!', { id: loadingToast });
         setCart([]);
+        setCoupons([]);
         setCurrentTransaction(null);
         setLastSuccessfulTransaction(res);
         onTransactionSuccessAction?.();
@@ -229,6 +291,7 @@ export const useCartController = ({
           unit_price: item.price,
           amount: item.amount,
         })),
+        coupons: coupons.map((c) => ({ code: c.code.code, amounts: 1 })),
       });
 
       if (res) {
@@ -298,6 +361,7 @@ export const useCartController = ({
 
   const clearTransactionState = () => {
     setCart([]);
+    setCoupons([]);
     setCurrentTransaction(null);
   };
   const clearLastSuccessfulTransaction = () => {
@@ -308,10 +372,13 @@ export const useCartController = ({
     cart,
     subTotal,
     total,
+    discountTotal,
     savedTransactions,
     savedTransactionsLoading,
     currentTransaction,
     lastSuccessfulTransaction,
+    coupons,
+    couponLoading,
     addToCart,
     updateQuantity,
     handleConfirmPayment,
@@ -320,6 +387,8 @@ export const useCartController = ({
     restoreTransaction,
     clearTransactionState,
     clearLastSuccessfulTransaction,
+    checkCoupon,
+    removeCoupon,
   };
 };
 

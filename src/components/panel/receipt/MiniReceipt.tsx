@@ -60,6 +60,30 @@ export const MiniReceipt = ({ transaction, store }: MiniReceiptProps) => {
 
       <div style={{ borderBottom: '1px dashed black', margin: '10px 0' }} />
 
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <span>Subtotal</span>
+        <span>{formatCurrency(transaction.sub_total)}</span>
+      </div>
+
+      {transaction.coupons && transaction.coupons.length > 0 && (
+        <>
+          <span>Voucher</span>
+          {transaction.coupons.map((coupon, index) => (
+            <div key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span>({coupon.code.code})</span>
+              <span>
+                -
+                {formatCurrency(
+                  coupon.type === 'voucher'
+                    ? coupon.voucher_value || 0
+                    : (transaction.sub_total * (coupon.discount_percentage || 0)) / 100,
+                )}
+              </span>
+            </div>
+          ))}
+        </>
+      )}
+
       <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold' }}>
         <span>Total</span>
         <span>{formatCurrency(total)}</span>
