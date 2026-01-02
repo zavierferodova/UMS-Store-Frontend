@@ -1,6 +1,5 @@
 import { CartItem } from '../types';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import Image from 'next/image';
 import {
   MinusIcon,
@@ -9,7 +8,6 @@ import {
   SaveIcon,
   FolderOpen,
   XIcon,
-  Loader2,
   TicketIcon,
 } from 'lucide-react';
 import { cn, formatCurrency } from '@/lib/utils';
@@ -20,6 +18,18 @@ import { CheckCouponCodeUsageResponse } from '@/domain/data/coupon';
 import { useState } from 'react';
 import { PaymentDialog } from './PaymentDialog';
 import { SavedTransactionsDialog } from './SavedTransactionsDialog';
+import { CouponsDialog } from './CouponsDialog';
+import { Badge } from '@/components/ui/badge';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 interface CartProps {
   className?: string;
@@ -27,6 +37,7 @@ interface CartProps {
   subTotal: number;
   total: number;
   discountTotal: number;
+  remainingDiscount?: number;
   savedTransactions: Transaction[];
   savedTransactionsLoading: boolean;
   currentTransactionCode: string | null;
@@ -48,6 +59,7 @@ export function Cart({
   subTotal,
   total,
   discountTotal,
+  remainingDiscount = 0,
   savedTransactions,
   savedTransactionsLoading,
   currentTransactionCode,
@@ -64,7 +76,8 @@ export function Cart({
 }: CartProps) {
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const [isSavedTransactionsDialogOpen, setIsSavedTransactionsDialogOpen] = useState(false);
-  const [couponCode, setCouponCode] = useState('');
+  const [isCouponsDialogOpen, setIsCouponsDialogOpen] = useState(false);
+  const [isNoCouponConfirmDialogOpen, setIsNoCouponConfirmDialogOpen] = useState(false);
 
   return (
     <>
@@ -109,7 +122,7 @@ export function Cart({
           </div>
         )}
 
-        <ScrollArea className="flex-1 p-6">
+        <ScrollArea className="flex-1 p-6 space-y-6 overflow-y-auto">
           {cart.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-40 text-muted-foreground space-y-2">
               <div className="p-4 bg-muted rounded-full">
@@ -195,60 +208,21 @@ export function Cart({
 
         <div className="p-6 bg-muted/30 space-y-6 border-t">
           <div className="space-y-2">
-            <div className="flex gap-2">
-              <Input
-                placeholder="Kode Kupon"
-                value={couponCode}
-                onChange={(e) => setCouponCode(e.target.value)}
-                disabled={couponLoading}
-                className="bg-background"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && couponCode && !couponLoading) {
-                    checkCoupon(couponCode);
-                    setCouponCode('');
-                  }
-                }}
-              />
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  checkCoupon(couponCode);
-                  setCouponCode('');
-                }}
-                disabled={!couponCode || couponLoading}
-              >
-                {couponLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <TicketIcon className="w-4 h-4" />
-                )}
-              </Button>
-            </div>
-            {coupons.length > 0 && (
-              <div className="space-y-1">
-                {coupons.map((coupon) => (
-                  <div
-                    key={coupon.code.code}
-                    className="text-xs text-green-600 font-medium flex items-center justify-between bg-green-50 p-2 rounded-md border border-green-100"
-                  >
-                    <div className="flex items-center gap-1">
-                      <TicketIcon className="w-3 h-3" />
-                      <span>
-                        {coupon.name} ({coupon.code.code})
-                      </span>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-5 w-5 text-green-700 hover:text-green-800 hover:bg-green-100"
-                      onClick={() => removeCoupon(coupon.code.code)}
-                    >
-                      <XIcon className="w-3 h-3" />
-                    </Button>
-                  </div>
-                ))}
+            <Button
+              variant="outline"
+              className="w-full justify-between cursor-pointer"
+              onClick={() => setIsCouponsDialogOpen(true)}
+            >
+              <div className="flex items-center gap-2">
+                <TicketIcon className="w-4 h-4" />
+                <span>Kupon</span>
               </div>
-            )}
+              {coupons.length > 0 && (
+                <Badge variant="secondary" className="ml-auto">
+                  {coupons.length} Terpakai
+                </Badge>
+              )}
+            </Button>
           </div>
 
           <div className="space-y-3">
@@ -260,6 +234,12 @@ export function Cart({
               <div className="flex justify-between text-sm text-green-600">
                 <span>Diskon</span>
                 <span className="font-medium">-{formatCurrency(discountTotal)}</span>
+              </div>
+            )}
+            {remainingDiscount > 0 && (
+              <div className="flex justify-between text-sm text-orange-600">
+                <span>Sisa Diskon</span>
+                <span className="font-medium">{formatCurrency(remainingDiscount)}</span>
               </div>
             )}
             <Separator className="my-2" />
@@ -282,7 +262,13 @@ export function Cart({
             <Button
               className="flex-4 h-12 text-lg font-bold rounded-xl shadow-lg shadow-primary/20 cursor-pointer"
               size="lg"
-              onClick={() => setIsPaymentDialogOpen(true)}
+              onClick={() => {
+                if (coupons.length === 0) {
+                  setIsNoCouponConfirmDialogOpen(true);
+                } else {
+                  setIsPaymentDialogOpen(true);
+                }
+              }}
               disabled={cart.length === 0}
             >
               Bayar
@@ -308,6 +294,38 @@ export function Cart({
         onRestore={onRestoreTransaction}
         onRefresh={onFetchSavedTransactions}
       />
+      <CouponsDialog
+        open={isCouponsDialogOpen}
+        onOpenChange={setIsCouponsDialogOpen}
+        coupons={coupons}
+        loading={couponLoading}
+        onCheckCoupon={checkCoupon}
+        onRemoveCoupon={removeCoupon}
+        subTotal={subTotal}
+      />
+      <AlertDialog open={isNoCouponConfirmDialogOpen} onOpenChange={setIsNoCouponConfirmDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Konfirmasi Pembayaran</AlertDialogTitle>
+            <AlertDialogDescription>
+              Transaksi ini tidak menggunakan kupon. Apakah Anda yakin ingin melanjutkan ke
+              pembayaran?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="cursor-pointer">Batal</AlertDialogCancel>
+            <AlertDialogAction
+              className="cursor-pointer"
+              onClick={() => {
+                setIsNoCouponConfirmDialogOpen(false);
+                setIsPaymentDialogOpen(true);
+              }}
+            >
+              Lanjutkan
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }

@@ -29,6 +29,7 @@ export default function CashierContainer({ store }: CashierContainerProps) {
     subTotal,
     total,
     discountTotal,
+    remainingDiscount,
     savedTransactions,
     savedTransactionsLoading,
     lastSuccessfulTransaction,
@@ -83,13 +84,14 @@ export default function CashierContainer({ store }: CashierContainerProps) {
           onAddToCart={addToCart}
         />
       </div>
-      <div className="hidden xl:block h-[95vh] lg:h-full w-full xl:w-[380px] shrink-0">
+      <div className="hidden xl:block h-[95vh] lg:h-full w-full xl:w-95 shrink-0">
         <Cart
           className="border"
           cart={cart}
           subTotal={subTotal}
           total={total}
           discountTotal={discountTotal}
+          remainingDiscount={remainingDiscount}
           coupons={coupons}
           couponLoading={couponLoading}
           checkCoupon={checkCoupon}

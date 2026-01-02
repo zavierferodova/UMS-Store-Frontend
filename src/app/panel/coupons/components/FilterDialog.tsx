@@ -107,7 +107,7 @@ export function FilterDialog({ state }: FilterDialogProps) {
           <SlidersHorizontalIcon className="h-4 w-4" /> Filter
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-106.25">
         <DialogHeader>
           <DialogTitle>Filter Kupon</DialogTitle>
         </DialogHeader>

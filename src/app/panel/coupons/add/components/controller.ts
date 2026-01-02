@@ -1,4 +1,4 @@
-import { useForm, UseFormReturn, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { formSchema, CouponFormValues } from './validation';
 import { useRouter } from 'next/navigation';
@@ -7,15 +7,11 @@ import couponData from '@/data/coupon';
 import { panelRoutes } from '@/routes/route';
 import { CouponType } from '@/domain/model/coupon';
 
-export function useController(): {
-  form: UseFormReturn<CouponFormValues>;
-  onSubmit: SubmitHandler<CouponFormValues>;
-} {
+export function useController() {
   const router = useRouter();
 
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  const form = useForm<CouponFormValues>({
-    resolver: zodResolver(formSchema) as any,
+  const form = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
       type: CouponType.voucher,

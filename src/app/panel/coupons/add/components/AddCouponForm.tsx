@@ -78,7 +78,7 @@ export function AddCouponForm() {
                         type="number"
                         placeholder="0"
                         {...field}
-                        value={field.value !== undefined && !isNaN(field.value) ? field.value : ''}
+                        value={(field.value as number | undefined) ?? ''}
                         onChange={(e) => field.onChange(e.target.valueAsNumber)}
                       />
                     </FormControl>
@@ -100,7 +100,7 @@ export function AddCouponForm() {
                         type="number"
                         placeholder="0"
                         {...field}
-                        value={field.value !== undefined && !isNaN(field.value) ? field.value : ''}
+                        value={(field.value as number | undefined) ?? ''}
                         onChange={(e) => field.onChange(e.target.valueAsNumber)}
                       />
                     </FormControl>

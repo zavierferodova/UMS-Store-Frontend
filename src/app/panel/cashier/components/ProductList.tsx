@@ -80,8 +80,8 @@ export function ProductList({
             {products.map((product) => {
               return (
                 <div key={`${product.id}-${product.sku.id}`} className="flex flex-col gap-2 group">
-                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-muted cursor-pointer">
-                    <div className="absolute bg-white top-2 right-2 z-50 px-3 py-1 rounded-2xl text-sm max-w-[140px] truncate border">
+                  <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl bg-muted cursor-pointer">
+                    <div className="absolute bg-white top-2 right-2 z-50 px-3 py-1 rounded-2xl text-sm max-w-35 truncate border">
                       {product.sku.sku}
                     </div>
                     {product.images && product.images.length > 0 ? (

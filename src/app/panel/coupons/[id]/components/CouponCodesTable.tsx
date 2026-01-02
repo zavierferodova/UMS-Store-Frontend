@@ -16,6 +16,8 @@ import { useState } from 'react';
 import { CouponCode } from '@/domain/model/coupon';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
+import { CreateCodeFormValues, UpdateCodeFormValues } from './codes-validation';
+
 interface CouponCodesTableProps {
   couponId: string;
 }
@@ -39,13 +41,12 @@ export function CouponCodesTable({ couponId }: CouponCodesTableProps) {
     setDialogOpen(true);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: CreateCodeFormValues | UpdateCodeFormValues) => {
     if (dialogMode === 'create') {
-      return await createCode(values);
+      return await createCode(values as CreateCodeFormValues);
     } else {
       if (selectedCode) {
-        return await updateCode(selectedCode.code, values);
+        return await updateCode(selectedCode.code, values as UpdateCodeFormValues);
       }
       return false;
     }

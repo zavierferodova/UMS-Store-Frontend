@@ -194,7 +194,7 @@ export const useCartController = ({
     });
   };
 
-  const { subTotal, total, discountTotal } = useMemo(() => {
+  const { subTotal, total, discountTotal, remainingDiscount } = useMemo(() => {
     const subTotal = cart.reduce((acc, item) => acc + item.price * item.amount, 0);
     let voucherTotal = 0;
     let percentageDiscount = 0;
@@ -210,13 +210,15 @@ export const useCartController = ({
     const percentageDiscountAmount = (subTotal * percentageDiscount) / 100;
 
     let discountTotal = voucherTotal + percentageDiscountAmount;
+    let remainingDiscount = 0;
 
     if (discountTotal > subTotal) {
+      remainingDiscount = discountTotal - subTotal;
       discountTotal = subTotal;
     }
 
     const total = subTotal - discountTotal;
-    return { subTotal, total, discountTotal };
+    return { subTotal, total, discountTotal, remainingDiscount };
   }, [cart, coupons]);
 
   const handleConfirmPayment = async (
@@ -373,6 +375,7 @@ export const useCartController = ({
     subTotal,
     total,
     discountTotal,
+    remainingDiscount,
     savedTransactions,
     savedTransactionsLoading,
     currentTransaction,

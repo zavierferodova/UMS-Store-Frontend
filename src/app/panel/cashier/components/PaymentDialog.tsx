@@ -95,7 +95,7 @@ export function PaymentDialog({ open, onOpenChange, total, onConfirm }: PaymentD
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] p-0 gap-0 max-h-[90vh] flex flex-col">
+      <DialogContent className="sm:max-w-150 p-0 gap-0 max-h-[90vh] flex flex-col">
         <DialogHeader className="p-6 pb-4 border-b shrink-0">
           <DialogTitle className="text-2xl font-bold">Pembayaran</DialogTitle>
         </DialogHeader>
@@ -162,17 +162,19 @@ export function PaymentDialog({ open, onOpenChange, total, onConfirm }: PaymentD
           </div>
 
           <div className="space-y-2 pt-4 border-t">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-muted-foreground">
-                Catatan (Opsional)
-              </label>
-              <Textarea
-                placeholder="Tambahkan catatan transaksi..."
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                className="resize-none mt-2"
-              />
-            </div>
+            {TransactionPayment.CASHLESS === paymentMethod && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-muted-foreground">
+                  Catatan (Opsional)
+                </label>
+                <Textarea
+                  placeholder="Tambahkan catatan transaksi..."
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  className="resize-none mt-2"
+                />
+              </div>
+            )}
             <div className="flex justify-between items-end pt-2">
               <span className="font-bold text-lg">TOTAL</span>
               <span className="font-bold text-3xl text-primary">{formatCurrency(total)}</span>
