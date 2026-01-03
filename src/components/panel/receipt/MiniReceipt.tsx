@@ -32,10 +32,10 @@ export const MiniReceipt = ({ transaction, store }: MiniReceiptProps) => {
 
       <div style={{ borderBottom: '1px dashed black', margin: '10px 0' }} />
 
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <span>{format(new Date(transaction.created_at), 'dd/MM/yy HH:mm')}</span>
+      <div>
+        <span>Waktu: {format(new Date(transaction.created_at), 'dd/MM/yy HH:mm')}</span>
       </div>
-      <div style={{ marginBottom: '5px' }}>
+      <div>
         <span>Kasir: {transaction.cashier?.name || 'Cashier'}</span>
       </div>
       <div style={{ marginBottom: '5px' }}>
@@ -67,11 +67,11 @@ export const MiniReceipt = ({ transaction, store }: MiniReceiptProps) => {
 
       {transaction.coupons && transaction.coupons.length > 0 && (
         <>
-          <span>Voucher</span>
+          Kode Kupon:
           {transaction.coupons.map((coupon, index) => (
-            <div key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span>({coupon.code.code})</span>
-              <span>
+            <div key={index}>
+              <span style={{ display: 'block' }}>{coupon.code.code}</span>
+              <span style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 -
                 {formatCurrency(
                   coupon.type === 'voucher'
@@ -84,10 +84,20 @@ export const MiniReceipt = ({ transaction, store }: MiniReceiptProps) => {
         </>
       )}
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          fontWeight: 'bold',
+          marginTop: '5px',
+        }}
+      >
         <span>Total</span>
         <span>{formatCurrency(total)}</span>
       </div>
+
+      <div style={{ borderBottom: '1px dashed black', margin: '10px 0' }} />
+
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span>Bayar ({transaction.payment})</span>
         <span>{formatCurrency(transaction.pay || 0)}</span>

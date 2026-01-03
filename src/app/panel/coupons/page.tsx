@@ -131,8 +131,8 @@ function CouponsPageContent() {
                     {localeDateFormat(coupon.end_time)}
                   </TableCell>
                   <TableCell>
-                    <Badge variant={coupon.is_disabled ? 'destructive' : 'default'}>
-                      {coupon.is_disabled ? 'Nonaktif' : 'Aktif'}
+                    <Badge variant={coupon.disabled ? 'destructive' : 'default'}>
+                      {coupon.disabled ? 'Nonaktif' : 'Aktif'}
                     </Badge>
                   </TableCell>
                 </TableRow>

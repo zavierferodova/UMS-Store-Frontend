@@ -9,7 +9,6 @@ export type CreateTransactionParams = {
   is_saved?: boolean;
   items: {
     product_sku: string;
-    unit_price: number;
     amount: number;
   }[];
   coupons: {
@@ -36,7 +35,6 @@ export type UpdateTransactionParams = {
   is_saved?: boolean;
   items: {
     product_sku: string;
-    unit_price: number;
     amount: number;
   }[];
   coupons: {

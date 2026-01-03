@@ -63,7 +63,11 @@ export function CouponsDialog({
                 }
               }}
             />
-            <Button onClick={handleCheck} disabled={!couponCode || loading}>
+            <Button
+              className="cursor-pointer"
+              onClick={handleCheck}
+              disabled={!couponCode || loading}
+            >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Gunakan'}
             </Button>
           </div>

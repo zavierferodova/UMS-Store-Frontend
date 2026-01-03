@@ -14,12 +14,13 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Separator } from '@/components/ui/separator';
-import { User, Calendar, CreditCard, FileText, Printer, ShieldCheck } from 'lucide-react';
+import { User, Calendar, CreditCard, FileText, Printer, ShieldCheck, Ticket } from 'lucide-react';
 import { useReactToPrint } from 'react-to-print';
 import { useRef } from 'react';
 import { MiniReceipt } from '@/components/panel/receipt/MiniReceipt';
 import { RegularReceipt } from '@/components/panel/receipt/RegularReceipt';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -119,7 +120,7 @@ export function TransactionDetailContainer({
               <div>
                 <p className="text-sm text-muted-foreground">Status</p>
                 <p className="font-medium capitalize">
-                  {transaction.is_saved ? 'Disimpan' : 'Selesai'}
+                  {transaction.is_saved ? 'Disimpan' : 'Dibayar'}
                 </p>
               </div>
             </div>
@@ -193,18 +194,69 @@ export function TransactionDetailContainer({
                 ))}
               </TableBody>
             </Table>
+          </CardContent>
+        </Card>
 
-            {transaction.note && (
-              <div className="bg-muted/50 p-4 rounded-lg">
-                <div className="flex items-center gap-2 font-medium mb-2">
-                  <FileText className="h-4 w-4" /> Catatan
+        {transaction.coupons && transaction.coupons.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Kupon Digunakan</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Nama Kupon</TableHead>
+                    <TableHead>Kode</TableHead>
+                    <TableHead>Tipe</TableHead>
+                    <TableHead className="text-right">Potongan</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {transaction.coupons.map((coupon, index) => (
+                    <TableRow key={index}>
+                      <TableCell className="font-medium">
+                        <div className="flex items-center gap-2">
+                          <Ticket className="h-4 w-4 text-muted-foreground" />
+                          {coupon.name}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="secondary" className="font-mono">
+                          {coupon.code.code}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="capitalize">
+                        {coupon.type === 'voucher' ? 'Voucher' : 'Diskon'}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {coupon.type === 'voucher'
+                          ? formatCurrency(coupon.voucher_value || 0)
+                          : `(${coupon.discount_percentage}%) ${formatCurrency(
+                              (transaction.sub_total * (coupon.discount_percentage || 0)) / 100,
+                            )}`}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        )}
+
+        <div className="flex justify-end">
+          <Card className="w-full md:w-1/3">
+            <CardContent>
+              {transaction.note && (
+                <div className="bg-muted/50 p-4 rounded-lg">
+                  <div className="flex items-center gap-2 font-medium mb-2">
+                    <FileText className="h-4 w-4" /> Catatan
+                  </div>
+                  <p className="text-sm whitespace-pre-wrap">{transaction.note}</p>
                 </div>
-                <p className="text-sm whitespace-pre-wrap">{transaction.note}</p>
-              </div>
-            )}
+              )}
 
-            <div className="flex justify-end">
-              <div className="w-full md:w-1/3 space-y-3">
+              <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Subtotal</span>
                   <span>{formatCurrency(transaction.sub_total)}</span>
@@ -233,9 +285,9 @@ export function TransactionDetailContainer({
                   </>
                 )}
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

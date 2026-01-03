@@ -23,7 +23,7 @@ type FilterOption = {
 
 const transactionStatusOptions: FilterOption[] = [
   { value: 'saved', label: 'Disimpan' },
-  { value: 'done', label: 'Selesai' },
+  { value: 'paid', label: 'Dibayar' },
 ];
 
 const paymentMethodOptions: FilterOption[] = [
@@ -128,7 +128,7 @@ export function FilterDialog({ state }: FilterDialogProps) {
           <span>Filter</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] overflow-hidden">
+      <DialogContent className="sm:max-w-106.25 overflow-hidden">
         <DialogHeader>
           <DialogTitle>Filter Transaksi</DialogTitle>
         </DialogHeader>

@@ -241,7 +241,6 @@ export const useCartController = ({
           note,
           items: cart.map((item) => ({
             product_sku: item.sku.sku,
-            unit_price: item.price,
             amount: item.amount,
           })),
           coupons: coupons.map((c) => ({ code: c.code.code, amounts: 1 })),
@@ -255,7 +254,6 @@ export const useCartController = ({
           note,
           items: cart.map((item) => ({
             product_sku: item.sku.sku,
-            unit_price: item.price,
             amount: item.amount,
           })),
           coupons: coupons.map((c) => ({ code: c.code.code, amounts: 1 })),
@@ -290,7 +288,6 @@ export const useCartController = ({
         is_saved: true,
         items: cart.map((item) => ({
           product_sku: item.sku.sku,
-          unit_price: item.price,
           amount: item.amount,
         })),
         coupons: coupons.map((c) => ({ code: c.code.code, amounts: 1 })),

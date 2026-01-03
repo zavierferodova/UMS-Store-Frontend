@@ -6,7 +6,7 @@ export interface Coupon {
   discount_percentage: number | null;
   start_time: Date;
   end_time: Date;
-  is_disabled: boolean;
+  disabled: boolean;
   created_at: Date;
   updated_at: Date;
 }

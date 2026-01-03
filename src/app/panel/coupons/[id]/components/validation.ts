@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const formSchema = z
   .object({
     name: z.string().min(1, { message: 'Nama kupon tidak boleh kosong' }),
-    is_disabled: z.boolean(),
+    disabled: z.boolean(),
     start_time: z.date({ message: 'Waktu mulai harus diisi' }),
     end_time: z.date({ message: 'Waktu selesai harus diisi' }),
   })

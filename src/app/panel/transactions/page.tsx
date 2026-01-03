@@ -113,7 +113,7 @@ function TransactionsPageContent() {
                   </TableCell>
                   <TableCell>{localeDateFormat(transaction.created_at)}</TableCell>
                   <TableCell>{localeDateFormat(transaction.updated_at)}</TableCell>
-                  <TableCell>{transaction.is_saved ? 'Disimpan' : 'Selesai'}</TableCell>
+                  <TableCell>{transaction.is_saved ? 'Disimpan' : 'Dibayar'}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

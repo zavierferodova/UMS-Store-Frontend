@@ -13,7 +13,7 @@ export function useController(coupon: Coupon) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: coupon.name,
-      is_disabled: coupon.is_disabled ?? false,
+      disabled: coupon.disabled ?? false,
       start_time: new Date(coupon.start_time),
       end_time: new Date(coupon.end_time),
     },
@@ -22,7 +22,7 @@ export function useController(coupon: Coupon) {
   const onSubmit = async (values: CouponFormValues) => {
     const response = await couponData.updateCoupon(coupon.id, {
       name: values.name,
-      disabled: values.is_disabled,
+      disabled: values.disabled,
       start_time: values.start_time.toISOString(),
       end_time: values.end_time.toISOString(),
     });
