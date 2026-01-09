@@ -17,6 +17,7 @@ export function RoleFilter({ onFilterChange }: RoleFilterProps) {
   const [showAdmin, setShowAdmin] = useState(false);
   const [showProcurement, setShowProcurement] = useState(false);
   const [showCashier, setShowCashier] = useState(false);
+  const [showChecker, setShowChecker] = useState(false);
   const prevRolesRef = useRef<string[]>([]);
 
   const handleFilterChange = useCallback(() => {
@@ -26,12 +27,13 @@ export function RoleFilter({ onFilterChange }: RoleFilterProps) {
     if (showAdmin) roleList.push('admin');
     if (showProcurement) roleList.push('procurement');
     if (showCashier) roleList.push('cashier');
+    if (showChecker) roleList.push('checker');
 
     if (JSON.stringify(roleList) !== JSON.stringify(prevRolesRef.current)) {
       onFilterChange(roleList);
       prevRolesRef.current = roleList;
     }
-  }, [showAdmin, showProcurement, showCashier, onFilterChange]);
+  }, [showAdmin, showProcurement, showCashier, showChecker, onFilterChange]);
 
   useEffect(() => {
     handleFilterChange();
@@ -65,6 +67,13 @@ export function RoleFilter({ onFilterChange }: RoleFilterProps) {
           onCheckedChange={setShowCashier}
         >
           Kasir
+        </DropdownMenuCheckboxItem>
+        <DropdownMenuCheckboxItem
+          className="cursor-pointer"
+          checked={showChecker}
+          onCheckedChange={setShowChecker}
+        >
+          Pengecekan
         </DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>

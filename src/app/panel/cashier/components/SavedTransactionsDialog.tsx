@@ -70,7 +70,7 @@ export function SavedTransactionsDialog({
                 <AccordionItem
                   key={transaction.id}
                   value={transaction.id}
-                  className="!border rounded-lg"
+                  className="border! rounded-lg"
                 >
                   <AccordionTrigger className="hover:no-underline py-4 px-4 cursor-pointer">
                     <div className="flex flex-col items-start text-left space-y-1 w-full">
@@ -96,6 +96,21 @@ export function SavedTransactionsDialog({
                             <span>{formatCurrency(item.unit_price * item.amount)}</span>
                           </div>
                         ))}
+                        {transaction.coupons && transaction.coupons.length > 0 && (
+                          <div className="border-t border-dashed border-gray-300 pt-2 mt-2">
+                            {transaction.coupons.map((coupon, idx) => (
+                              <div
+                                key={idx}
+                                className="flex justify-between text-sm text-green-600"
+                              >
+                                <span>
+                                  Kupon: {coupon.name} ({coupon.code})
+                                </span>
+                                <span>-{formatCurrency(coupon.amount)}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                       <div className="flex justify-end pt-2">
                         <Button

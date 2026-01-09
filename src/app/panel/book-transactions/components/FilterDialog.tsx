@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Dialog,
   DialogContent,
@@ -22,25 +24,18 @@ type FilterOption = {
   label: string;
 };
 
-const transactionStatusOptions: FilterOption[] = [
-  { value: 'saved', label: 'Disimpan' },
-  { value: 'paid', label: 'Dibayar' },
-];
-
-const paymentMethodOptions: FilterOption[] = [
-  { value: 'cash', label: 'Tunai' },
-  { value: 'cashless', label: 'Non-Tunai' },
+const statusOptions: FilterOption[] = [
+  { value: 'open', label: 'Buka' },
+  { value: 'closed', label: 'Tutup' },
 ];
 
 type FilterDialogState = {
-  startDate: string | null;
-  setStartDate: (value: string | null) => void;
-  endDate: string | null;
-  setEndDate: (value: string | null) => void;
-  transactionStatus: string[];
-  setTransactionStatus: (value: string[]) => void;
-  paymentMethod: string[];
-  setPaymentMethod: (value: string[]) => void;
+  timeOpen: string | null;
+  setTimeOpen: (value: string | null) => void;
+  timeClosed: string | null;
+  setTimeClosed: (value: string | null) => void;
+  status: string[];
+  setStatus: (value: string[]) => void;
   cashierId: string | null;
   setCashierId: (value: string | null) => void;
 };
@@ -50,23 +45,18 @@ type FilterDialogProps = {
 };
 
 export const useFilterDialog = () => {
-  const [startDate, setStartDate] = useQueryState(
-    'start_date',
+  const [timeOpen, setTimeOpen] = useQueryState(
+    'time_open',
     parseAsString.withDefault('').withOptions({ history: 'push' }),
   );
 
-  const [endDate, setEndDate] = useQueryState(
-    'end_date',
+  const [timeClosed, setTimeClosed] = useQueryState(
+    'time_closed',
     parseAsString.withDefault('').withOptions({ history: 'push' }),
   );
 
-  const [transactionStatus, setTransactionStatus] = useQueryState(
-    'transaction_status',
-    parseAsArrayOf(parseAsString).withDefault([]).withOptions({ history: 'push' }),
-  );
-
-  const [paymentMethod, setPaymentMethod] = useQueryState(
-    'payment_method',
+  const [status, setStatus] = useQueryState(
+    'status',
     parseAsArrayOf(parseAsString).withDefault([]).withOptions({ history: 'push' }),
   );
 
@@ -76,15 +66,13 @@ export const useFilterDialog = () => {
   );
 
   const state = {
-    startDate: startDate || null,
-    endDate: endDate || null,
-    transactionStatus,
-    paymentMethod,
+    timeOpen: timeOpen || null,
+    timeClosed: timeClosed || null,
+    status,
     cashierId: cashierId || null,
-    setStartDate: (val: string | null) => setStartDate(val || null),
-    setEndDate: (val: string | null) => setEndDate(val || null),
-    setTransactionStatus,
-    setPaymentMethod,
+    setTimeOpen: (val: string | null) => setTimeOpen(val || null),
+    setTimeClosed: (val: string | null) => setTimeClosed(val || null),
+    setStatus,
     setCashierId: (val: string | null) => setCashierId(val || null),
   };
 
@@ -95,14 +83,12 @@ export const useFilterDialog = () => {
 
 export function FilterDialog({ state }: FilterDialogProps) {
   const {
-    startDate,
-    setStartDate,
-    endDate,
-    setEndDate,
-    transactionStatus,
-    setTransactionStatus,
-    paymentMethod,
-    setPaymentMethod,
+    timeOpen,
+    setTimeOpen,
+    timeClosed,
+    setTimeClosed,
+    status,
+    setStatus,
     cashierId,
     setCashierId,
   } = state;
@@ -132,29 +118,29 @@ export function FilterDialog({ state }: FilterDialogProps) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-106.25 overflow-hidden">
         <DialogHeader>
-          <DialogTitle>Filter Transaksi</DialogTitle>
+          <DialogTitle>Filter Buku Kasir</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6 py-2">
           <div className="space-y-2">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
-                <div className="text-sm font-medium">Tanggal Awal</div>
+                <div className="text-sm font-medium">Waktu Buka</div>
                 <Input
-                  id="start-date"
-                  type="date"
-                  value={startDate || ''}
-                  onChange={(e) => setStartDate(e.target.value || null)}
+                  id="time-open"
+                  type="datetime-local"
+                  value={timeOpen || ''}
+                  onChange={(e) => setTimeOpen(e.target.value || null)}
                   className="block"
                 />
               </div>
               <div className="space-y-1">
-                <div className="text-sm font-medium">Tanggal Akhir</div>
+                <div className="text-sm font-medium">Waktu Tutup</div>
                 <Input
-                  id="end-date"
-                  type="date"
-                  value={endDate || ''}
-                  onChange={(e) => setEndDate(e.target.value || null)}
+                  id="time-closed"
+                  type="datetime-local"
+                  value={timeClosed || ''}
+                  onChange={(e) => setTimeClosed(e.target.value || null)}
                   className="block"
                 />
               </div>
@@ -174,43 +160,19 @@ export function FilterDialog({ state }: FilterDialogProps) {
           )}
 
           <div className="space-y-2">
-            <div className="text-sm font-medium">Metode Pembayaran</div>
+            <div className="text-sm font-medium">Status</div>
             <div className="space-y-2">
-              {paymentMethodOptions.map((option) => (
-                <div key={option.value} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={`payment-${option.value}`}
-                    checked={paymentMethod.includes(option.value)}
-                    className="cursor-pointer"
-                    onCheckedChange={(checked) => {
-                      const newPayment = checked
-                        ? [...paymentMethod, option.value]
-                        : paymentMethod.filter((item) => item !== option.value);
-                      setPaymentMethod(newPayment);
-                    }}
-                  />
-                  <Label htmlFor={`payment-${option.value}`} className="cursor-pointer">
-                    {option.label}
-                  </Label>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <div className="text-sm font-medium">Status Transaksi</div>
-            <div className="space-y-2">
-              {transactionStatusOptions.map((option) => (
+              {statusOptions.map((option) => (
                 <div key={option.value} className="flex items-center space-x-2">
                   <Checkbox
                     id={`status-${option.value}`}
-                    checked={transactionStatus.includes(option.value)}
+                    checked={status.includes(option.value)}
                     className="cursor-pointer"
                     onCheckedChange={(checked) => {
                       const newStatus = checked
-                        ? [...transactionStatus, option.value]
-                        : transactionStatus.filter((item) => item !== option.value);
-                      setTransactionStatus(newStatus);
+                        ? [...status, option.value]
+                        : status.filter((item) => item !== option.value);
+                      setStatus(newStatus);
                     }}
                   />
                   <Label htmlFor={`status-${option.value}`} className="cursor-pointer">

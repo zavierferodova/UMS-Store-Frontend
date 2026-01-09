@@ -15,9 +15,10 @@ import { Store } from '@/domain/model/store';
 
 interface CashierContainerProps {
   store: Store;
+  cashierBookId: string;
 }
 
-export default function CashierContainer({ store }: CashierContainerProps) {
+export default function CashierContainer({ store, cashierBookId }: CashierContainerProps) {
   const {
     status,
     products,
@@ -48,7 +49,7 @@ export default function CashierContainer({ store }: CashierContainerProps) {
     clearLastSuccessfulTransaction,
     checkCoupon,
     removeCoupon,
-  } = useController();
+  } = useController(cashierBookId);
   const { setMenu } = usePanelHeader();
 
   useEffect(() => {

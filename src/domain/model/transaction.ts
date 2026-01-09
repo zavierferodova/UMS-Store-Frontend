@@ -1,4 +1,4 @@
-import { Coupon, CouponCode } from './coupon';
+import { CouponType } from './coupon';
 import { User } from './user';
 
 export interface Transaction {
@@ -19,8 +19,14 @@ export interface Transaction {
   coupons: TransactionCoupon[];
 }
 
-export interface TransactionCoupon extends Coupon {
-  code: CouponCode;
+export interface TransactionCoupon {
+  name: string;
+  code: string;
+  type: CouponType;
+  item_voucher_value: number | null;
+  item_discount_percentage: number | null;
+  item_discount_value: number | null;
+  amount: number;
 }
 
 export interface TransactionItem {

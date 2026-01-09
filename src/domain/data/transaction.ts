@@ -2,7 +2,7 @@ import { IPaginationResponse } from '../model/response';
 import { Transaction, TransactionPayment } from '../model/transaction';
 
 export type CreateTransactionParams = {
-  cashier: string;
+  cashier_book_id: string;
   pay?: number | null;
   payment?: TransactionPayment | null;
   note?: string;
@@ -13,7 +13,7 @@ export type CreateTransactionParams = {
   }[];
   coupons: {
     code: string;
-    amounts: number;
+    amount: number;
   }[];
 };
 
@@ -39,7 +39,7 @@ export type UpdateTransactionParams = {
   }[];
   coupons: {
     code: string;
-    amounts: number;
+    amount: number;
   }[];
 };
 

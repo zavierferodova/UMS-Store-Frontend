@@ -209,6 +209,8 @@ export function TransactionDetailContainer({
                     <TableHead>Nama Kupon</TableHead>
                     <TableHead>Kode</TableHead>
                     <TableHead>Tipe</TableHead>
+                    <TableHead>Nilai</TableHead>
+                    <TableHead>Jumlah</TableHead>
                     <TableHead className="text-right">Potongan</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -223,18 +225,22 @@ export function TransactionDetailContainer({
                       </TableCell>
                       <TableCell>
                         <Badge variant="secondary" className="font-mono">
-                          {coupon.code.code}
+                          {coupon.code}
                         </Badge>
                       </TableCell>
                       <TableCell className="capitalize">
                         {coupon.type === 'voucher' ? 'Voucher' : 'Diskon'}
                       </TableCell>
+                      <TableCell>
+                        {coupon.type === 'discount'
+                          ? `${coupon.item_discount_percentage || 0}%`
+                          : formatCurrency(coupon.item_voucher_value || 0)}
+                      </TableCell>
+                      <TableCell>{coupon.amount}</TableCell>
                       <TableCell className="text-right">
-                        {coupon.type === 'voucher'
-                          ? formatCurrency(coupon.voucher_value || 0)
-                          : `(${coupon.discount_percentage}%) ${formatCurrency(
-                              (transaction.sub_total * (coupon.discount_percentage || 0)) / 100,
-                            )}`}
+                        {coupon.type === 'discount'
+                          ? `${formatCurrency((coupon.item_discount_value || 0) * coupon.amount)}`
+                          : formatCurrency((coupon.item_voucher_value || 0) * coupon.amount)}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -248,7 +254,7 @@ export function TransactionDetailContainer({
           <Card className="w-full md:w-1/3">
             <CardContent>
               {transaction.note && (
-                <div className="bg-muted/50 p-4 rounded-lg">
+                <div className="bg-muted/50 p-4 rounded-lg mb-4">
                   <div className="flex items-center gap-2 font-medium mb-2">
                     <FileText className="h-4 w-4" /> Catatan
                   </div>

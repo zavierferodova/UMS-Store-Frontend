@@ -81,11 +81,15 @@ export const useProductController = () => {
   };
 };
 
-export const useCartController = ({
-  onTransactionSuccessAction,
-}: {
-  onTransactionSuccessAction?: () => void;
-} = {}) => {
+export const useCartController = (
+  {
+    onTransactionSuccessAction,
+    cashierBookId,
+  }: {
+    onTransactionSuccessAction?: () => void;
+    cashierBookId: string;
+  } = { cashierBookId: '' },
+) => {
   const { data: session } = useSession();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [savedTransactions, setSavedTransactions] = useState<Transaction[]>([]);
@@ -243,11 +247,11 @@ export const useCartController = ({
             product_sku: item.sku.sku,
             amount: item.amount,
           })),
-          coupons: coupons.map((c) => ({ code: c.code.code, amounts: 1 })),
+          coupons: coupons.map((c) => ({ code: c.code.code, amount: 1 })),
         });
       } else {
         res = await transactionData.createTransaction({
-          cashier: session.user.id,
+          cashier_book_id: cashierBookId,
           payment: method,
           pay: payAmount,
           is_saved: false,
@@ -256,7 +260,7 @@ export const useCartController = ({
             product_sku: item.sku.sku,
             amount: item.amount,
           })),
-          coupons: coupons.map((c) => ({ code: c.code.code, amounts: 1 })),
+          coupons: coupons.map((c) => ({ code: c.code.code, amount: 1 })),
         });
       }
 
@@ -282,7 +286,7 @@ export const useCartController = ({
 
     try {
       const res = await transactionData.createTransaction({
-        cashier: session.user.id,
+        cashier_book_id: cashierBookId,
         payment: null,
         pay: null,
         is_saved: true,
@@ -290,7 +294,7 @@ export const useCartController = ({
           product_sku: item.sku.sku,
           amount: item.amount,
         })),
-        coupons: coupons.map((c) => ({ code: c.code.code, amounts: 1 })),
+        coupons: coupons.map((c) => ({ code: c.code.code, amount: 1 })),
       });
 
       if (res) {
@@ -392,11 +396,12 @@ export const useCartController = ({
   };
 };
 
-export const useController = () => {
+export const useController = (cashierBookId: string) => {
   const { data: session, status } = useSession();
   const productController = useProductController();
   const cartController = useCartController({
     onTransactionSuccessAction: productController.refreshProducts,
+    cashierBookId,
   });
 
   return {

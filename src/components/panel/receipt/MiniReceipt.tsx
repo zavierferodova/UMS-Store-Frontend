@@ -60,28 +60,26 @@ export const MiniReceipt = ({ transaction, store }: MiniReceiptProps) => {
 
       <div style={{ borderBottom: '1px dashed black', margin: '10px 0' }} />
 
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
         <span>Subtotal</span>
         <span>{formatCurrency(transaction.sub_total)}</span>
       </div>
 
       {transaction.coupons && transaction.coupons.length > 0 && (
-        <>
-          Kode Kupon:
+        <div style={{ marginBottom: '5px' }}>
+          <span>Kode Kupon</span>
           {transaction.coupons.map((coupon, index) => (
             <div key={index}>
-              <span style={{ display: 'block' }}>{coupon.code.code}</span>
+              <span style={{ display: 'block' }}>{coupon.code}</span>
               <span style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 -
-                {formatCurrency(
-                  coupon.type === 'voucher'
-                    ? coupon.voucher_value || 0
-                    : (transaction.sub_total * (coupon.discount_percentage || 0)) / 100,
-                )}
+                {coupon.type === 'discount'
+                  ? `${formatCurrency((coupon.item_discount_value || 0) * coupon.amount)}`
+                  : formatCurrency((coupon.item_voucher_value || 0) * coupon.amount)}
               </span>
             </div>
           ))}
-        </>
+        </div>
       )}
 
       <div
@@ -89,7 +87,6 @@ export const MiniReceipt = ({ transaction, store }: MiniReceiptProps) => {
           display: 'flex',
           justifyContent: 'space-between',
           fontWeight: 'bold',
-          marginTop: '5px',
         }}
       >
         <span>Total</span>

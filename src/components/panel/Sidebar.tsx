@@ -27,6 +27,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 import {
   BadgeCheckIcon,
+  BookIcon,
   ChevronRightIcon,
   ChevronsUpDownIcon,
   HomeIcon,
@@ -99,6 +100,18 @@ const menu: MenuGroup[] = [
         href: panelRoutes.cashier,
         icon: <ShoppingCartIcon />,
         roles: [role.cashier],
+      },
+      {
+        title: 'Buku Kasir',
+        href: panelRoutes.cashierBook,
+        icon: <BookIcon />,
+        roles: [role.cashier],
+      },
+      {
+        title: 'Buku Transaksi',
+        href: panelRoutes.bookTransactions,
+        icon: <BookIcon />,
+        roles: [role.admin, role.cashier],
       },
       {
         title: 'Transaksi',
