@@ -98,7 +98,7 @@ function BookTransactionDetailPageContent() {
                 {formatCurrency(cashierBookStats.discount.value)}
               </div>
               <p className="text-muted-foreground text-xs">
-                {cashierBookStats.discount.count} transaksi
+                {cashierBookStats.discount.count} kupon
               </p>
             </CardContent>
           </Card>
@@ -112,7 +112,7 @@ function BookTransactionDetailPageContent() {
                 {formatCurrency(cashierBookStats.voucher.value)}
               </div>
               <p className="text-muted-foreground text-xs">
-                {cashierBookStats.voucher.count} transaksi
+                {cashierBookStats.voucher.count} kupon
               </p>
             </CardContent>
           </Card>
