@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/select';
 import { CouponType } from '@/domain/model/coupon';
 import { format } from 'date-fns';
+import { formatCurrency } from '@/lib/utils';
 
 export function AddCouponForm() {
   const { form, onSubmit } = useController();
@@ -50,15 +51,17 @@ export function AddCouponForm() {
                   <FormLabel>Tipe Kupon</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="w-full cursor-pointer">
                         <SelectValue placeholder="Pilih tipe kupon" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value={CouponType.voucher}>
+                      <SelectItem className="cursor-pointer" value={CouponType.voucher}>
                         Voucher (Potongan Harga Tetap)
                       </SelectItem>
-                      <SelectItem value={CouponType.discount}>Diskon (Persentase)</SelectItem>
+                      <SelectItem className="cursor-pointer" value={CouponType.discount}>
+                        Diskon (Persentase)
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -75,11 +78,14 @@ export function AddCouponForm() {
                     <FormLabel>Nilai Voucher (Rp)</FormLabel>
                     <FormControl>
                       <Input
-                        type="number"
-                        placeholder="0"
+                        type="text"
+                        placeholder="Rp 0"
                         {...field}
-                        value={(field.value as number | undefined) ?? ''}
-                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                        value={field.value ? formatCurrency(field.value as number) : ''}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^0-9]/g, '');
+                          field.onChange(value ? Number(value) : 0);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
@@ -101,7 +107,10 @@ export function AddCouponForm() {
                         placeholder="0"
                         {...field}
                         value={(field.value as number | undefined) ?? ''}
-                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          field.onChange(val === '' ? 0 : Number(val));
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
