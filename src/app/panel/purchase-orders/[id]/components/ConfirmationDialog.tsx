@@ -113,7 +113,7 @@ export function ConfirmationDialog({
               rows={4}
               className="resize-none"
             />
-            <p className="text-sm text-muted-foreground">{rejectionReason.length}/255 karakter</p>
+            <p className="text-muted-foreground text-sm">{rejectionReason.length}/255 karakter</p>
           </div>
         )}
 

@@ -15,12 +15,12 @@ export function DialogImagePreview({ isOpen, onOpenChange, src }: DialogImagePre
 
   return (
     <Dialog>
-      <div className="fixed inset-0 flex items-center justify-center bg-black/80 z-50">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
         <Button
           type="button"
           variant="ghost"
           size="default"
-          className="absolute top-4 right-4 z-50 text-white hover:bg-white hover:text-black cursor-pointer"
+          className="absolute top-4 right-4 z-50 cursor-pointer text-white hover:bg-white hover:text-black"
           onClick={() => onOpenChange(false)}
         >
           <XIcon className="h-8 w-8" />
@@ -28,7 +28,7 @@ export function DialogImagePreview({ isOpen, onOpenChange, src }: DialogImagePre
         <div onClick={(e) => e.stopPropagation()}>
           <TransformWrapper initialScale={0.75} minScale={0.75} maxScale={7} centerOnInit>
             <TransformComponent>
-              <div className="relative w-[90vw] h-[100vh] overflow-hidden">
+              <div className="relative h-[100vh] w-[90vw] overflow-hidden">
                 <Image
                   src={src}
                   alt="Product Preview"

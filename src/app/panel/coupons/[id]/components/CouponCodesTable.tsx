@@ -59,14 +59,14 @@ export function CouponCodesTable({ couponId }: CouponCodesTableProps) {
         <CardDescription>Kelola kode kupon anda di sini</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center mb-4">
-          <div className="relative w-full mr-2">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+        <div className="mb-4 flex items-center">
+          <div className="relative mr-2 w-full">
+            <Search className="text-muted-foreground absolute top-2.5 left-2 h-4 w-4" />
             <Input
               placeholder="Cari kode..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-8 w-full"
+              className="w-full pl-8"
             />
           </div>
           <Button onClick={handleCreate} size="sm" className="cursor-pointer">

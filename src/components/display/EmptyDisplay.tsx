@@ -10,8 +10,8 @@ export function EmptyDisplay({ title, description }: EmptyDisplayProps) {
     <div className="flex flex-col items-center">
       <Image src="/images/empty-box.png" alt="Empty Box" width={180} height={180} />
       <div>
-        <div className="text-center font-bold text-xl mt-4 text-accent-foreground">{title}</div>
-        <div className="text-center text-muted-foreground">{description}</div>
+        <div className="text-accent-foreground mt-4 text-center text-xl font-bold">{title}</div>
+        <div className="text-muted-foreground text-center">{description}</div>
       </div>
     </div>
   );

@@ -94,12 +94,12 @@ export function FilterDialog({ state }: FilterDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="gap-2 cursor-pointer">
+        <Button variant="outline" className="cursor-pointer gap-2">
           <SlidersHorizontalIcon className="h-4 w-4" />
           <span>Filter</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-106.25 overflow-hidden">
+      <DialogContent className="overflow-hidden sm:max-w-106.25">
         <DialogHeader>
           <DialogTitle>Filter Transaksi</DialogTitle>
         </DialogHeader>

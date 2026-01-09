@@ -82,12 +82,12 @@ export function Cart({
   return (
     <>
       <div
-        className={cn('flex flex-col h-full bg-background rounded-2xl overflow-hidden', className)}
+        className={cn('bg-background flex h-full flex-col overflow-hidden rounded-2xl', className)}
       >
-        <div className="p-6 pb-4 border-b flex justify-between items-center">
+        <div className="flex items-center justify-between border-b p-6 pb-4">
           <div>
-            <h2 className="font-bold text-2xl">Keranjang</h2>
-            <p className="text-muted-foreground text-sm mt-1">{cart.length} item dipilih</p>
+            <h2 className="text-2xl font-bold">Keranjang</h2>
+            <p className="text-muted-foreground mt-1 text-sm">{cart.length} item dipilih</p>
           </div>
           <div className="flex gap-2">
             {currentTransactionCode && (
@@ -96,9 +96,9 @@ export function Cart({
                 size="icon"
                 onClick={onClearTransaction}
                 title="Clear Transaction"
-                className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                className="text-red-500 hover:bg-red-50 hover:text-red-600"
               >
-                <XIcon className="w-5 h-5" />
+                <XIcon className="h-5 w-5" />
               </Button>
             )}
             <Button
@@ -108,13 +108,13 @@ export function Cart({
               onClick={() => setIsSavedTransactionsDialogOpen(true)}
               title="Transaksi Tersimpan"
             >
-              <FolderOpen className="w-5 h-5" />
+              <FolderOpen className="h-5 w-5" />
             </Button>
           </div>
         </div>
 
         {currentTransactionCode && (
-          <div className="px-6 py-2 bg-blue-50 border-b border-blue-100 text-blue-700 text-sm flex items-center justify-between">
+          <div className="flex items-center justify-between border-b border-blue-100 bg-blue-50 px-6 py-2 text-sm text-blue-700">
             <span>
               Transaksi Tersimpan:{' '}
               <span className="font-mono font-bold">{currentTransactionCode}</span>
@@ -122,11 +122,11 @@ export function Cart({
           </div>
         )}
 
-        <ScrollArea className="flex-1 p-6 space-y-6 overflow-y-auto">
+        <ScrollArea className="flex-1 space-y-6 overflow-y-auto p-6">
           {cart.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-40 text-muted-foreground space-y-2">
-              <div className="p-4 bg-muted rounded-full">
-                <BanknoteIcon className="w-6 h-6 opacity-50" />
+            <div className="text-muted-foreground flex h-40 flex-col items-center justify-center space-y-2">
+              <div className="bg-muted rounded-full p-4">
+                <BanknoteIcon className="h-6 w-6 opacity-50" />
               </div>
               <p>Belum ada pesanan</p>
             </div>
@@ -134,7 +134,7 @@ export function Cart({
             <div className="space-y-6">
               {cart.map((item) => (
                 <div key={item.sku.id} className="flex gap-4">
-                  <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-muted">
+                  <div className="bg-muted relative h-20 w-20 shrink-0 overflow-hidden rounded-xl">
                     {item.images && item.images.length > 0 ? (
                       <Image
                         src={item.images[0].image}
@@ -143,7 +143,7 @@ export function Cart({
                         className="object-cover"
                       />
                     ) : (
-                      <div className="flex h-full items-center justify-center text-xs text-muted-foreground">
+                      <div className="text-muted-foreground flex h-full items-center justify-center text-xs">
                         No Image
                       </div>
                     )}
@@ -151,24 +151,24 @@ export function Cart({
 
                   <div className="flex flex-1 flex-col justify-between py-0.5">
                     <div className="flex justify-between gap-2">
-                      <h3 className="font-semibold line-clamp-2 text-sm leading-tight">
+                      <h3 className="line-clamp-2 text-sm leading-tight font-semibold">
                         {item.name}
                       </h3>
-                      <span className="font-bold text-sm whitespace-nowrap">
+                      <span className="text-sm font-bold whitespace-nowrap">
                         {formatCurrency(item.price * item.amount)}
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between mt-2">
-                      <p className="text-xs text-muted-foreground">{formatCurrency(item.price)}</p>
-                      <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-full">
+                    <div className="mt-2 flex items-center justify-between">
+                      <p className="text-muted-foreground text-xs">{formatCurrency(item.price)}</p>
+                      <div className="bg-muted/50 flex items-center gap-1 rounded-full p-1">
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-6 w-6 rounded-full cursor-pointer"
+                          className="h-6 w-6 cursor-pointer rounded-full"
                           onClick={() => onUpdateQuantity(item.sku.id, -1)}
                         >
-                          <MinusIcon className="w-3 h-3" />
+                          <MinusIcon className="h-3 w-3" />
                         </Button>
                         <input
                           type="number"
@@ -183,19 +183,19 @@ export function Cart({
                             const delta = newAmount - item.amount;
                             onUpdateQuantity(item.sku.id, delta);
                           }}
-                          className="text-sm font-medium w-12 text-center bg-transparent border-none outline-none"
+                          className="w-12 border-none bg-transparent text-center text-sm font-medium outline-none"
                         />
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-6 w-6 rounded-full cursor-pointer"
+                          className="h-6 w-6 cursor-pointer rounded-full"
                           onClick={() => {
                             if (item.amount < 999) {
                               onUpdateQuantity(item.sku.id, 1);
                             }
                           }}
                         >
-                          <PlusIcon className="w-3 h-3" />
+                          <PlusIcon className="h-3 w-3" />
                         </Button>
                       </div>
                     </div>
@@ -206,15 +206,15 @@ export function Cart({
           )}
         </ScrollArea>
 
-        <div className="p-6 bg-muted/30 space-y-6 border-t">
+        <div className="bg-muted/30 space-y-6 border-t p-6">
           <div className="space-y-2">
             <Button
               variant="outline"
-              className="w-full justify-between cursor-pointer"
+              className="w-full cursor-pointer justify-between"
               onClick={() => setIsCouponsDialogOpen(true)}
             >
               <div className="flex items-center gap-2">
-                <TicketIcon className="w-4 h-4" />
+                <TicketIcon className="h-4 w-4" />
                 <span>Kupon</span>
               </div>
               {coupons.length > 0 && (
@@ -243,24 +243,24 @@ export function Cart({
               </div>
             )}
             <Separator className="my-2" />
-            <div className="flex justify-between items-end">
-              <span className="font-bold text-lg">Total</span>
-              <span className="font-bold text-2xl">{formatCurrency(total)}</span>
+            <div className="flex items-end justify-between">
+              <span className="text-lg font-bold">Total</span>
+              <span className="text-2xl font-bold">{formatCurrency(total)}</span>
             </div>
           </div>
 
           <div className="flex gap-2">
             <Button
               variant="outline"
-              className="flex-1 h-12 text-lg font-bold rounded-xl border-primary text-primary hover:bg-primary/10 hover:text-primary cursor-pointer"
+              className="border-primary text-primary hover:bg-primary/10 hover:text-primary h-12 flex-1 cursor-pointer rounded-xl text-lg font-bold"
               size="lg"
               onClick={onSaveTransaction}
               disabled={cart.length === 0}
             >
-              <SaveIcon className="w-5 h-5" />
+              <SaveIcon className="h-5 w-5" />
             </Button>
             <Button
-              className="flex-4 h-12 text-lg font-bold rounded-xl shadow-lg shadow-primary/20 cursor-pointer"
+              className="shadow-primary/20 h-12 flex-4 cursor-pointer rounded-xl text-lg font-bold shadow-lg"
               size="lg"
               onClick={() => {
                 if (coupons.length === 0) {

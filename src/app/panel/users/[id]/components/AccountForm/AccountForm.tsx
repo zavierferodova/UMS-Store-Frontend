@@ -39,12 +39,12 @@ export const AccountForm = ({ user }: AccountFormProps) => {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="mb-6 flex items-center space-x-4">
-          <div className="relative flex justify-center w-full">
+          <div className="relative flex w-full justify-center">
             <Avatar className="h-20 w-20 rounded-md">
               <AvatarImage
                 src={userImage}
                 alt="User profile image"
-                className="object-cover w-full h-full"
+                className="h-full w-full object-cover"
               />
               <AvatarFallback className="rounded-xl">
                 <UserIcon className="text-accent-foreground/60" />

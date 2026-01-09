@@ -49,7 +49,7 @@ export default function StoreForm({ store }: StoreFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-2xl mx-auto">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="mx-auto w-full max-w-2xl">
         <Card>
           <CardHeader>
             <CardTitle>Pengaturan Toko</CardTitle>

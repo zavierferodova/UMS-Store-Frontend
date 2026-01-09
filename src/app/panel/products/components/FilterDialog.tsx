@@ -48,12 +48,12 @@ export function FilterDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="gap-2 cursor-pointer">
+        <Button variant="outline" className="cursor-pointer gap-2">
           <SlidersHorizontalIcon className="h-4 w-4" />
           <span>Filter</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] overflow-hidden">
+      <DialogContent className="overflow-hidden sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Filter Produk</DialogTitle>
         </DialogHeader>

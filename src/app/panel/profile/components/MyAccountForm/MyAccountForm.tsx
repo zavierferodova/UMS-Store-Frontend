@@ -67,14 +67,14 @@ export const MyAccountForm = () => {
                     <AvatarImage
                       src={imagePreview || ''}
                       alt="User profile image"
-                      className="object-cover w-full h-full"
+                      className="h-full w-full object-cover"
                     />
                     <AvatarFallback className="rounded-xl">
                       <UserIcon className="text-accent-foreground/60" />
                     </AvatarFallback>
                   </Avatar>
                   <div
-                    className="group absolute inset-0 flex h-20 w-20 cursor-pointer items-center justify-center rounded-md bg-opacity-0 transition-all duration-300 hover:bg-black/50"
+                    className="group bg-opacity-0 absolute inset-0 flex h-20 w-20 cursor-pointer items-center justify-center rounded-md transition-all duration-300 hover:bg-black/50"
                     onClick={handleAvatarClick}
                   >
                     <CameraIcon className="h-6 w-6 text-white opacity-0 transition-all duration-300 group-hover:opacity-100" />

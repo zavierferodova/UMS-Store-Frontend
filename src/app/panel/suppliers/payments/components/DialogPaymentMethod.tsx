@@ -238,11 +238,11 @@ export function DialogPaymentMethod({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Status Penghapusan</FormLabel>
-                    <FormDescription className="text-sm text-muted-foreground">
+                    <FormDescription className="text-muted-foreground text-sm">
                       Aktifkan atau hapus metode pembayaran agar tidak dapat digunakan pada
                       transaksi baru
                     </FormDescription>
-                    <div className="flex flex-row items-center gap-2 mt-2">
+                    <div className="mt-2 flex flex-row items-center gap-2">
                       <FormControl>
                         <Switch
                           checked={field.value}
@@ -250,7 +250,7 @@ export function DialogPaymentMethod({
                           className="data-[state=checked]:bg-primary cursor-pointer"
                         />
                       </FormControl>
-                      <div className="font-normal text-sm">{field.value ? 'Aktif' : 'Dihapus'}</div>
+                      <div className="text-sm font-normal">{field.value ? 'Aktif' : 'Dihapus'}</div>
                     </div>
                   </FormItem>
                 )}

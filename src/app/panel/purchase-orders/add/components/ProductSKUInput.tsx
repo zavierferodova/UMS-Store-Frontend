@@ -67,8 +67,8 @@ export function ProductSKUInput({
   };
 
   return (
-    <div className="space-y-4 w-full overflow-hidden">
-      <div className="max-h-[400px] overflow-auto w-full">
+    <div className="w-full space-y-4 overflow-hidden">
+      <div className="max-h-[400px] w-full overflow-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -102,11 +102,11 @@ export function ProductSKUInput({
                           placeholder="Masukkan SKU"
                           className={skuError ? 'border-destructive' : ''}
                         />
-                        {skuError && <p className="text-xs text-destructive">{skuError}</p>}
+                        {skuError && <p className="text-destructive text-xs">{skuError}</p>}
                       </div>
                     )}
                   </TableCell>
-                  <TableCell className="align-middle min-w-[200px]">
+                  <TableCell className="min-w-[200px] align-middle">
                     {!isSupplierEditable ? (
                       <span className="text-sm font-medium">
                         {sku.supplierName || 'Unknown Supplier'}
@@ -126,7 +126,7 @@ export function ProductSKUInput({
                           error={!!supplierError}
                         />
                         {supplierError && (
-                          <p className="text-xs text-destructive">{supplierError}</p>
+                          <p className="text-destructive text-xs">{supplierError}</p>
                         )}
                       </div>
                     )}
@@ -136,15 +136,15 @@ export function ProductSKUInput({
                       <span className="text-sm font-medium">{sku.stock || 0}</span>
                     </TableCell>
                   )}
-                  <TableCell className="align-middle text-center">
-                    {isReadOnly && <span className="text-sm text-muted-foreground">-</span>}
+                  <TableCell className="text-center align-middle">
+                    {isReadOnly && <span className="text-muted-foreground text-sm">-</span>}
                     {!isReadOnly && (
                       <Button
                         type="button"
                         variant="ghost"
                         size="icon"
                         onClick={() => handleRemoveSku(index)}
-                        className="h-8 w-8 text-destructive hover:text-destructive/90 cursor-pointer"
+                        className="text-destructive hover:text-destructive/90 h-8 w-8 cursor-pointer"
                         disabled={skus.length === 1 && !isEditMode}
                       >
                         <TrashIcon className="h-4 w-4" />

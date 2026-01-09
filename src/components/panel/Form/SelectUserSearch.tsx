@@ -96,7 +96,7 @@ export function SelectUserSearch({
           aria-expanded={open}
           disabled={disabled}
           className={cn(
-            'w-full font-normal justify-between cursor-pointer text-muted-foreground hover:text-muted-foreground hover:bg-accent',
+            'text-muted-foreground hover:text-muted-foreground hover:bg-accent w-full cursor-pointer justify-between font-normal',
             value && 'text-foreground hover:text-foreground',
             error && 'border-destructive text-destructive',
           )}
@@ -115,7 +115,7 @@ export function SelectUserSearch({
           <CommandInput placeholder="Cari user..." value={search} onValueChange={setSearch} />
           <CommandList onScroll={handleScroll} className="max-h-[200px] overflow-y-auto">
             {isLoading && users.length === 0 && (
-              <div className="py-6 text-center text-sm text-muted-foreground">Loading...</div>
+              <div className="text-muted-foreground py-6 text-center text-sm">Loading...</div>
             )}
             {!isLoading && users.length === 0 && <CommandEmpty>User tidak ditemukan.</CommandEmpty>}
             <CommandGroup>
@@ -144,7 +144,7 @@ export function SelectUserSearch({
               ))}
             </CommandGroup>
             {isLoading && users.length > 0 && (
-              <div className="py-2 text-center text-xs text-muted-foreground">Loading more...</div>
+              <div className="text-muted-foreground py-2 text-center text-xs">Loading more...</div>
             )}
           </CommandList>
         </Command>

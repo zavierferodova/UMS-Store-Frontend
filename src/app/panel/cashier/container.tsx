@@ -70,8 +70,8 @@ export default function CashierContainer({ store, cashierBookId }: CashierContai
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 lg:h-[88vh] overflow-hidden">
-      <div className="flex-1 min-w-0 overflow-y-auto">
+    <div className="flex flex-col gap-6 overflow-hidden lg:h-[88vh] lg:flex-row">
+      <div className="min-w-0 flex-1 overflow-y-auto">
         <ProductList
           search={search}
           onSearchChange={setSearch}
@@ -85,7 +85,7 @@ export default function CashierContainer({ store, cashierBookId }: CashierContai
           onAddToCart={addToCart}
         />
       </div>
-      <div className="hidden xl:block h-[95vh] lg:h-full w-full xl:w-95 shrink-0">
+      <div className="hidden h-[95vh] w-full shrink-0 lg:h-full xl:block xl:w-95">
         <Cart
           className="border"
           cart={cart}
@@ -113,18 +113,18 @@ export default function CashierContainer({ store, cashierBookId }: CashierContai
         <Sheet>
           <SheetTrigger asChild>
             <Button
-              className="fixed bottom-4 right-4 h-14 w-14 rounded-full shadow-lg z-50"
+              className="fixed right-4 bottom-4 z-50 h-14 w-14 rounded-full shadow-lg"
               size="icon"
             >
               <ShoppingCart className="h-6 w-6" />
               {cart.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center border-2 border-background">
+                <span className="border-background absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full border-2 bg-red-500 text-xs font-bold text-white">
                   {cart.length}
                 </span>
               )}
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-full sm:max-w-md p-0 border-none">
+          <SheetContent side="right" className="w-full border-none p-0 sm:max-w-md">
             <SheetTitle className="sr-only">Cart</SheetTitle>
             <div className="h-full pt-10">
               <Cart

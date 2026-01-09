@@ -21,7 +21,7 @@ export const AddSupplierForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4"
+        className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2"
       >
         <Card>
           <CardHeader>
@@ -60,7 +60,7 @@ export const AddSupplierForm = () => {
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem className="items-start h-max">
+                  <FormItem className="h-max items-start">
                     <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input {...field} maxLength={255} placeholder="Masukan email" />
@@ -145,7 +145,7 @@ export const AddSupplierForm = () => {
               </div>
             </CardContent>
           </Card>
-          <div className="flex justify-end mt-4">
+          <div className="mt-4 flex justify-end">
             <Button className="w-max cursor-pointer" type="submit">
               Simpan
             </Button>

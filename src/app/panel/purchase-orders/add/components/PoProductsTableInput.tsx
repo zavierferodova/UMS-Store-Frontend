@@ -62,7 +62,7 @@ export function PoProductsTableInput({
 
   if (products.length === 0) {
     return (
-      <div className="text-center py-8 text-muted-foreground flex flex-col items-center gap-2">
+      <div className="text-muted-foreground flex flex-col items-center gap-2 py-8 text-center">
         <PackageOpenIcon size={40} className="mx-auto mb-1" />
         <div>No products selected.</div>
       </div>
@@ -116,14 +116,14 @@ export function PoProductsTableInput({
               <TableRow key={product.sku.sku}>
                 <TableCell className="text-center">{idx + 1}</TableCell>
                 <TableCell>
-                  <div className="w-12 h-12 relative rounded-md overflow-hidden">
+                  <div className="relative h-12 w-12 overflow-hidden rounded-md">
                     {product.images && product.images.length > 0 ? (
                       <Image
                         src={product.images[0]?.image}
                         alt={product.name}
                         layout="fill"
                         objectFit="cover"
-                        className="w-full h-full bg-gray-200 cursor-pointer"
+                        className="h-full w-full cursor-pointer bg-gray-200"
                         onClick={() => {
                           if (readonly) return;
                           setCurrentImagePreview(product.images[0]?.image);
@@ -131,7 +131,7 @@ export function PoProductsTableInput({
                         }}
                       />
                     ) : (
-                      <div className="w-full h-full bg-gray-200 flex justify-center items-center">
+                      <div className="flex h-full w-full items-center justify-center bg-gray-200">
                         <ImageIcon size={16} />
                       </div>
                     )}
@@ -142,7 +142,7 @@ export function PoProductsTableInput({
                     href={panelRoutes.productEdit(product.id)}
                     rel="noopener noreferrer"
                     target="_blank"
-                    className="hover:underline cursor-pointer font-medium"
+                    className="cursor-pointer font-medium hover:underline"
                   >
                     {product.name}
                   </Link>
@@ -171,7 +171,7 @@ export function PoProductsTableInput({
                       />
                     )}
                     {!readonly && item.price === 0 && (
-                      <p className="text-xs text-destructive">Harga harus lebih dari 0</p>
+                      <p className="text-destructive text-xs">Harga harus lebih dari 0</p>
                     )}
                   </div>
                 </TableCell>
@@ -197,7 +197,7 @@ export function PoProductsTableInput({
                       />
                     )}
                     {!readonly && item.amounts === 0 && (
-                      <p className="text-xs text-destructive">Jumlah harus lebih dari 0</p>
+                      <p className="text-destructive text-xs">Jumlah harus lebih dari 0</p>
                     )}
                   </div>
                 </TableCell>
@@ -266,7 +266,7 @@ export function PoProductsTableInput({
                     {!readonly &&
                       item.supplier_discount != null &&
                       item.supplier_discount > 100 && (
-                        <p className="text-xs text-destructive">
+                        <p className="text-destructive text-xs">
                           Diskon tidak boleh lebih dari 100%
                         </p>
                       )}

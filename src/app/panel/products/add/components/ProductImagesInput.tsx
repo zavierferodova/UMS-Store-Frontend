@@ -82,9 +82,9 @@ export function ProductImagesInput({ onImagesChange, images = [] }: ProductImage
         >
           {(images || []).map((image) => (
             <Reorder.Item key={image.id} value={image} className="relative h-24 w-24 flex-shrink-0">
-              <div className="group relative w-full h-full">
-                <div className="w-full h-full flex items-center absolute justify-center bg-gray-100 rounded-md">
-                  <ImageIcon className="h-8 w-8 text-muted-foreground" />
+              <div className="group relative h-full w-full">
+                <div className="absolute flex h-full w-full items-center justify-center rounded-md bg-gray-100">
+                  <ImageIcon className="text-muted-foreground h-8 w-8" />
                 </div>
                 <Image
                   src={image.src}
@@ -92,7 +92,7 @@ export function ProductImagesInput({ onImagesChange, images = [] }: ProductImage
                   fill
                   className="rounded-md object-cover"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-50 group-hover:flex hidden items-center justify-center gap-2 rounded-md">
+                <div className="bg-opacity-50 absolute inset-0 hidden items-center justify-center gap-2 rounded-md bg-black group-hover:flex">
                   <Button
                     type="button"
                     variant="ghost"
@@ -125,7 +125,7 @@ export function ProductImagesInput({ onImagesChange, images = [] }: ProductImage
             className="flex h-24 w-24 flex-shrink-0 cursor-pointer items-center justify-center rounded-md border border-dashed"
             onClick={triggerFileInput}
           >
-            <ImageIcon className="h-8 w-8 text-muted-foreground" />
+            <ImageIcon className="text-muted-foreground h-8 w-8" />
             <input
               type="file"
               ref={fileInputRef}

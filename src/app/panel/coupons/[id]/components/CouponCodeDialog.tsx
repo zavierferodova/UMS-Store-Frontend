@@ -160,7 +160,7 @@ export function CouponCodeDialog({
               />
             )}
             <DialogFooter>
-              <Button type="submit" className="w-full sm:w-auto cursor-pointer">
+              <Button type="submit" className="w-full cursor-pointer sm:w-auto">
                 Simpan
               </Button>
             </DialogFooter>

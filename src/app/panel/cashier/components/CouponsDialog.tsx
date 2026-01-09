@@ -68,24 +68,24 @@ export function CouponsDialog({
               onClick={handleCheck}
               disabled={!couponCode || loading}
             >
-              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Gunakan'}
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Gunakan'}
             </Button>
           </div>
 
           <div className="space-y-2">
             <h4 className="text-sm font-medium">Kupon Terpasang ({coupons.length})</h4>
             {coupons.length === 0 ? (
-              <p className="text-sm text-muted-foreground">Belum ada kupon yang digunakan.</p>
+              <p className="text-muted-foreground text-sm">Belum ada kupon yang digunakan.</p>
             ) : (
               <div className="space-y-2">
                 {coupons.map((coupon) => (
                   <div
                     key={coupon.code.code}
-                    className="flex items-center justify-between bg-green-50 p-3 rounded-md border border-green-100"
+                    className="flex items-center justify-between rounded-md border border-green-100 bg-green-50 p-3"
                   >
                     <div className="flex items-center gap-2">
-                      <div className="bg-green-100 p-2 rounded-full">
-                        <TicketIcon className="w-4 h-4 text-green-600" />
+                      <div className="rounded-full bg-green-100 p-2">
+                        <TicketIcon className="h-4 w-4 text-green-600" />
                       </div>
                       <div>
                         <p className="text-sm font-medium text-green-900">{coupon.name}</p>
@@ -106,10 +106,10 @@ export function CouponsDialog({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="text-green-700 hover:text-green-800 hover:bg-green-100"
+                      className="text-green-700 hover:bg-green-100 hover:text-green-800"
                       onClick={() => onRemoveCoupon(coupon.code.code)}
                     >
-                      <XIcon className="w-4 h-4" />
+                      <XIcon className="h-4 w-4" />
                     </Button>
                   </div>
                 ))}

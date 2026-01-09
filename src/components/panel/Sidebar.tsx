@@ -213,7 +213,7 @@ function renderMenuItem(item: Menu, userRole: UserRole | undefined, pathname: st
       >
         <SidebarMenuItem>
           <SidebarMenuButton asChild disabled={item.disabled}>
-            <CollapsibleTrigger className="w-full group/item-collapsible cursor-pointer">
+            <CollapsibleTrigger className="group/item-collapsible w-full cursor-pointer">
               {item.icon}
               <div>{item.title}</div>
               <ChevronRightIcon className="ml-auto size-4 transition-transform group-data-[state=open]/item-collapsible:rotate-90" />
@@ -231,7 +231,7 @@ function renderMenuItem(item: Menu, userRole: UserRole | undefined, pathname: st
                         <button
                           type="button"
                           disabled
-                          className="w-full text-left opacity-50 cursor-not-allowed"
+                          className="w-full cursor-not-allowed text-left opacity-50"
                         >
                           <div>{subItem.title}</div>
                         </button>
@@ -275,7 +275,7 @@ export function PanelSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="text-primary font-bold py-4 flex justify-center items-center">
+        <div className="text-primary flex items-center justify-center py-4 font-bold">
           <Image src="/images/logo.png" alt="Logo" width={70} height={70} />
         </div>
         <SidebarSeparator />
@@ -306,13 +306,13 @@ export function PanelSidebar() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton className="h-auto cursor-pointer">
-              <Avatar className="size-10 rounded-lg overflow-hidden">
+              <Avatar className="size-10 overflow-hidden rounded-lg">
                 <AvatarImage
                   src={user?.profile_image}
                   alt="User profile image"
-                  className="w-full h-full object-cover"
+                  className="h-full w-full object-cover"
                 />
-                <AvatarFallback className="w-full h-full flex justify-center items-center bg-accent">
+                <AvatarFallback className="bg-accent flex h-full w-full items-center justify-center">
                   <UserIcon className="text-accent-foreground/60" />
                 </AvatarFallback>
               </Avatar>
@@ -328,13 +328,13 @@ export function PanelSidebar() {
           <DropdownMenuContent className="w-56">
             <DropdownMenuLabel>
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="size-10 rounded-lg overflow-hidden">
+                <Avatar className="size-10 overflow-hidden rounded-lg">
                   <AvatarImage
                     src={user?.profile_image}
                     alt="User profile image"
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                   />
-                  <AvatarFallback className="w-full h-full flex justify-center items-center bg-accent">
+                  <AvatarFallback className="bg-accent flex h-full w-full items-center justify-center">
                     <UserIcon className="text-accent-foreground/60" />
                   </AvatarFallback>
                 </Avatar>
@@ -356,8 +356,8 @@ export function PanelSidebar() {
               </DropdownMenuItem>
               <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                 <div className="flex items-center">
-                  <SunIcon className="w-4 h-4 mr-2 dark:hidden" />
-                  <MoonIcon className="w-4 h-4 mr-2 hidden dark:block" />
+                  <SunIcon className="mr-2 h-4 w-4 dark:hidden" />
+                  <MoonIcon className="mr-2 hidden h-4 w-4 dark:block" />
                   <span>Theme</span>
                 </div>
                 <Switch

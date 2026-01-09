@@ -41,8 +41,8 @@ export function ProductDetailForm({ product }: { product: Product }) {
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="mb-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-6 min-w-0">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          <div className="min-w-0 space-y-6 lg:col-span-2">
             <Card>
               <CardHeader>
                 <CardTitle>Detail Produk</CardTitle>
@@ -159,14 +159,14 @@ export function ProductDetailForm({ product }: { product: Product }) {
                 {isAdmin(user) && (
                   <div className="mb-10">
                     <FormLabel className="mb-1">Status Penghapusan</FormLabel>
-                    <FormDescription className="text-sm text-muted-foreground">
+                    <FormDescription className="text-muted-foreground text-sm">
                       Aktifkan atau hapus produk produk dari katalog
                     </FormDescription>
                     <FormField
                       control={form.control}
                       name="active"
                       render={({ field }) => (
-                        <FormItem className="flex flex-row items-center justify-start gap-2 h-full">
+                        <FormItem className="flex h-full flex-row items-center justify-start gap-2">
                           <FormControl>
                             <Switch
                               checked={field.value}
@@ -174,7 +174,7 @@ export function ProductDetailForm({ product }: { product: Product }) {
                               className="data-[state=checked]:bg-primary cursor-pointer"
                             />
                           </FormControl>
-                          <div className="font-normal text-sm">
+                          <div className="text-sm font-normal">
                             {field.value ? 'Aktif' : 'Dihapus'}
                           </div>
                         </FormItem>
@@ -186,7 +186,7 @@ export function ProductDetailForm({ product }: { product: Product }) {
             </Card>
           </div>
 
-          <div className="lg:col-span-1 space-y-6 min-w-0">
+          <div className="min-w-0 space-y-6 lg:col-span-1">
             <Card>
               <CardHeader>
                 <CardTitle>SKU Produk</CardTitle>
@@ -226,7 +226,7 @@ export function ProductDetailForm({ product }: { product: Product }) {
               </CardContent>
             </Card>
 
-            <div className="flex justify-end items-center gap-2 mt-4">
+            <div className="mt-4 flex items-center justify-end gap-2">
               <Button type="submit" className="cursor-pointer">
                 Simpan
               </Button>
@@ -256,7 +256,7 @@ export function ProductDetailForm({ product }: { product: Product }) {
               <AlertDialogCancel className="cursor-pointer">Batal</AlertDialogCancel>
               <AlertDialogAction
                 onClick={onDelete}
-                className="cursor-pointer bg-destructive hover:bg-destructive/90"
+                className="bg-destructive hover:bg-destructive/90 cursor-pointer"
               >
                 Hapus
               </AlertDialogAction>

@@ -21,7 +21,7 @@ export function AddCouponForm() {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mb-6 max-w-2xl mx-auto">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="mx-auto mb-6 max-w-2xl">
         <Card className="mb-3">
           <CardHeader>
             <CardTitle>Detail Kupon</CardTitle>
@@ -110,7 +110,7 @@ export function AddCouponForm() {
               />
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <FormField
                 control={form.control}
                 name="start_time"

@@ -42,7 +42,7 @@ export function SavedTransactionsDialog({
           <DialogTitle>Transaksi Tersimpan</DialogTitle>
         </DialogHeader>
 
-        <div className="flex justify-end mb-2">
+        <div className="mb-2 flex justify-end">
           <Button
             className="cursor-pointer"
             variant="ghost"
@@ -50,18 +50,18 @@ export function SavedTransactionsDialog({
             onClick={onRefresh}
             disabled={loading}
           >
-            <RefreshCcw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCcw className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
         </div>
 
         <ScrollArea className="max-h-[60vh]">
           {loading && transactions.length === 0 ? (
-            <div className="flex justify-center items-center h-40">
-              <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+            <div className="flex h-40 items-center justify-center">
+              <Loader2 className="text-muted-foreground h-8 w-8 animate-spin" />
             </div>
           ) : transactions.length === 0 ? (
-            <div className="text-center text-muted-foreground py-10">
+            <div className="text-muted-foreground py-10 text-center">
               Tidak ada transaksi tersimpan.
             </div>
           ) : (
@@ -70,24 +70,24 @@ export function SavedTransactionsDialog({
                 <AccordionItem
                   key={transaction.id}
                   value={transaction.id}
-                  className="border! rounded-lg"
+                  className="rounded-lg border!"
                 >
-                  <AccordionTrigger className="hover:no-underline py-4 px-4 cursor-pointer">
-                    <div className="flex flex-col items-start text-left space-y-1 w-full">
-                      <div className="flex justify-between w-full pr-4">
+                  <AccordionTrigger className="cursor-pointer px-4 py-4 hover:no-underline">
+                    <div className="flex w-full flex-col items-start space-y-1 text-left">
+                      <div className="flex w-full justify-between pr-4">
                         <p className="font-medium">
                           {new Date(transaction.created_at).toLocaleString()}
                         </p>
                         <p className="font-bold">{formatCurrency(transaction.total)}</p>
                       </div>
-                      <p className="text-sm text-muted-foreground font-normal">
+                      <p className="text-muted-foreground text-sm font-normal">
                         {transaction.items.length} items
                       </p>
                     </div>
                   </AccordionTrigger>
                   <AccordionContent>
-                    <div className="pt-2 pb-4 space-y-4 px-4">
-                      <div className="space-y-2 bg-muted/30 p-3 rounded-md">
+                    <div className="space-y-4 px-4 pt-2 pb-4">
+                      <div className="bg-muted/30 space-y-2 rounded-md p-3">
                         {transaction.items.map((item, idx) => (
                           <div key={idx} className="flex justify-between text-sm">
                             <span className="text-muted-foreground">
@@ -97,7 +97,7 @@ export function SavedTransactionsDialog({
                           </div>
                         ))}
                         {transaction.coupons && transaction.coupons.length > 0 && (
-                          <div className="border-t border-dashed border-gray-300 pt-2 mt-2">
+                          <div className="mt-2 border-t border-dashed border-gray-300 pt-2">
                             {transaction.coupons.map((coupon, idx) => (
                               <div
                                 key={idx}
@@ -115,7 +115,7 @@ export function SavedTransactionsDialog({
                       <div className="flex justify-end pt-2">
                         <Button
                           size="sm"
-                          className="w-full sm:w-auto cursor-pointer"
+                          className="w-full cursor-pointer sm:w-auto"
                           onClick={() => {
                             onRestore(transaction);
                             onOpenChange(false);

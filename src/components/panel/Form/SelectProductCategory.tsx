@@ -189,7 +189,7 @@ export function SelectProductCategory({
             role="combobox"
             aria-expanded={open}
             className={cn(
-              'w-full justify-between cursor-pointer',
+              'w-full cursor-pointer justify-between',
               error && 'border-destructive text-destructive',
             )}
           >
@@ -208,7 +208,7 @@ export function SelectProductCategory({
                   onSelect={() => {
                     setIsAddingCategory(true);
                   }}
-                  className="flex items-center justify-between gap-2 cursor-pointer"
+                  className="flex cursor-pointer items-center justify-between gap-2"
                 >
                   {isAddingCategory ? (
                     <>
@@ -227,13 +227,13 @@ export function SelectProductCategory({
                           className="h-6 w-6 cursor-pointer"
                           onClick={handleAddCategory}
                         >
-                          <CheckCircleIcon className="h-4 w-4 text-green-500 cursor-pointer" />
+                          <CheckCircleIcon className="h-4 w-4 cursor-pointer text-green-500" />
                         </Button>
                         <Button
                           type="button"
                           variant="ghost"
                           size="icon"
-                          className="h-6 w-6 hover:text-red-600 cursor-pointer"
+                          className="h-6 w-6 cursor-pointer hover:text-red-600"
                           onClick={(e) => {
                             e.stopPropagation();
                             setIsAddingCategory(false);
@@ -276,7 +276,7 @@ export function SelectProductCategory({
                         setOpen(false);
                       }
                     }}
-                    className="flex items-center justify-between cursor-pointer"
+                    className="flex cursor-pointer items-center justify-between"
                   >
                     {categoryToEdit?.value === category.value ? (
                       <>
@@ -366,7 +366,7 @@ export function SelectProductCategory({
                       setPage(nextPage);
                       fetchCategories(nextPage, true);
                     }}
-                    className="flex items-center justify-center gap-2 cursor-pointer"
+                    className="flex cursor-pointer items-center justify-center gap-2"
                   >
                     <span className="hover:underline">Lebih banyak</span>
                   </CommandItem>
@@ -393,7 +393,7 @@ export function SelectProductCategory({
           <AlertDialogFooter>
             <AlertDialogCancel className="cursor-pointer">Batal</AlertDialogCancel>
             <AlertDialogAction
-              className="bg-destructive hover:bg-destructive/90 text-white cursor-pointer"
+              className="bg-destructive hover:bg-destructive/90 cursor-pointer text-white"
               onClick={handleDeleteCategory}
             >
               Hapus

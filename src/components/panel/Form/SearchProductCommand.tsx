@@ -101,30 +101,30 @@ export function SearchProductCommand({
                 key={product.sku.sku}
                 value={product.sku.sku}
                 onSelect={() => handleProductSelect(product)}
-                className="cursor-pointer flex flex-col items-start gap-0"
+                className="flex cursor-pointer flex-col items-start gap-0"
               >
-                <div className="flex items-center w-full gap-2 pl-6 relative">
+                <div className="relative flex w-full items-center gap-2 pl-6">
                   {isSelected && (
-                    <Check className="w-4 h-4 text-primary mr-1 absolute left-0 top-1/2 -translate-y-1/2" />
+                    <Check className="text-primary absolute top-1/2 left-0 mr-1 h-4 w-4 -translate-y-1/2" />
                   )}
-                  <div className="w-10 h-10 shrink-0 rounded-md overflow-hidden bg-gray-200 flex items-center justify-center mr-2">
+                  <div className="mr-2 flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-md bg-gray-200">
                     {product.images && product.images.length > 0 ? (
                       <Image
                         src={product.images[0].image}
                         alt={product.name}
                         width={50}
                         height={50}
-                        className="w-full h-full bg-gray-200 object-cover"
+                        className="h-full w-full bg-gray-200 object-cover"
                       />
                     ) : (
-                      <span className="flex items-center justify-center w-full h-full text-muted-foreground">
+                      <span className="text-muted-foreground flex h-full w-full items-center justify-center">
                         <ImageIcon size={20} />
                       </span>
                     )}
                   </div>
-                  <div className="flex flex-col flex-1 min-w-0">
+                  <div className="flex min-w-0 flex-1 flex-col">
                     <span className="truncate">{product.name}</span>
-                    <span className="text-xs text-muted-foreground truncate">
+                    <span className="text-muted-foreground truncate text-xs">
                       SKU: {product.sku.sku} | Stock: {product.sku.stock}
                     </span>
                   </div>
@@ -132,10 +132,10 @@ export function SearchProductCommand({
                     href={panelRoutes.productEdit(product.id)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="ml-2 p-1 rounded hover:bg-accent transition-colors self-center"
+                    className="hover:bg-accent ml-2 self-center rounded p-1 transition-colors"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <ExternalLink className="w-4 h-4" />
+                    <ExternalLink className="h-4 w-4" />
                   </Link>
                 </div>
               </CommandItem>
@@ -149,7 +149,7 @@ export function SearchProductCommand({
             </div>
           )}
           {isLoading && page > 1 && (
-            <CommandItem disabled className="opacity-50 justify-center">
+            <CommandItem disabled className="justify-center opacity-50">
               Memuat...
             </CommandItem>
           )}

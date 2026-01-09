@@ -20,8 +20,8 @@ export function AddProductForm() {
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="mb-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-6 min-w-0">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          <div className="min-w-0 space-y-6 lg:col-span-2">
             <Card>
               <CardHeader>
                 <CardTitle>Detail Produk</CardTitle>
@@ -133,7 +133,7 @@ export function AddProductForm() {
             </Card>
           </div>
 
-          <div className="lg:col-span-1 space-y-6 min-w-0">
+          <div className="min-w-0 space-y-6 lg:col-span-1">
             <Card>
               <CardHeader>
                 <CardTitle>SKU Produk</CardTitle>

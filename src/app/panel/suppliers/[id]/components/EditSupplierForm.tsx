@@ -43,7 +43,7 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4"
+        className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2"
       >
         <Card style={{ height: 'max-content' }}>
           <CardHeader>
@@ -60,7 +60,7 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                     type="button"
                     size="icon"
                     variant="ghost"
-                    className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 cursor-pointer"
+                    className="absolute top-1/2 right-1 h-8 w-8 -translate-y-1/2 cursor-pointer"
                     onClick={() => {
                       navigator.clipboard.writeText(supplier.code ?? '');
                       toast.success('Kode pemasok berhasil disalin');
@@ -100,7 +100,7 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem className="items-start h-max">
+                  <FormItem className="h-max items-start">
                     <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input {...field} maxLength={255} placeholder="Masukan email" />
@@ -159,10 +159,10 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Status Penghapusan</FormLabel>
-                        <FormDescription className="text-sm text-muted-foreground">
+                        <FormDescription className="text-muted-foreground text-sm">
                           Aktifkan atau hapus pemasok agar tidak dapat digunakan pada transaksi baru
                         </FormDescription>
-                        <div className="flex flex-row items-center gap-2 mt-2">
+                        <div className="mt-2 flex flex-row items-center gap-2">
                           <FormControl>
                             <Switch
                               checked={field.value}
@@ -170,7 +170,7 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
                               className="data-[state=checked]:bg-primary cursor-pointer"
                             />
                           </FormControl>
-                          <div className="font-normal text-sm">
+                          <div className="text-sm font-normal">
                             {field.value ? 'Aktif' : 'Dihapus'}
                           </div>
                         </div>
@@ -222,7 +222,7 @@ export const EditSupplierForm = ({ supplier }: EditSupplierFormProps) => {
             </CardContent>
           </Card>
 
-          <div className="flex justify-end gap-2 mt-4">
+          <div className="mt-4 flex justify-end gap-2">
             <Button className="w-max cursor-pointer" type="submit">
               Simpan
             </Button>

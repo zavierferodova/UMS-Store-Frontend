@@ -56,12 +56,12 @@ export function PurchaseOrdersTable({ purchaseOrders }: PurchaseOrdersTableProps
               <TableCell>
                 <Link
                   href={panelRoutes.supplierEdit(po.supplier.id)}
-                  className="font-medium hover:underline cursor-pointer"
+                  className="cursor-pointer font-medium hover:underline"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ textDecorationThickness: '2px' }}
                 >
-                  <span className="hover:underline decoration-2 underline-offset-2 transition-all">
+                  <span className="decoration-2 underline-offset-2 transition-all hover:underline">
                     {po.supplier.name}
                   </span>
                 </Link>
@@ -70,12 +70,12 @@ export function PurchaseOrdersTable({ purchaseOrders }: PurchaseOrdersTableProps
                 {isAdmin(user) ? (
                   <Link
                     href={panelRoutes.userEdit(po.requester.id)}
-                    className="font-medium hover:underline cursor-pointer"
+                    className="cursor-pointer font-medium hover:underline"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ textDecorationThickness: '2px' }}
                   >
-                    <span className="hover:underline decoration-2 underline-offset-2 transition-all">
+                    <span className="decoration-2 underline-offset-2 transition-all hover:underline">
                       {po.requester.name}
                     </span>
                   </Link>
@@ -88,12 +88,12 @@ export function PurchaseOrdersTable({ purchaseOrders }: PurchaseOrdersTableProps
                   isAdmin(user) ? (
                     <Link
                       href={panelRoutes.userEdit(po.approver.id)}
-                      className="font-medium hover:underline cursor-pointer"
+                      className="cursor-pointer font-medium hover:underline"
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{ textDecorationThickness: '2px' }}
                     >
-                      <span className="hover:underline decoration-2 underline-offset-2 transition-all">
+                      <span className="decoration-2 underline-offset-2 transition-all hover:underline">
                         {po.approver.name}
                       </span>
                     </Link>

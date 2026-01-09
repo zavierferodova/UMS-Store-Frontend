@@ -38,13 +38,13 @@ export function CardInputPurchaseOrder({
               <div className="grid grid-cols-[120px_10px_1fr] gap-1">
                 <div className="text-sm font-medium">Status</div>
                 <div>:</div>
-                <div className="capitalize text-sm text-muted-foreground">
+                <div className="text-muted-foreground text-sm capitalize">
                   {purchaseOrder?.status.replace('_', ' ')}
                 </div>
 
                 <div className="text-sm font-medium">Kode</div>
                 <div>:</div>
-                <div className="text-sm text-muted-foreground">{purchaseOrder?.code}</div>
+                <div className="text-muted-foreground text-sm">{purchaseOrder?.code}</div>
               </div>
 
               <Separator className="mb-6" />
@@ -76,7 +76,7 @@ export function CardInputPurchaseOrder({
                 <FormLabel>Pembayaran</FormLabel>
                 <Select value={field.value} onValueChange={field.onChange}>
                   <FormControl>
-                    <SelectTrigger className="w-full cursor-pointer hover:bg-accent">
+                    <SelectTrigger className="hover:bg-accent w-full cursor-pointer">
                       <SelectValue placeholder="Pilih metode pembayaran..." />
                     </SelectTrigger>
                   </FormControl>

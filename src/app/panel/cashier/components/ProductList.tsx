@@ -59,29 +59,29 @@ export function ProductList({
   };
 
   return (
-    <div className={cn('flex-1 flex flex-col space-y-6 overflow-hidden h-full', className)}>
-      <div className="flex items-center space-x-2 bg-background px-4 py-1 rounded-2xl border shrink-0 w-full">
-        <SearchIcon className="w-4 h-4 text-muted-foreground" />
+    <div className={cn('flex h-full flex-1 flex-col space-y-6 overflow-hidden', className)}>
+      <div className="bg-background flex w-full shrink-0 items-center space-x-2 rounded-2xl border px-4 py-1">
+        <SearchIcon className="text-muted-foreground h-4 w-4" />
         <Input
           placeholder="Cari produk ..."
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="border-none shadow-none focus-visible:ring-0 text-sm"
+          className="border-none text-sm shadow-none focus-visible:ring-0"
         />
       </div>
 
-      <div className="flex-1 overflow-y-auto pr-2 scrollbar-hide">
+      <div className="scrollbar-hide flex-1 overflow-y-auto pr-2">
         {loading && page === 1 ? (
           <SpinAnimation />
         ) : products.length === 0 ? (
           <EmptyDisplay title="Tidak ada produk" description="Coba cari yang lain" />
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6 pb-8">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-6 pb-8 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => {
               return (
-                <div key={`${product.id}-${product.sku.id}`} className="flex flex-col gap-2 group">
-                  <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl bg-muted cursor-pointer">
-                    <div className="absolute bg-white top-2 right-2 z-50 px-3 py-1 rounded-2xl text-sm max-w-35 truncate border">
+                <div key={`${product.id}-${product.sku.id}`} className="group flex flex-col gap-2">
+                  <div className="bg-muted relative aspect-4/3 w-full cursor-pointer overflow-hidden rounded-2xl">
+                    <div className="absolute top-2 right-2 z-50 max-w-35 truncate rounded-2xl border bg-white px-3 py-1 text-sm">
                       {product.sku.sku}
                     </div>
                     {product.images && product.images.length > 0 ? (
@@ -93,33 +93,33 @@ export function ProductList({
                         onClick={() => handleImageClick(product.images[0].image)}
                       />
                     ) : (
-                      <div className="flex items-center justify-center h-full text-muted-foreground">
+                      <div className="text-muted-foreground flex h-full items-center justify-center">
                         No Image
                       </div>
                     )}
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <h3 className="font-bold text-lg leading-tight line-clamp-2 text-gray-800">
+                    <h3 className="line-clamp-2 text-lg leading-tight font-bold text-gray-800">
                       {product.name}
                     </h3>
-                    <div className="text-sm text-muted-foreground">
-                      <div className="font-medium line-clamp-1">
+                    <div className="text-muted-foreground text-sm">
+                      <div className="line-clamp-1 font-medium">
                         {product.category?.name || 'Tidak ada kategori'}
                       </div>
                       <div>Stok: {product.sku.stock}</div>
                     </div>
                   </div>
 
-                  <div className="flex flex-row justify-between items-center gap-3 mt-auto">
-                    <span className="font-bold text-xl text-shadow-gray-700">
+                  <div className="mt-auto flex flex-row items-center justify-between gap-3">
+                    <span className="text-xl font-bold text-shadow-gray-700">
                       {formatCurrency(product.price)}
                     </span>
                     <Button
-                      className="rounded-full w-10 h-10 font-bold cursor-pointer"
+                      className="h-10 w-10 cursor-pointer rounded-full font-bold"
                       onClick={() => handleQuantityChange(product, 1)}
                     >
-                      <ShoppingCartIcon className="w-5 h-5" />
+                      <ShoppingCartIcon className="h-5 w-5" />
                     </Button>
                   </div>
                 </div>
@@ -133,7 +133,7 @@ export function ProductList({
             <Button
               variant="outline"
               onClick={onLoadMore}
-              className="rounded-full px-8 cursor-pointer"
+              className="cursor-pointer rounded-full px-8"
             >
               Lebih banyak
             </Button>

@@ -95,12 +95,12 @@ export function FilterDialog({ state }: FilterDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="gap-2 cursor-pointer">
+        <Button variant="outline" className="cursor-pointer gap-2">
           <SlidersHorizontalIcon className="h-4 w-4" />
           <span>Filter</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] overflow-hidden">
+      <DialogContent className="overflow-hidden sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Filter Purchase Order</DialogTitle>
         </DialogHeader>
@@ -114,9 +114,9 @@ export function FilterDialog({ state }: FilterDialogProps) {
                   variant="outline"
                   role="combobox"
                   aria-expanded={openStatusSelect}
-                  className="w-full justify-between font-normal cursor-pointer h-auto min-h-9 hover:bg-white"
+                  className="h-auto min-h-9 w-full cursor-pointer justify-between font-normal hover:bg-white"
                 >
-                  <div className="flex flex-wrap gap-1 flex-1 min-w-0 max-h-20 overflow-y-auto py-1">
+                  <div className="flex max-h-20 min-w-0 flex-1 flex-wrap gap-1 overflow-y-auto py-1">
                     {purchaseOrderStatus.length === 0 ? (
                       <span className="text-muted-foreground">Pilih status...</span>
                     ) : (
@@ -128,12 +128,12 @@ export function FilterDialog({ state }: FilterDialogProps) {
                           <Badge
                             key={statusValue}
                             variant="secondary"
-                            className="gap-1 pr-1 cursor-pointer"
+                            className="cursor-pointer gap-1 pr-1"
                           >
                             <span>{option?.label}</span>
                             <span
                               onClick={(e) => handleStatusRemove(statusValue, e)}
-                              className="hover:bg-muted rounded-sm p-0.5 cursor-pointer"
+                              className="hover:bg-muted cursor-pointer rounded-sm p-0.5"
                             >
                               <X className="h-3 w-3" />
                             </span>
@@ -160,7 +160,7 @@ export function FilterDialog({ state }: FilterDialogProps) {
                           {purchaseOrderStatus.includes(option.value) ? (
                             <CheckIcon className="mr-1 h-4 w-4 text-green-500" />
                           ) : (
-                            <span className="mr-1 h-4 w-4 inline-block" />
+                            <span className="mr-1 inline-block h-4 w-4" />
                           )}
                           <span>{option.label}</span>
                         </CommandItem>

@@ -110,7 +110,7 @@ export const ProfileForm = ({ user }: ProfileFormProps) => {
                     <FormControl>
                       <Textarea
                         placeholder="Jl Raya Kebangsaan, Mendungan. Sukoharjo"
-                        className="min-h-53 max-h-53"
+                        className="max-h-53 min-h-53"
                         maxLength={255}
                         {...field}
                       />

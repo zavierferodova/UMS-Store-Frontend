@@ -59,7 +59,7 @@ export function EditCouponForm({ coupon }: EditCouponFormProps) {
               </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <FormField
                 control={form.control}
                 name="start_time"
@@ -133,7 +133,7 @@ export function EditCouponForm({ coupon }: EditCouponFormProps) {
             />
           </CardContent>
         </Card>
-        <div className="flex justify-end mt-3">
+        <div className="mt-3 flex justify-end">
           <Button className="cursor-pointer" type="submit">
             Update
           </Button>

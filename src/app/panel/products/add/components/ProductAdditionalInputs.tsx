@@ -67,8 +67,8 @@ export function ProductAdditionalInputs({
 
         return (
           <div key={index} className="space-y-2">
-            <div className="flex items-center lg:items-start gap-2">
-              <div className="grid grid-cols-1 lg:grid-cols-2 w-full gap-2">
+            <div className="flex items-center gap-2 lg:items-start">
+              <div className="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
                 <div className="w-full space-y-1">
                   <Input
                     placeholder="Label"
@@ -81,7 +81,7 @@ export function ProductAdditionalInputs({
                     aria-invalid={!!labelError}
                   />
                   {labelError && (
-                    <p className="text-sm font-medium text-destructive">{labelError}</p>
+                    <p className="text-destructive text-sm font-medium">{labelError}</p>
                   )}
                 </div>
                 <div className="w-full space-y-1">
@@ -96,7 +96,7 @@ export function ProductAdditionalInputs({
                     aria-invalid={!!valueError}
                   />
                   {valueError && (
-                    <p className="text-sm font-medium text-destructive">{valueError}</p>
+                    <p className="text-destructive text-sm font-medium">{valueError}</p>
                   )}
                 </div>
               </div>
@@ -104,7 +104,7 @@ export function ProductAdditionalInputs({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="cursor-pointer h-9 w-9 mt-1"
+                  className="mt-1 h-9 w-9 cursor-pointer"
                   onClick={() => removeAdditionalInfo(index)}
                   type="button"
                   aria-label="Hapus info tambahan"
@@ -120,7 +120,7 @@ export function ProductAdditionalInputs({
         <Button
           variant="ghost"
           size="icon"
-          className="cursor-pointer text-primary hover:text-primary/80"
+          className="text-primary hover:text-primary/80 cursor-pointer"
           onClick={addAdditionalInfo}
           type="button"
         >

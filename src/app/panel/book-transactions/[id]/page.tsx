@@ -63,13 +63,13 @@ function BookTransactionDetailPageContent() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Tunai</CardTitle>
-              <Banknote className="h-4 w-4 text-muted-foreground" />
+              <Banknote className="text-muted-foreground h-4 w-4" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
                 {formatCurrency(cashierBookStats.cash.value)}
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 {cashierBookStats.cash.count} transaksi
               </p>
             </CardContent>
@@ -77,13 +77,13 @@ function BookTransactionDetailPageContent() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Non Tunai</CardTitle>
-              <CreditCard className="h-4 w-4 text-muted-foreground" />
+              <CreditCard className="text-muted-foreground h-4 w-4" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
                 {formatCurrency(cashierBookStats.cashless.value)}
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 {cashierBookStats.cashless.count} transaksi
               </p>
             </CardContent>
@@ -91,13 +91,13 @@ function BookTransactionDetailPageContent() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Diskon</CardTitle>
-              <Percent className="h-4 w-4 text-muted-foreground" />
+              <Percent className="text-muted-foreground h-4 w-4" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
                 {formatCurrency(cashierBookStats.discount.value)}
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 {cashierBookStats.discount.count} transaksi
               </p>
             </CardContent>
@@ -105,13 +105,13 @@ function BookTransactionDetailPageContent() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Voucher</CardTitle>
-              <Ticket className="h-4 w-4 text-muted-foreground" />
+              <Ticket className="text-muted-foreground h-4 w-4" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
                 {formatCurrency(cashierBookStats.voucher.value)}
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 {cashierBookStats.voucher.count} transaksi
               </p>
             </CardContent>
@@ -120,7 +120,7 @@ function BookTransactionDetailPageContent() {
       )}
       <Card>
         <CardHeader>
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <div>
               <CardTitle>
                 Detail Buku Transaksi {cashierBook ? `(${cashierBook.code})` : ''}
@@ -128,14 +128,14 @@ function BookTransactionDetailPageContent() {
               <CardDescription>Daftar transaksi pada buku kasir ini</CardDescription>
             </div>
             {cashierBook && (
-              <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto justify-end">
+              <div className="flex w-full flex-col justify-end gap-2 md:w-auto md:flex-row">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
                   <Input
                     onChange={(e) => updateSearch(e.target.value)}
                     value={search || ''}
                     placeholder="Cari transaksi"
-                    className="pl-10 w-full md:w-64"
+                    className="w-full pl-10 md:w-64"
                   />
                 </div>
                 <FilterDialog state={filterDialogState} />

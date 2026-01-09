@@ -117,17 +117,17 @@ export function ProductCategorySelect({
           aria-expanded={open}
           disabled={disabled}
           className={cn(
-            'w-full justify-between text-left font-normal overflow-hidden cursor-pointer',
+            'w-full cursor-pointer justify-between overflow-hidden text-left font-normal',
             !value && 'text-muted-foreground',
             className,
           )}
         >
-          <span className="truncate block w-full">{displayValue()}</span>
+          <span className="block w-full truncate">{displayValue()}</span>
           <CaretUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="p-0 w-[var(--radix-popover-trigger-width)]"
+        className="w-[var(--radix-popover-trigger-width)] p-0"
         align="start"
         sideOffset={4}
         collisionPadding={16}
@@ -168,7 +168,7 @@ export function ProductCategorySelect({
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="w-full justify-center text-xs text-muted-foreground cursor-pointer"
+                    className="text-muted-foreground w-full cursor-pointer justify-center text-xs"
                     onClick={() => fetchCategories(page + 1, true)}
                     disabled={isLoadingMore}
                   >

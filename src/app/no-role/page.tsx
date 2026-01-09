@@ -11,8 +11,8 @@ export default function NoRolePage() {
   const session = useSession();
 
   return (
-    <div className="relative h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-      <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
+    <div className="relative grid h-screen flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
+      <div className="bg-muted relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
         <div
           className="absolute inset-0 bg-cover"
           style={{
@@ -21,13 +21,13 @@ export default function NoRolePage() {
           }}
         />
       </div>
-      <div className="p-4 lg:p-8 relative h-full flex items-center">
+      <div className="relative flex h-full items-center p-4 lg:p-8">
         <div className="absolute top-6 lg:left-6">
           <ThemeToggle />
         </div>
-        <div className="mx-auto w-full max-w-[350px] flex flex-col justify-center space-y-6">
+        <div className="mx-auto flex w-full max-w-[350px] flex-col justify-center space-y-6">
           <div className="flex flex-col space-y-2 text-center">
-            <div className="flex items-center justify-center mb-4">
+            <div className="mb-4 flex items-center justify-center">
               <Image
                 src="/images/key.png"
                 alt="Kunci"
@@ -36,9 +36,9 @@ export default function NoRolePage() {
                 className="rotate-90"
               />
             </div>
-            <div className="text-xl mb-3">Halo, {session.data?.user?.name.split(' ')[0]} 👋😁</div>
+            <div className="mb-3 text-xl">Halo, {session.data?.user?.name.split(' ')[0]} 👋😁</div>
             <h1 className="text-2xl font-semibold tracking-tight">Maaf anda belum memiliki role</h1>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Silahkan hubungi admin untuk mendapatkan akses
             </p>
           </div>

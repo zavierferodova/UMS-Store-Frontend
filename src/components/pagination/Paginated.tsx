@@ -146,13 +146,13 @@ export function Paginated({ state, onPageChange, onLimitChange }: PaginatedProps
   const endEntry = Math.min(currentPage * pageSize, totalItems);
 
   return (
-    <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-5 w-full mt-6">
-      <div className="w-full shrink-0 md:w-max flex justify-center md:justify-start items-center gap-2 text-sm text-muted-foreground">
+    <div className="mt-6 flex w-full flex-col gap-5 md:flex-row md:items-center md:justify-between">
+      <div className="text-muted-foreground flex w-full shrink-0 items-center justify-center gap-2 text-sm md:w-max md:justify-start">
         {onLimitChange && (
           <select
             value={pageSize}
             onChange={(e) => onLimitChange?.(Number(e.target.value))}
-            className="h-8 rounded-md border border-input bg-background px-2 py-1 text-sm"
+            className="border-input bg-background h-8 rounded-md border px-2 py-1 text-sm"
           >
             {limitOptions.map((option) => (
               <option key={option} value={option}>
@@ -165,7 +165,7 @@ export function Paginated({ state, onPageChange, onLimitChange }: PaginatedProps
           Showing {startEntry} to {endEntry} of {totalItems} entries
         </span>
       </div>
-      <Pagination className="w-full flex justify-center md:justify-end">
+      <Pagination className="flex w-full justify-center md:justify-end">
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
@@ -176,7 +176,7 @@ export function Paginated({ state, onPageChange, onLimitChange }: PaginatedProps
                   onPageChange(currentPage - 1);
                 }
               }}
-              className={currentPage <= 1 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+              className={currentPage <= 1 ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
             />
           </PaginationItem>
 
@@ -218,7 +218,7 @@ export function Paginated({ state, onPageChange, onLimitChange }: PaginatedProps
                 }
               }}
               className={
-                currentPage >= totalPages ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                currentPage >= totalPages ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
               }
             />
           </PaginationItem>

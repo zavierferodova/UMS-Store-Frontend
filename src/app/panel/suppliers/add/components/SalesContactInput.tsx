@@ -71,7 +71,7 @@ export function SalesContactInput({ contacts, onContactsChange, errors }: SalesC
                   })}
                   aria-invalid={!!nameError}
                 />
-                {nameError && <p className="text-sm font-medium text-destructive">{nameError}</p>}
+                {nameError && <p className="text-destructive text-sm font-medium">{nameError}</p>}
               </div>
               <div className="w-1/2 space-y-1">
                 <Input
@@ -84,13 +84,13 @@ export function SalesContactInput({ contacts, onContactsChange, errors }: SalesC
                   })}
                   aria-invalid={!!phoneError}
                 />
-                {phoneError && <p className="text-sm font-medium text-destructive">{phoneError}</p>}
+                {phoneError && <p className="text-destructive text-sm font-medium">{phoneError}</p>}
               </div>
               {contacts.length > 1 && (
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="cursor-pointer h-9 w-9 mt-1"
+                  className="mt-1 h-9 w-9 cursor-pointer"
                   onClick={() => removeContact(index)}
                   type="button"
                   aria-label="Hapus kontak"
@@ -106,7 +106,7 @@ export function SalesContactInput({ contacts, onContactsChange, errors }: SalesC
         <Button
           variant="ghost"
           size="icon"
-          className="cursor-pointer text-primary hover:text-primary/80"
+          className="text-primary hover:text-primary/80 cursor-pointer"
           onClick={addContact}
           type="button"
           aria-label="Tambah kontak"

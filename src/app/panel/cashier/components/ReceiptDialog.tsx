@@ -42,13 +42,13 @@ export function ReceiptDialog({ open, onOpenChange, transaction, store }: Receip
           <DialogTitle>Transaksi Berhasil</DialogTitle>
         </DialogHeader>
 
-        <div className="flex justify-center p-4 bg-gray-100 rounded-lg overflow-hidden max-h-[60vh] overflow-y-auto">
+        <div className="flex max-h-[60vh] justify-center overflow-hidden overflow-y-auto rounded-lg bg-gray-100 p-4">
           <div ref={receiptRef}>
             <MiniReceipt transaction={transaction} store={store} />
           </div>
         </div>
 
-        <DialogFooter className="sm:justify-between gap-2">
+        <DialogFooter className="gap-2 sm:justify-between">
           <Button
             variant="secondary"
             className="cursor-pointer"
@@ -57,7 +57,7 @@ export function ReceiptDialog({ open, onOpenChange, transaction, store }: Receip
             Tutup
           </Button>
           <Button onClick={handlePrint} className="cursor-pointer">
-            <Printer className="w-4 h-4 mr-2" />
+            <Printer className="mr-2 h-4 w-4" />
             Cetak Struk
           </Button>
         </DialogFooter>

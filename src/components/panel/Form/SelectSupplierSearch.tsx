@@ -82,7 +82,7 @@ export function SelectSupplierSearch({
           aria-expanded={open}
           disabled={disabled}
           className={cn(
-            'w-full font-normal  justify-between cursor-pointer text-muted-foreground hover:text-muted-foreground hover:bg-accent',
+            'text-muted-foreground hover:text-muted-foreground hover:bg-accent w-full cursor-pointer justify-between font-normal',
             value && 'text-foreground hover:text-foreground',
             error && 'border-destructive text-destructive',
           )}
@@ -110,16 +110,16 @@ export function SelectSupplierSearch({
                     onChange(value && value.id === supplier.id ? null : supplier);
                     setOpen(false);
                   }}
-                  className="cursor-pointer flex flex-col items-start gap-0"
+                  className="flex cursor-pointer flex-col items-start gap-0"
                 >
-                  <div className="flex items-center w-full gap-2 pl-6 relative">
+                  <div className="relative flex w-full items-center gap-2 pl-6">
                     {value && value.id === supplier.id && (
-                      <CheckIcon className="w-4 h-4 text-primary mr-1 absolute left-0 top-1/2 -translate-y-1/2" />
+                      <CheckIcon className="text-primary absolute top-1/2 left-0 mr-1 h-4 w-4 -translate-y-1/2" />
                     )}
-                    <div className="flex flex-col flex-1 min-w-0">
+                    <div className="flex min-w-0 flex-1 flex-col">
                       <span className="truncate">{supplier.name}</span>
                       {supplier.code && (
-                        <span className="text-xs text-muted-foreground truncate">
+                        <span className="text-muted-foreground truncate text-xs">
                           {supplier.code}
                         </span>
                       )}
@@ -128,10 +128,10 @@ export function SelectSupplierSearch({
                       href={supplier.id ? panelRoutes.supplierEdit(supplier.id) : '#'}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="ml-2 p-1 rounded hover:bg-accent transition-colors self-center hover:text-primary"
+                      className="hover:bg-accent hover:text-primary ml-2 self-center rounded p-1 transition-colors"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <ExternalLink className="w-4 h-4" />
+                      <ExternalLink className="h-4 w-4" />
                     </Link>
                   </div>
                 </CommandItem>
@@ -143,7 +143,7 @@ export function SelectSupplierSearch({
                     setPage(nextPage);
                     fetchSuppliers(nextPage, true);
                   }}
-                  className="flex items-center justify-center gap-2 cursor-pointer"
+                  className="flex cursor-pointer items-center justify-center gap-2"
                 >
                   <span className="hover:underline">Lebih banyak</span>
                 </CommandItem>

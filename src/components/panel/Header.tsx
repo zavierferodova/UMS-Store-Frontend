@@ -44,9 +44,9 @@ export function PanelHeader() {
 
   return (
     <>
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center">
-          <div className="flex items-center mr-4">
+          <div className="mr-4 flex items-center">
             <SidebarTrigger className="mr-2 cursor-pointer" />
             {menu.length > 0 && (
               <Separator orientation="vertical" className="data-[orientation=vertical]:h-6" />

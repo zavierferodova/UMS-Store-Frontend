@@ -115,7 +115,7 @@ export default function PurchaseOrderDetailContainer({
   return (
     <Form {...form}>
       <div className="container">
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-col gap-6 lg:flex-row">
           {!readonly && (
             <CardInputPurchaseOrder
               purchaseOrder={purchaseOrder}
@@ -136,15 +136,15 @@ export default function PurchaseOrderDetailContainer({
               <CardContent>
                 <div className="space-y-6">
                   <div className="flex flex-col gap-2">
-                    <div className="flex justify-end items-center gap-2">
+                    <div className="flex items-center justify-end gap-2">
                       <div className="relative w-full">
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
-                          <Search className="w-4 h-4" />
+                        <span className="text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                          <Search className="h-4 w-4" />
                         </span>
                         <Input
                           type="text"
                           placeholder="Cari produk berdasarkan SKU atau nama..."
-                          className="pl-9 w-full"
+                          className="w-full pl-9"
                           value={searchProductText}
                           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                             setSearchProductText(e.target.value)
@@ -155,10 +155,10 @@ export default function PurchaseOrderDetailContainer({
                         <Button
                           type="button"
                           variant="default"
-                          className="cursor-pointer ml-2"
+                          className="ml-2 cursor-pointer"
                           onClick={() => setShowProductSearch(true)}
                         >
-                          <Plus className="w-4 h-4" />
+                          <Plus className="h-4 w-4" />
                           Tambah
                         </Button>
                       )}
@@ -192,7 +192,7 @@ export default function PurchaseOrderDetailContainer({
               </CardContent>
             </Card>
 
-            <div className="flex flex-col sm:flex-row gap-2 justify-end mt-6">
+            <div className="mt-6 flex flex-col justify-end gap-2 sm:flex-row">
               {(() => {
                 if (
                   (isAdmin(user) || isChecker(user)) &&

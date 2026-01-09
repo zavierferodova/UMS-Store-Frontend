@@ -50,7 +50,7 @@ export function CardDetailPurchaseOrder({
 
               <div>Pembayaran</div>
               <div>:</div>
-              <div className="capitalize text-muted-foreground">{purchaseOrder.payout}</div>
+              <div className="text-muted-foreground capitalize">{purchaseOrder.payout}</div>
 
               <div>Dibuat</div>
               <div>:</div>

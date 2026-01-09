@@ -19,7 +19,7 @@ export function ThemeToggle() {
       <Button
         variant="outline"
         size="icon"
-        className="rounded-full h-10 w-10 cursor-pointer"
+        className="h-10 w-10 cursor-pointer rounded-full"
         disabled
       >
         <Sun className="h-4 w-4" />
@@ -31,7 +31,7 @@ export function ThemeToggle() {
     <Button
       variant="outline"
       size="icon"
-      className="rounded-full h-10 w-10 cursor-pointer"
+      className="h-10 w-10 cursor-pointer rounded-full"
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
     >
       {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}

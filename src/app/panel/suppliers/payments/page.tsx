@@ -119,21 +119,21 @@ function PaymentMethodsPageContent() {
     <>
       <Card>
         <CardHeader>
-          <div className="flex flex-col md:flex-row justify-between md:items-center">
+          <div className="flex flex-col justify-between md:flex-row md:items-center">
             <div>
               <CardTitle>Daftar Metode Pembayaran</CardTitle>
               <CardDescription>
                 Daftar semua metode pembayaran pemasok yang terdaftar di sistem
               </CardDescription>
             </div>
-            <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto mt-4 md:mt-0">
+            <div className="mt-4 flex w-full flex-col gap-2 md:mt-0 md:w-auto md:flex-row">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
                 <Input
                   onChange={(e) => updateSearch(e.target.value)}
                   value={search}
                   placeholder="Cari metode pembayaran"
-                  className="pl-10 w-full md:w-64"
+                  className="w-full pl-10 md:w-64"
                 />
               </div>
               <FilterDialog
@@ -144,7 +144,7 @@ function PaymentMethodsPageContent() {
               />
               <Button
                 onClick={() => setPaymentDialogOpen(true)}
-                className="cursor-pointer w-full md:w-auto"
+                className="w-full cursor-pointer md:w-auto"
               >
                 <PlusIcon className="h-4 w-4" /> <span className="ml-1">Tambah</span>
               </Button>
@@ -216,7 +216,7 @@ function PaymentMethodsPageContent() {
                             onClick={() => onDeleteClick(paymentMethod.id.toString())}
                             className="cursor-pointer"
                           >
-                            <Trash2 className="h-4 w-4 text-destructive" />
+                            <Trash2 className="text-destructive h-4 w-4" />
                           </Button>
                         )}
                       </div>

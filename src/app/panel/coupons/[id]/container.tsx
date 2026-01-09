@@ -30,7 +30,7 @@ export function CouponPageContainer({ coupon }: CouponPageContainerProps) {
   }, [setMenu, coupon.id]);
 
   return (
-    <div className="grid gap-6 lg:grid-cols-2 items-start">
+    <div className="grid items-start gap-6 lg:grid-cols-2">
       <EditCouponForm coupon={coupon} />
       <CouponCodesTable couponId={coupon.id} />
     </div>

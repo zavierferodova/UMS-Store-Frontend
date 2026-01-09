@@ -69,7 +69,7 @@ export function TransactionDetailContainer({
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold tracking-tight">Detail Transaksi</h2>
         {transaction.is_saved === false && (
           <div className="flex items-center gap-2">
@@ -107,57 +107,57 @@ export function TransactionDetailContainer({
           <CardHeader>
             <CardTitle>Informasi Transaksi</CardTitle>
           </CardHeader>
-          <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <CardContent className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             <div className="flex items-center gap-3">
-              <FileText className="h-5 w-5 text-muted-foreground" />
+              <FileText className="text-muted-foreground h-5 w-5" />
               <div>
-                <p className="text-sm text-muted-foreground">Kode Transaksi</p>
+                <p className="text-muted-foreground text-sm">Kode Transaksi</p>
                 <p className="font-medium">{transaction.code}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <ShieldCheck className="h-5 w-5 text-muted-foreground" />
+              <ShieldCheck className="text-muted-foreground h-5 w-5" />
               <div>
-                <p className="text-sm text-muted-foreground">Status</p>
+                <p className="text-muted-foreground text-sm">Status</p>
                 <p className="font-medium capitalize">
                   {transaction.is_saved ? 'Disimpan' : 'Dibayar'}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <User className="h-5 w-5 text-muted-foreground" />
+              <User className="text-muted-foreground h-5 w-5" />
               <div>
-                <p className="text-sm text-muted-foreground">Kasir</p>
+                <p className="text-muted-foreground text-sm">Kasir</p>
                 <p className="font-medium">{transaction.cashier?.name || '-'}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <CreditCard className="h-5 w-5 text-muted-foreground" />
+              <CreditCard className="text-muted-foreground h-5 w-5" />
               <div>
-                <p className="text-sm text-muted-foreground">Metode Pembayaran</p>
+                <p className="text-muted-foreground text-sm">Metode Pembayaran</p>
                 <p className="font-medium capitalize">{transaction.payment || '-'}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Calendar className="h-5 w-5 text-muted-foreground" />
+              <Calendar className="text-muted-foreground h-5 w-5" />
               <div>
-                <p className="text-sm text-muted-foreground">Waktu Pembayaran</p>
+                <p className="text-muted-foreground text-sm">Waktu Pembayaran</p>
                 <p className="font-medium">
                   {transaction.paid_time ? localeDateFormat(transaction.paid_time) : '-'}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Calendar className="h-5 w-5 text-muted-foreground" />
+              <Calendar className="text-muted-foreground h-5 w-5" />
               <div>
-                <p className="text-sm text-muted-foreground">Waktu Dibuat</p>
+                <p className="text-muted-foreground text-sm">Waktu Dibuat</p>
                 <p className="font-medium">{localeDateFormat(transaction.created_at)}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Calendar className="h-5 w-5 text-muted-foreground" />
+              <Calendar className="text-muted-foreground h-5 w-5" />
               <div>
-                <p className="text-sm text-muted-foreground">Waktu Diupdate</p>
+                <p className="text-muted-foreground text-sm">Waktu Diupdate</p>
                 <p className="font-medium">{localeDateFormat(transaction.updated_at)}</p>
               </div>
             </div>
@@ -183,7 +183,7 @@ export function TransactionDetailContainer({
                   <TableRow key={index}>
                     <TableCell>
                       <div className="font-medium">{item.name}</div>
-                      <div className="text-sm text-muted-foreground">{item.sku_code}</div>
+                      <div className="text-muted-foreground text-sm">{item.sku_code}</div>
                     </TableCell>
                     <TableCell className="text-right">{formatCurrency(item.unit_price)}</TableCell>
                     <TableCell className="text-center">{item.amount}</TableCell>
@@ -219,7 +219,7 @@ export function TransactionDetailContainer({
                     <TableRow key={index}>
                       <TableCell className="font-medium">
                         <div className="flex items-center gap-2">
-                          <Ticket className="h-4 w-4 text-muted-foreground" />
+                          <Ticket className="text-muted-foreground h-4 w-4" />
                           {coupon.name}
                         </div>
                       </TableCell>
@@ -254,8 +254,8 @@ export function TransactionDetailContainer({
           <Card className="w-full md:w-1/3">
             <CardContent>
               {transaction.note && (
-                <div className="bg-muted/50 p-4 rounded-lg mb-4">
-                  <div className="flex items-center gap-2 font-medium mb-2">
+                <div className="bg-muted/50 mb-4 rounded-lg p-4">
+                  <div className="mb-2 flex items-center gap-2 font-medium">
                     <FileText className="h-4 w-4" /> Catatan
                   </div>
                   <p className="text-sm whitespace-pre-wrap">{transaction.note}</p>
@@ -274,7 +274,7 @@ export function TransactionDetailContainer({
                   </div>
                 )}
                 <Separator />
-                <div className="flex justify-between font-bold text-lg">
+                <div className="flex justify-between text-lg font-bold">
                   <span>Total</span>
                   <span>{formatCurrency(transaction.total)}</span>
                 </div>

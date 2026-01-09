@@ -95,32 +95,32 @@ export function PaymentDialog({ open, onOpenChange, total, onConfirm }: PaymentD
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-150 p-0 gap-0 max-h-[90vh] flex flex-col">
-        <DialogHeader className="p-6 pb-4 border-b shrink-0">
+      <DialogContent className="flex max-h-[90vh] flex-col gap-0 p-0 sm:max-w-150">
+        <DialogHeader className="shrink-0 border-b p-6 pb-4">
           <DialogTitle className="text-2xl font-bold">Pembayaran</DialogTitle>
         </DialogHeader>
 
-        <div className="p-6 space-y-8 overflow-y-auto flex-1">
+        <div className="flex-1 space-y-8 overflow-y-auto p-6">
           <div className="space-y-3">
-            <label className="text-sm font-medium text-muted-foreground">Tipe Pembayaran</label>
+            <label className="text-muted-foreground text-sm font-medium">Tipe Pembayaran</label>
             <Tabs
               value={paymentMethod}
               onValueChange={(v) => setPaymentMethod(v as TransactionPayment)}
               className="w-full"
             >
-              <TabsList className="grid w-full grid-cols-2 h-12 bg-muted/50 p-1">
+              <TabsList className="bg-muted/50 grid h-12 w-full grid-cols-2 p-1">
                 <TabsTrigger
                   value={TransactionPayment.CASH}
-                  className="rounded-md data-[state=active]:bg-white data-[state=active]:shadow-sm cursor-pointer"
+                  className="cursor-pointer rounded-md data-[state=active]:bg-white data-[state=active]:shadow-sm"
                 >
-                  <BanknoteIcon className="w-4 h-4 mr-2" />
+                  <BanknoteIcon className="mr-2 h-4 w-4" />
                   Tunai
                 </TabsTrigger>
                 <TabsTrigger
                   value={TransactionPayment.CASHLESS}
-                  className="rounded-md data-[state=active]:bg-white data-[state=active]:shadow-sm cursor-pointer"
+                  className="cursor-pointer rounded-md data-[state=active]:bg-white data-[state=active]:shadow-sm"
                 >
-                  <CreditCardIcon className="w-4 h-4 mr-2" />
+                  <CreditCardIcon className="mr-2 h-4 w-4" />
                   Non-Tunai
                 </TabsTrigger>
               </TabsList>
@@ -128,12 +128,12 @@ export function PaymentDialog({ open, onOpenChange, total, onConfirm }: PaymentD
           </div>
 
           <div className="space-y-3">
-            <label className="text-sm font-medium text-muted-foreground">Opsi Nominal</label>
+            <label className="text-muted-foreground text-sm font-medium">Opsi Nominal</label>
 
             <div className="animate-in fade-in slide-in-from-top-2 mt-2">
               <Input
                 autoFocus
-                className="h-14 text-lg font-medium text-center"
+                className="h-14 text-center text-lg font-medium"
                 placeholder="Masukkan nominal"
                 value={customAmount ? Number(customAmount).toLocaleString('id-ID') : ''}
                 onChange={(e) => handleCustomAmountChange(e.target.value)}
@@ -145,7 +145,7 @@ export function PaymentDialog({ open, onOpenChange, total, onConfirm }: PaymentD
                 <Button
                   key={amount}
                   variant={payAmount === amount ? 'default' : 'outline'}
-                  className={`h-16 text-lg font-medium cursor-pointer ${
+                  className={`h-16 cursor-pointer text-lg font-medium ${
                     payAmount === amount
                       ? 'bg-primary text-primary-foreground shadow-md'
                       : 'bg-background hover:bg-muted'
@@ -161,31 +161,31 @@ export function PaymentDialog({ open, onOpenChange, total, onConfirm }: PaymentD
             </div>
           </div>
 
-          <div className="space-y-2 pt-4 border-t">
+          <div className="space-y-2 border-t pt-4">
             {TransactionPayment.CASHLESS === paymentMethod && (
               <div className="space-y-2">
-                <label className="text-sm font-medium text-muted-foreground">
+                <label className="text-muted-foreground text-sm font-medium">
                   Catatan (Opsional)
                 </label>
                 <Textarea
                   placeholder="Tambahkan catatan transaksi..."
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
-                  className="resize-none mt-2"
+                  className="mt-2 resize-none"
                 />
               </div>
             )}
-            <div className="flex justify-between items-end pt-2">
-              <span className="font-bold text-lg">TOTAL</span>
-              <span className="font-bold text-3xl text-primary">{formatCurrency(total)}</span>
+            <div className="flex items-end justify-between pt-2">
+              <span className="text-lg font-bold">TOTAL</span>
+              <span className="text-primary text-3xl font-bold">{formatCurrency(total)}</span>
             </div>
             {payAmount < total && (
-              <p className="text-destructive text-sm text-right font-medium">
+              <p className="text-destructive text-right text-sm font-medium">
                 Nominal pembayaran kurang
               </p>
             )}
             {payAmount >= total && (
-              <div className="flex justify-between items-center text-muted-foreground">
+              <div className="text-muted-foreground flex items-center justify-between">
                 <span className="text-sm">Kembalian</span>
                 <span className="font-medium">{formatCurrency(payAmount - total)}</span>
               </div>
@@ -193,9 +193,9 @@ export function PaymentDialog({ open, onOpenChange, total, onConfirm }: PaymentD
           </div>
         </div>
 
-        <div className="p-6 bg-muted/30 border-t shrink-0">
+        <div className="bg-muted/30 shrink-0 border-t p-6">
           <Button
-            className="w-full h-14 text-xl font-bold rounded-xl shadow-lg shadow-primary/20 cursor-pointer"
+            className="shadow-primary/20 h-14 w-full cursor-pointer rounded-xl text-xl font-bold shadow-lg"
             size="lg"
             onClick={() => onConfirm(paymentMethod, payAmount, note)}
             disabled={payAmount < total}

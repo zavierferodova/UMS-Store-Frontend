@@ -113,8 +113,8 @@ export function FilterDialog({ state }: FilterDialogProps) {
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid gap-2">
-            <div className="flex flex-col sm:flex-row gap-2">
-              <div className="grid gap-1.5 flex-1">
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <div className="grid flex-1 gap-1.5">
                 <Label htmlFor="start_time" className="mb-1">
                   Tanggal Mulai
                 </Label>
@@ -125,7 +125,7 @@ export function FilterDialog({ state }: FilterDialogProps) {
                   onChange={(e) => setStartTime(e.target.value)}
                 />
               </div>
-              <div className="grid gap-1.5 flex-1">
+              <div className="grid flex-1 gap-1.5">
                 <Label htmlFor="end_time" className="mb-1">
                   Tanggal Selesai
                 </Label>

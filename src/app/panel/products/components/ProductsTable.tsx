@@ -57,21 +57,21 @@ export function ProductsTable({ products }: ProductsTableProps) {
               </TableCell>
               <TableCell>
                 <div>
-                  <div className="w-15 h-15 relative rounded-sm overflow-hidden">
+                  <div className="relative h-15 w-15 overflow-hidden rounded-sm">
                     {product.images.length > 0 ? (
                       <Image
                         src={product.images[0]?.image}
                         alt={product.name}
                         layout="fill"
                         objectFit="cover"
-                        className="w-full h-full bg-gray-200 cursor-pointer"
+                        className="h-full w-full cursor-pointer bg-gray-200"
                         onClick={() => {
                           setCurrentImagePreview(product.images[0]?.image);
                           setShowImageDialog(true);
                         }}
                       />
                     ) : (
-                      <div className="w-full h-full bg-gray-200 flex justify-center items-center">
+                      <div className="flex h-full w-full items-center justify-center bg-gray-200">
                         <ImageIcon size={20} />
                       </div>
                     )}
