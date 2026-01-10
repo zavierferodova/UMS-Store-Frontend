@@ -10,7 +10,9 @@ export const formSchema = z.object({
 
 export const avatarSchema = z.object({
   profileImage: z
-    .instanceof(File)
+    .custom<File>((v) => typeof File !== 'undefined' && v instanceof File, {
+      message: 'Harus berupa file',
+    })
     .refine((file) => file.size > 0, 'Gambar tidak boleh kosong')
     .refine((file) => file.size <= 5 * 1024 * 1024, 'Ukuran gambar maksimal 5MB')
     .refine(

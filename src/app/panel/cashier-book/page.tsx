@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/table';
 import { Paginated } from '@/components/pagination/Paginated';
 import { usePanelHeader } from '@/components/panel/Header';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { panelRoutes } from '@/routes/route';
 import { useController } from './controller';
 import { PageStatus } from '@/lib/page';
@@ -238,5 +238,9 @@ function CashierBookPageContent() {
 }
 
 export default function CashierBookPage() {
-  return <CashierBookPageContent />;
+  return (
+    <Suspense>
+      <CashierBookPageContent />
+    </Suspense>
+  );
 }
